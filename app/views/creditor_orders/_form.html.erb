@@ -1,0 +1,81 @@
+<%= form_with(model: creditor_order, local: true) do |form| %>
+  <% if creditor_order.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(creditor_order.errors.count, "error") %> prohibited this creditor_order from being saved:</h2>
+
+      <ul>
+      <% creditor_order.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <%= form.label :supplier_id %>
+      <%= collection_select(:creditor_order,
+                            :supplier_id,
+                            Supplier.all,
+                            :id,
+                            :supplier_name,
+                            {prompt: true},
+                            {class: "custom-select"}) %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :job_id %>
+      <%= collection_select(:creditor_order,
+                            :job_id,
+                            Job.all,
+                            :id,
+                            :job_name,
+                            {prompt: true},
+                            {class: "custom-select"}) %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :invoice_id %>
+      <%= collection_select(:creditor_order,
+                            :invoice_id,
+                            Invoice.all,
+                            :id,
+                            :invoice_code,
+                            {prompt: true},
+                            {class: "custom-select"}) %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <%= form.label :value_excluding_tax %>
+      <%= form.text_field :value_excluding_tax, id: :debtor_order_value_excluding_tax, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :tax_amount %>
+      <%= form.text_field :tax_amount, id: :debtor_order_tax_amount, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :value_including_tax %>
+      <%= form.text_field :value_including_tax, id: :debtor_order_value_including_tax, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= form.label :delivery_note %>
+      <%= form.text_field :delivery_note, id: :creditor_order_delivery_note, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-6">
+      <%= form.label :still_owed_amount %>
+      <%= form.text_field :still_owed_amount, id: :debtor_order_still_owed_amount, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= form.label :date_issued %>
+    <%= form.datetime_select :date_issued, id: :creditor_order_date_issued %>
+  </div>
+
+  <div class="actions">
+    <%= form.submit "Create Creditor Order", class: "btn btn-primary btn-lg" %>
+  </div>
+<% end %>

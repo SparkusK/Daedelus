@@ -1,0 +1,49 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Supplier:</strong>
+  <%= @creditor_order.supplier %>
+</p>
+
+<p>
+  <strong>Job:</strong>
+  <%= @creditor_order.job %>
+</p>
+
+<p>
+  <strong>Invoice:</strong>
+  <%= @creditor_order.invoice %>
+</p>
+
+<p>
+  <strong>Delivery note:</strong>
+  <%= @creditor_order.delivery_note %>
+</p>
+
+<p>
+  <strong>Date issued:</strong>
+  <%= @creditor_order.date_issued %>
+</p>
+
+<p>
+  <strong>Value excluding tax:</strong>
+  <%= @creditor_order.value_excluding_tax %>
+</p>
+
+<p>
+  <strong>Tax amount:</strong>
+  <%= @creditor_order.tax_amount %>
+</p>
+
+<p>
+  <strong>Value including tax:</strong>
+  <%= @creditor_order.value_including_tax %>
+</p>
+
+<p>
+  <strong>Still owed amount:</strong>
+  <%= @creditor_order.still_owed_amount %>
+</p>
+
+<%= link_to 'Edit', edit_creditor_order_path(@creditor_order) %> |
+<%= link_to 'Back', creditor_orders_path %>

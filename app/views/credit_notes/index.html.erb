@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Credit Notes</h1>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Creditor order</th>
+      <th>Payment type</th>
+      <th>Amount paid</th>
+      <th>Note</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @credit_notes.each do |credit_note| %>
+      <tr>
+        <td><%= credit_note.creditor_order %></td>
+        <td><%= credit_note.payment_type %></td>
+        <td><%= credit_note.amount_paid %></td>
+        <td><%= credit_note.note %></td>
+        <td><%= link_to 'Show', credit_note %></td>
+        <td><%= link_to 'Edit', edit_credit_note_path(credit_note) %></td>
+        <td><%= link_to 'Destroy', credit_note, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Credit Note', new_credit_note_path %>

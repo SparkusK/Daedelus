@@ -1,0 +1,29 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Debtor order:</strong>
+  <%= @debtor_payment.debtor_order %>
+</p>
+
+<p>
+  <strong>Payment amount:</strong>
+  <%= @debtor_payment.payment_amount %>
+</p>
+
+<p>
+  <strong>Payment date:</strong>
+  <%= @debtor_payment.payment_date %>
+</p>
+
+<p>
+  <strong>Payment type:</strong>
+  <%= @debtor_payment.payment_type %>
+</p>
+
+<p>
+  <strong>Note:</strong>
+  <%= @debtor_payment.note %>
+</p>
+
+<%= link_to 'Edit', edit_debtor_payment_path(@debtor_payment) %> |
+<%= link_to 'Back', debtor_payments_path %>

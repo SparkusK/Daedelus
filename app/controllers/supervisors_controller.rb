@@ -24,7 +24,9 @@ class SupervisorsController < ApplicationController
   # POST /supervisors
   # POST /supervisors.json
   def create
-    @supervisor = Supervisor.new(supervisor_params)
+    @input_params = {:employee_id=> params[:employee][:employee_id],
+                     :section_id => params[:section][:section_id]}
+    @supervisor = Supervisor.new(@input_params)
 
     respond_to do |format|
       if @supervisor.save
@@ -69,6 +71,6 @@ class SupervisorsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def supervisor_params
-      params.require(:supervisor).permit(:employee_id, :section_id)
+      params.require([:employee, :section])
     end
 end

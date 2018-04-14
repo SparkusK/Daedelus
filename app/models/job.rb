@@ -5,11 +5,11 @@ class Job < ApplicationRecord
   has_many :labor_records
 
   def get_supervisor
-    Employee.find_by(section_id: section.id, is_supervisor: true)
+    Supervisor.find_by(section_id: section.id)
   end
 
   def job_name
     @supervisor = get_supervisor
-    "Job no. #{id}, supervised by #{@supervisor.first_name}"
+    "Job no. #{id}, supervised by #{@supervisor.employee.first_name}"
   end
 end

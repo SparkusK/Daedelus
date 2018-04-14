@@ -1,5 +1,9 @@
 Rails.application.routes.draw do
 
+  resources :credit_notes
+  resources :creditor_orders
+  resources :debtor_payments
+  resources :debtor_orders
   resources :supervisors
   resources :invoices
   resources :suppliers

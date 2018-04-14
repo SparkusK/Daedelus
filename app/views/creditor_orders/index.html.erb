@@ -1,0 +1,43 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Creditor Orders</h1>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Supplier</th>
+      <th>Job</th>
+      <th>Invoice</th>
+      <th>Delivery note</th>
+      <th>Date issued</th>
+      <th>Value excluding tax</th>
+      <th>Tax amount</th>
+      <th>Value including tax</th>
+      <th>Still owed amount</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @creditor_orders.each do |creditor_order| %>
+      <tr>
+        <td><%= creditor_order.supplier %></td>
+        <td><%= creditor_order.job %></td>
+        <td><%= creditor_order.invoice %></td>
+        <td><%= creditor_order.delivery_note %></td>
+        <td><%= creditor_order.date_issued %></td>
+        <td><%= creditor_order.value_excluding_tax %></td>
+        <td><%= creditor_order.tax_amount %></td>
+        <td><%= creditor_order.value_including_tax %></td>
+        <td><%= creditor_order.still_owed_amount %></td>
+        <td><%= link_to 'Show', creditor_order %></td>
+        <td><%= link_to 'Edit', edit_creditor_order_path(creditor_order) %></td>
+        <td><%= link_to 'Destroy', creditor_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Creditor Order', new_creditor_order_path %>

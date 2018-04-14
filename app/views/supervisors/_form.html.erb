@@ -11,17 +11,35 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :employee_id %>
-    <%= form.text_field :employee_id, id: :supervisor_employee_id %>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= form.label :employee_id %>
+      <%= collection_select(:employee,
+                            :employee_id,
+                            promotable_employees(),
+                            :id,
+                            :employee_name,
+                            {prompt: true},
+                            {class: "custom-select"}) %>
+    </div>
+    <div class="form-group col-md-6">
+      <%= form.label :section_id %>
+      <%= collection_select(:section,
+                            :section_id,
+                            unsupervised_sections(),
+                            :id,
+                            :section_name,
+                            {prompt: true},
+                            {class: "custom-select"}) %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= form.label :section_id %>
-    <%= form.text_field :section_id, id: :supervisor_section_id %>
-  </div>
+
+
+
+
 
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit "Create Supervisor", class: "btn btn-primary btn-lg" %>
   </div>
 <% end %>

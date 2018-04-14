@@ -21,28 +21,16 @@
     </div>
   </div>
 
-
   <div class="form-row">
-    <div class="form-group col-md-10">
+    <div class="form-group col-md-5">
       <%= form.label :section_id %>
       <%= collection_select(:employee, :section_id, Section.all, :id, :section_name, {prompt: true}, {class: "custom-select"}) %>
     </div>
-    <div class="form-group col-md-2">
-      <%= form.label "Supervisor?" %>
-      <div class="custom-control custom-checkbox">
-        <%= form.check_box :is_supervisor, id: "customCheck1", class: "custom-control-input" %>
-         <label class="custom-control-label" for="customCheck1"></label>
-      </div>
-    </div>
-  </div>
-
-
-  <div class="form-row">
-    <div class="form-group col-md-9">
+    <div class="form-group col-md-5">
       <%= form.label :occupation %>
       <%= form.text_field :occupation, id: :employee_occupation, class: "form-control" %>
     </div>
-    <div class="form-group col-md-3">
+    <div class="form-group col-md-2">
       <%= form.label :company_number %>
       <%= form.text_field :company_number, id: :employee_company_number, class: "form-control" %>
     </div>

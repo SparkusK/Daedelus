@@ -1,5 +1,7 @@
 module EmployeesHelper
-  def get_supervisors
-    Employee.where(:is_supervisor=>true)
+
+  def promotable_employees
+    Employee.all.select { |emp| emp if emp.supervisor.nil? }
   end
+
 end

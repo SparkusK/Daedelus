@@ -1,0 +1,35 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Debtor Payments</h1>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Debtor order</th>
+      <th>Payment amount</th>
+      <th>Payment date</th>
+      <th>Payment type</th>
+      <th>Note</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @debtor_payments.each do |debtor_payment| %>
+      <tr>
+        <td><%= debtor_payment.debtor_order %></td>
+        <td><%= debtor_payment.payment_amount %></td>
+        <td><%= debtor_payment.payment_date %></td>
+        <td><%= debtor_payment.payment_type %></td>
+        <td><%= debtor_payment.note %></td>
+        <td><%= link_to 'Show', debtor_payment %></td>
+        <td><%= link_to 'Edit', edit_debtor_payment_path(debtor_payment) %></td>
+        <td><%= link_to 'Destroy', debtor_payment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Debtor Payment', new_debtor_payment_path %>

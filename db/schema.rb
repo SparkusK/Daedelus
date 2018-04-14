@@ -10,10 +10,37 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180414130120) do
+ActiveRecord::Schema.define(version: 20180414173201) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "credit_notes", force: :cascade do |t|
+    t.bigint "creditor_order_id"
+    t.string "payment_type"
+    t.decimal "amount_paid"
+    t.string "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["creditor_order_id"], name: "index_credit_notes_on_creditor_order_id"
+  end
+
+  create_table "creditor_orders", force: :cascade do |t|
+    t.bigint "supplier_id"
+    t.bigint "job_id"
+    t.bigint "invoice_id"
+    t.string "delivery_note"
+    t.datetime "date_issued"
+    t.decimal "value_excluding_tax"
+    t.decimal "tax_amount"
+    t.decimal "value_including_tax"
+    t.decimal "still_owed_amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["invoice_id"], name: "index_creditor_orders_on_invoice_id"
+    t.index ["job_id"], name: "index_creditor_orders_on_job_id"
+    t.index ["supplier_id"], name: "index_creditor_orders_on_supplier_id"
+  end
 
   create_table "customers", force: :cascade do |t|
     t.string "name"
@@ -23,10 +50,36 @@ ActiveRecord::Schema.define(version: 20180414130120) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "debtor_orders", force: :cascade do |t|
+    t.bigint "customer_id"
+    t.bigint "job_id"
+    t.bigint "invoice_id"
+    t.string "SA_number"
+    t.decimal "value_including_tax"
+    t.decimal "tax_amount"
+    t.decimal "value_excluding_tax"
+    t.decimal "still_owed_amount"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["customer_id"], name: "index_debtor_orders_on_customer_id"
+    t.index ["invoice_id"], name: "index_debtor_orders_on_invoice_id"
+    t.index ["job_id"], name: "index_debtor_orders_on_job_id"
+  end
+
+  create_table "debtor_payments", force: :cascade do |t|
+    t.bigint "debtor_order_id"
+    t.decimal "payment_amount"
+    t.decimal "payment_date"
+    t.string "payment_type"
+    t.string "note"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["debtor_order_id"], name: "index_debtor_payments_on_debtor_order_id"
+  end
+
   create_table "employees", force: :cascade do |t|
     t.string "first_name"
     t.string "last_name"
-    t.boolean "is_supervisor"
     t.string "occupation"
     t.bigint "section_id"
     t.string "company_number"
@@ -98,8 +151,9 @@ ActiveRecord::Schema.define(version: 20180414130120) do
     t.bigint "section_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["employee_id"], name: "index_supervisors_on_employee_id"
-    t.index ["section_id"], name: "index_supervisors_on_section_id"
+    t.index ["employee_id", "section_id"], name: "index_supervisors_on_employee_id_and_section_id", unique: true
+    t.index ["employee_id"], name: "index_supervisors_on_employee_id", unique: true
+    t.index ["section_id"], name: "index_supervisors_on_section_id", unique: true
   end
 
   create_table "suppliers", force: :cascade do |t|
@@ -127,13 +181,21 @@ ActiveRecord::Schema.define(version: 20180414130120) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  add_foreign_key "credit_notes", "creditor_orders"
+  add_foreign_key "creditor_orders", "invoices"
+  add_foreign_key "creditor_orders", "jobs"
+  add_foreign_key "creditor_orders", "suppliers"
+  add_foreign_key "debtor_orders", "customers"
+  add_foreign_key "debtor_orders", "invoices"
+  add_foreign_key "debtor_orders", "jobs"
+  add_foreign_key "debtor_payments", "debtor_orders"
   add_foreign_key "employees", "sections"
   add_foreign_key "jobs", "orders"
   add_foreign_key "jobs", "quotations"
   add_foreign_key "jobs", "sections"
   add_foreign_key "labor_records", "employees"
-  add_foreign_key "labor_records", "employees", column: "supervisor_id"
   add_foreign_key "labor_records", "jobs"
+  add_foreign_key "labor_records", "supervisors"
   add_foreign_key "supervisors", "employees"
   add_foreign_key "supervisors", "sections"
 end
