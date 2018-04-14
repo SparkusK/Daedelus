@@ -2,10 +2,10 @@
 
 <h1>Sections</h1>
 
-<table>
+<table class="table table-striped table-hover">
   <thead>
     <tr>
-      <th>Employee</th>
+      <th>Id</th>
       <th>Name</th>
       <th colspan="3"></th>
     </tr>
@@ -14,7 +14,7 @@
   <tbody>
     <% @sections.each do |section| %>
       <tr>
-        <td><%= section.employee %></td>
+        <td><%= section.id %></td>
         <td><%= section.name %></td>
         <td><%= link_to 'Show', section %></td>
         <td><%= link_to 'Edit', edit_section_path(section) %></td>

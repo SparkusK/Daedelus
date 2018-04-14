@@ -1,3 +1,8 @@
 class Section < ApplicationRecord
-  belongs_to :employee
+  has_many :employees
+  has_many :jobs
+  has_one :employee, as: :supervisor
+  def section_name
+    "#{name}"
+  end
 end

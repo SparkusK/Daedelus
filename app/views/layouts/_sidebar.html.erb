@@ -1,14 +1,32 @@
 <ul class="nav flex-column">
   <li class="nav-item">
-    <a class="nav-link active" href="#">Active</a>
+    <%= link_to "Employees", employees_path, class: "nav-link" %>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Link</a>
+    <%= link_to "Sections", sections_path, class: "nav-link" %>
+  </li>
+  <div class="dropdown-divider"></div>
+  <li class="nav-item">
+    <%= link_to "Orders", orders_path, class: "nav-link" %>
   </li>
   <li class="nav-item">
-    <a class="nav-link" href="#">Link</a>
+    <%= link_to "Quotations", quotations_path, class: "nav-link" %>
   </li>
   <li class="nav-item">
-    <a class="nav-link disabled" href="#">Disabled</a>
+    <%= link_to "Invoices", invoices_path, class: "nav-link" %>
+  </li>
+  <div class="dropdown-divider"></div>
+  <li class="nav-item">
+    <%= link_to "Jobs", jobs_path, class: "nav-link" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to "Labor Records", labor_records_path, class: "nav-link" %>
+  </li>
+  <div class="dropdown-divider"></div>
+  <li class="nav-item">
+    <%= link_to "Customers", customers_path, class: "nav-link" %>
+  </li>
+  <li class="nav-item">
+    <%= link_to "Suppliers", suppliers_path, class: "nav-link" %>
   </li>
 </ul>

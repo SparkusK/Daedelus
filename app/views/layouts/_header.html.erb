@@ -1,28 +1,14 @@
 <header>
-  <nav class="navbar navbar-inverse">
-    <div class="container-fluid">
-      <div class="navbar-header">
-        <%= link_to "Home", root_path, class: "navbar-brand" %>
-      </div>
-      <ul class="nav navbar-nav navbar-left">
-        <li><%= link_to "Home",   root_path %></li>
-          <% if true # if logged in; need to do this. Devise? %>
-            <li><%= link_to "Home",   root_path %></li>
-            <li class="dropdown">
-              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                <%= "Spark" %> <b class="caret"></b>
-              </a>
-              <ul class="dropdown-menu">
-                <li><%= link_to "Home",   root_path %></li>
-                <li class="divider"></li>
-                <li>
-                  <li><%= link_to "Home",   root_path %></li>
-                </li>
-              </ul>
-            </li>
-        <% else # if not logged in. %>
-          <li><%= link_to "Log in", login_path %></li>
-        <% end %>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Navbar</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <%= link_to "Home", root_path, class: "nav-link" %>
+        </li>
       </ul>
     </div>
   </nav>

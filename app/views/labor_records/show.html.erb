@@ -1,0 +1,44 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Employee:</strong>
+  <%= @labor_record.employee %>
+</p>
+
+<p>
+  <strong>Day of the week:</strong>
+  <%= @labor_record.day_of_the_week %>
+</p>
+
+<p>
+  <strong>Labor date:</strong>
+  <%= @labor_record.labor_date %>
+</p>
+
+<p>
+  <strong>Hours:</strong>
+  <%= @labor_record.hours %>
+</p>
+
+<p>
+  <strong>Total before:</strong>
+  <%= @labor_record.total_before %>
+</p>
+
+<p>
+  <strong>Total after:</strong>
+  <%= @labor_record.total_after %>
+</p>
+
+<p>
+  <strong>Supervisor:</strong>
+  <%= @labor_record.supervisor_id %>
+</p>
+
+<p>
+  <strong>Job:</strong>
+  <%= @labor_record.job %>
+</p>
+
+<%= link_to 'Edit', edit_labor_record_path(@labor_record) %> |
+<%= link_to 'Back', labor_records_path %>

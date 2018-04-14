@@ -1,0 +1,41 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Labor Records</h1>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Employee</th>
+      <th>Day of the week</th>
+      <th>Labor date</th>
+      <th>Hours</th>
+      <th>Total before</th>
+      <th>Total after</th>
+      <th>Supervisor</th>
+      <th>Job</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @labor_records.each do |labor_record| %>
+      <tr>
+        <td><%= labor_record.employee %></td>
+        <td><%= labor_record.day_of_the_week %></td>
+        <td><%= labor_record.labor_date %></td>
+        <td><%= labor_record.hours %></td>
+        <td><%= labor_record.total_before %></td>
+        <td><%= labor_record.total_after %></td>
+        <td><%= labor_record.supervisor_id %></td>
+        <td><%= labor_record.job %></td>
+        <td><%= link_to 'Show', labor_record %></td>
+        <td><%= link_to 'Edit', edit_labor_record_path(labor_record) %></td>
+        <td><%= link_to 'Destroy', labor_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Labor Record', new_labor_record_path %>
