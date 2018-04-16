@@ -22,14 +22,14 @@
     <% @jobs.each do |job| %>
       <tr>
         <td><%= job.receive_date %></td>
-        <td><%= job.section %></td>
+        <td><%= job.section.name %></td>
         <td><%= job.contact_person %></td>
         <td><%= job.balow_section %></td>
         <td><%= job.total %></td>
         <td><%= job.work_description %></td>
         <td><%= job.jce_number %></td>
-        <td><%= job.order %></td>
-        <td><%= job.quotation %></td>
+        <td><%= job.order.code %></td>
+        <td><%= job.quotation.code %></td>
         <td><%= link_to 'Show', job %></td>
         <td><%= link_to 'Edit', edit_job_path(job) %></td>
         <td><%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %></td>

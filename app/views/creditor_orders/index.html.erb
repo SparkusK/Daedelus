@@ -21,9 +21,9 @@
   <tbody>
     <% @creditor_orders.each do |creditor_order| %>
       <tr>
-        <td><%= creditor_order.supplier %></td>
-        <td><%= creditor_order.job %></td>
-        <td><%= creditor_order.invoice %></td>
+        <td><%= creditor_order.supplier.supplier_name %></td>
+        <td><%= creditor_order.job.job_name %></td>
+        <td><%= creditor_order.invoice.code %></td>
         <td><%= creditor_order.delivery_note %></td>
         <td><%= creditor_order.date_issued %></td>
         <td><%= creditor_order.value_excluding_tax %></td>

@@ -1,0 +1,34 @@
+<p id="notice"><%= notice %></p>
+
+<table class="table table-striped table-hover">
+  <thead>
+    <tr>
+      <th>Labour</th>
+      <th>Overheads</th>
+      <th>Orders</th>
+      <th>Target jobs</th>
+      <th>Cost @ 5%</th>
+      <th>Cost @ 10%</th>
+      <th>Cost @ 15%</th>
+      <th>Profit @ 5%</th>
+      <th>Profit @ 10%</th>
+      <th>Profit @ 15%</th>
+    </tr>
+  </thead>
+  <tbody>
+      <tr>
+        <td><%= @summary.labor.values[0][0] %></td>
+        <td><%= @summary.overheads %></td>
+        <td><%= @summary.orders.values[0][0] %></td>
+        <td><%= @summary.target_jobs %></td>
+        <td><%= @summary.get_cost(1.05) %></td>
+        <td><%= @summary.get_cost(1.1) %></td>
+        <td><%= @summary.get_cost(1.15) %></td>
+        <td><%= @summary.get_profit(1.05) %></td>
+        <td><%= @summary.get_profit(1.1) %></td>
+        <td><%= @summary.get_profit(1.15) %></td>
+      </tr>
+  </tbody>
+</table>
+
+<%= link_to 'Back', summaries_path %>

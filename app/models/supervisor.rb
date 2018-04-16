@@ -1,6 +1,7 @@
 class Supervisor < ApplicationRecord
   belongs_to :employee
   belongs_to :section
+  has_many :labor_records
 
   def supervisor_name
     "#{employee.first_name} #{employee.last_name}"

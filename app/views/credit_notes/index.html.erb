@@ -16,7 +16,7 @@
   <tbody>
     <% @credit_notes.each do |credit_note| %>
       <tr>
-        <td><%= credit_note.creditor_order %></td>
+        <td><%= credit_note.creditor_order.creditor_order_name %></td>
         <td><%= credit_note.payment_type %></td>
         <td><%= credit_note.amount_paid %></td>
         <td><%= credit_note.note %></td>
