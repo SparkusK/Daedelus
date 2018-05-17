@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180414173201) do
+ActiveRecord::Schema.define(version: 20180517075012) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -37,6 +37,7 @@ ActiveRecord::Schema.define(version: 20180414173201) do
     t.decimal "still_owed_amount"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "reference_number"
     t.index ["invoice_id"], name: "index_creditor_orders_on_invoice_id"
     t.index ["job_id"], name: "index_creditor_orders_on_job_id"
     t.index ["supplier_id"], name: "index_creditor_orders_on_supplier_id"
@@ -104,11 +105,11 @@ ActiveRecord::Schema.define(version: 20180414173201) do
     t.decimal "total"
     t.string "work_description"
     t.string "jce_number"
-    t.bigint "order_id"
+    t.bigint "debtor_order_id"
     t.bigint "quotation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["order_id"], name: "index_jobs_on_order_id"
+    t.index ["debtor_order_id"], name: "index_jobs_on_debtor_order_id"
     t.index ["quotation_id"], name: "index_jobs_on_quotation_id"
     t.index ["section_id"], name: "index_jobs_on_section_id"
   end
@@ -128,10 +129,13 @@ ActiveRecord::Schema.define(version: 20180414173201) do
     t.index ["job_id"], name: "index_labor_records_on_job_id"
   end
 
-  create_table "orders", force: :cascade do |t|
-    t.string "code"
+  create_table "managers", force: :cascade do |t|
+    t.bigint "employee_id"
+    t.bigint "section_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.index ["employee_id"], name: "index_managers_on_employee_id"
+    t.index ["section_id"], name: "index_managers_on_section_id"
   end
 
   create_table "quotations", force: :cascade do |t|
@@ -153,7 +157,6 @@ ActiveRecord::Schema.define(version: 20180414173201) do
     t.datetime "updated_at", null: false
     t.index ["employee_id", "section_id"], name: "index_supervisors_on_employee_id_and_section_id", unique: true
     t.index ["employee_id"], name: "index_supervisors_on_employee_id", unique: true
-    t.index ["section_id"], name: "index_supervisors_on_section_id", unique: true
   end
 
   create_table "suppliers", force: :cascade do |t|
@@ -190,12 +193,14 @@ ActiveRecord::Schema.define(version: 20180414173201) do
   add_foreign_key "debtor_orders", "jobs"
   add_foreign_key "debtor_payments", "debtor_orders"
   add_foreign_key "employees", "sections"
-  add_foreign_key "jobs", "orders"
+  add_foreign_key "jobs", "debtor_orders"
   add_foreign_key "jobs", "quotations"
   add_foreign_key "jobs", "sections"
   add_foreign_key "labor_records", "employees"
   add_foreign_key "labor_records", "jobs"
   add_foreign_key "labor_records", "supervisors"
+  add_foreign_key "managers", "employees"
+  add_foreign_key "managers", "sections"
   add_foreign_key "supervisors", "employees"
   add_foreign_key "supervisors", "sections"
 end

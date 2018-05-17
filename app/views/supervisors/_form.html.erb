@@ -16,7 +16,7 @@
       <%= form.label :employee_id %>
       <%= collection_select(:employee,
                             :employee_id,
-                            promotable_employees(),
+                            leaf_employees(),
                             :id,
                             :employee_name,
                             {prompt: true},
@@ -26,7 +26,7 @@
       <%= form.label :section_id %>
       <%= collection_select(:section,
                             :section_id,
-                            unsupervised_sections(),
+                            Section.all(),
                             :id,
                             :section_name,
                             {prompt: true},

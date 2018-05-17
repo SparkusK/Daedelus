@@ -1,7 +1,8 @@
 class Section < ApplicationRecord
   has_many :employees
   has_many :jobs
-  has_one :supervisor
+  has_many :supervisors
+  has_one :manager
 
   def section_name
     "#{name}"
