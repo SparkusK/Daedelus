@@ -21,7 +21,11 @@
     <% @debtor_orders.each do |debtor_order| %>
       <tr>
         <td><%= debtor_order.customer.customer_name %></td>
-        <td><%= debtor_order.job.job_name %></td>
+        <% if debtor_order.job.nil? %>
+          <td>No Job</td>
+        <% else %>
+          <td><%= debtor_order.job.job_name %></td>
+        <% end %>
         <td><%= debtor_order.invoice.code %></td>
         <td><%= debtor_order.SA_number %></td>
         <td><%= debtor_order.value_including_tax %></td>
