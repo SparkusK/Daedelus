@@ -1,6 +1,6 @@
 class Job < ApplicationRecord
   belongs_to :section
-  belongs_to :order
+  belongs_to :debtor_order
   belongs_to :quotation
   has_many :labor_records
 
