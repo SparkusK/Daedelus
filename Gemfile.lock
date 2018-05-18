@@ -61,6 +61,8 @@ GEM
     dotenv (0.7.0)
     erubi (1.7.1)
     execjs (2.7.0)
+    faker (1.8.7)
+      i18n (>= 0.7)
     ffi (1.9.23)
     foreman (0.64.0)
       dotenv (~> 0.7.0)
@@ -175,6 +177,7 @@ DEPENDENCIES
   byebug
   coffee-rails (~> 4.2)
   devise
+  faker
   foreman
   jbuilder (~> 2.5)
   listen (>= 3.0.5, < 3.2)
