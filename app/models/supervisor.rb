@@ -10,8 +10,6 @@ class Supervisor < ApplicationRecord
 
   validates :employee_id, presence: true
     # , message: "A Section has to be supervised by an Employee."
-  validates :employee_id, uniqueness: true
-    # , message: "A Section can only be supervised by one Employee."
   validates :section_id, presence: true
     # , message: "A Supervisor has to supervise a Section."
   validates :section_id, uniqueness: true
