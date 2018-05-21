@@ -26,7 +26,11 @@
         <td><%= labor_record.hours %></td>
         <td><%= labor_record.total_before %></td>
         <td><%= labor_record.total_after %></td>
+        <% if labor_record.supervisor.nil? %>
+          <td></td>
+        <% else %>
         <td><%= labor_record.supervisor.supervisor_name %></td>
+        <% end %>
         <td><%= labor_record.job.job_name %></td>
         <td><%= link_to 'Show', labor_record %></td>
         <td><%= link_to 'Edit', edit_labor_record_path(labor_record) %></td>
