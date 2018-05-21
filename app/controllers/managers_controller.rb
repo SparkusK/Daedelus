@@ -24,8 +24,9 @@ class ManagersController < ApplicationController
   # POST /managers
   # POST /managers.json
   def create
-    @manager = Manager.new(manager_params)
-
+    @input_params = {:employee_id=> params[:employee][:employee_id],
+                     :section_id => params[:section][:section_id]}
+    @manager = Manager.new(@input_params)
     respond_to do |format|
       if @manager.save
         format.html { redirect_to @manager, notice: 'Manager was successfully created.' }
@@ -69,6 +70,6 @@ class ManagersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def manager_params
-      params.require(:manager).permit(:employee_id, :section_id)
+      params.require([:employee, :section])
     end
 end
