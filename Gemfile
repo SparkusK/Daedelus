@@ -33,6 +33,8 @@ gem 'webpacker'
 gem 'foreman'
 gem 'devise'
 gem 'faker'
+gem 'will_paginate'
+gem 'bootstrap-will_paginate'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

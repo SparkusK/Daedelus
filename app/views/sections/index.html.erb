@@ -24,4 +24,8 @@
 
 <br>
 
+<%= will_paginate @sections, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
+
+<br>
+
 <%= link_to 'New Section', new_section_path %>

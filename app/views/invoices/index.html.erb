@@ -24,4 +24,8 @@
 
 <br>
 
+<%= will_paginate @invoices, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
+
+<br>
+
 <%= link_to 'New Invoice', new_invoice_path %>

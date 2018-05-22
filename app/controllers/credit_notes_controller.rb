@@ -4,7 +4,7 @@ class CreditNotesController < ApplicationController
   # GET /credit_notes
   # GET /credit_notes.json
   def index
-    @credit_notes = CreditNote.all
+    @credit_notes = CreditNote.paginate(page: params[:page])
   end
 
   # GET /credit_notes/1

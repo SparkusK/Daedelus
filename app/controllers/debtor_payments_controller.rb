@@ -4,7 +4,7 @@ class DebtorPaymentsController < ApplicationController
   # GET /debtor_payments
   # GET /debtor_payments.json
   def index
-    @debtor_payments = DebtorPayment.all
+    @debtor_payments = DebtorPayment.paginate(page: params[:page])
   end
 
   # GET /debtor_payments/1

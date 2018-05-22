@@ -4,7 +4,7 @@ class SupervisorsController < ApplicationController
   # GET /supervisors
   # GET /supervisors.json
   def index
-    @supervisors = Supervisor.all
+    @supervisors = Supervisor.paginate(page: params[:page])
   end
 
   # GET /supervisors/1

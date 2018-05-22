@@ -4,7 +4,7 @@ class QuotationsController < ApplicationController
   # GET /quotations
   # GET /quotations.json
   def index
-    @quotations = Quotation.all
+    @quotations = Quotation.paginate(page: params[:page])
   end
 
   # GET /quotations/1

@@ -4,7 +4,7 @@ class SectionsController < ApplicationController
   # GET /sections
   # GET /sections.json
   def index
-    @sections = Section.all
+    @sections = Section.paginate(page: params[:page])
   end
 
   # GET /sections/1

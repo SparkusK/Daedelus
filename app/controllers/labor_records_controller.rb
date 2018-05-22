@@ -4,7 +4,7 @@ class LaborRecordsController < ApplicationController
   # GET /labor_records
   # GET /labor_records.json
   def index
-    @labor_records = LaborRecord.all
+    @labor_records = LaborRecord.paginate(page: params[:page])
   end
 
   # GET /labor_records/1

@@ -30,4 +30,8 @@
 
 <br>
 
+<%= will_paginate @credit_notes, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
+
+<br>
+
 <%= link_to 'New Credit Note', new_credit_note_path %>

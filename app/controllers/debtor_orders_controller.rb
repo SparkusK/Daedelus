@@ -4,7 +4,7 @@ class DebtorOrdersController < ApplicationController
   # GET /debtor_orders
   # GET /debtor_orders.json
   def index
-    @debtor_orders = DebtorOrder.all
+    @debtor_orders = DebtorOrder.paginate(page: params[:page])
   end
 
   # GET /debtor_orders/1
