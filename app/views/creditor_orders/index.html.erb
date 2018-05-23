@@ -26,10 +26,10 @@
         <td><%= creditor_order.invoice.code %></td>
         <td><%= creditor_order.delivery_note %></td>
         <td><%= creditor_order.date_issued %></td>
-        <td><%= creditor_order.value_excluding_tax %></td>
+        <td><%= creditor_order.value_excluding_tax.truncate(2) %></td>
         <td><%= creditor_order.tax_amount %></td>
-        <td><%= creditor_order.value_including_tax %></td>
-        <td><%= creditor_order.still_owed_amount %></td>
+        <td><%= creditor_order.value_including_tax.truncate(2) %></td>
+        <td><%= creditor_order.still_owed_amount.truncate(2) %></td>
         <td><%= link_to 'Show', creditor_order %></td>
         <td><%= link_to 'Edit', edit_creditor_order_path(creditor_order) %></td>
         <td><%= link_to 'Destroy', creditor_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>

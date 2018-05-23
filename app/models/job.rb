@@ -12,4 +12,9 @@ class Job < ApplicationRecord
     @supervisor = get_supervisor
     "Job no. #{id}, supervised by #{@supervisor.employee.first_name}"
   end
+
+  # Search by section, jce_number, or quotation
+  def fuzzy_search(params)
+
+  end
 end

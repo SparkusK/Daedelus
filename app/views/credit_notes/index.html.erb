@@ -18,7 +18,7 @@
       <tr>
         <td><%= credit_note.creditor_order.creditor_order_name %></td>
         <td><%= credit_note.payment_type %></td>
-        <td><%= credit_note.amount_paid %></td>
+        <td><%= credit_note.amount_paid.truncate(2) %></td>
         <td><%= credit_note.note %></td>
         <td><%= link_to 'Show', credit_note %></td>
         <td><%= link_to 'Edit', edit_credit_note_path(credit_note) %></td>

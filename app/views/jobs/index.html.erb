@@ -25,7 +25,7 @@
         <td><%= job.section.name %></td>
         <td><%= job.contact_person %></td>
         <td><%= job.balow_section %></td>
-        <td><%= job.total %></td>
+        <td><%= job.total.truncate(2) %></td>
         <td><%= job.work_description %></td>
         <td><%= job.jce_number %></td>
         <td><%= job.debtor_order.id %></td>

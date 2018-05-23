@@ -13,4 +13,9 @@ class Supervisor < ApplicationRecord
   validates :section_id, presence: true
     # , message: "A Supervisor has to supervise a Section."
 
+    # Search by employee.first_name, employee.last_name, or section.name
+    def fuzzy_search(params)
+
+    end
+
 end

@@ -8,5 +8,10 @@ class Employee < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  # Search by first_name, last_name, occupation, section, or company number
+  def fuzzy_search(params)
+
+  end
+
 
 end

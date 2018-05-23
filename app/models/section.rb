@@ -8,5 +8,9 @@ class Section < ApplicationRecord
     "#{name}"
   end
 
+  # Search by name
+  def fuzzy_search(params)
+
+  end
 
 end
