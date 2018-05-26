@@ -25,4 +25,6 @@ Rails.application.routes.draw do
   get '/summaries/new', to: "summaries#new"
   post 'summaries/new', to: "summaries#show"
 
+  get '/payroll', to: "payrolls#index"
+
 end
