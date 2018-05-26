@@ -17,16 +17,16 @@
   </thead>
   <tbody>
       <tr>
-        <td><%= @summary.labor.values[0][0] %></td>
-        <td><%= @summary.overheads %></td>
-        <td><%= @summary.orders.values[0][0] %></td>
-        <td><%= @summary.target_jobs %></td>
-        <td><%= @summary.get_cost(1.05) %></td>
-        <td><%= @summary.get_cost(1.1) %></td>
-        <td><%= @summary.get_cost(1.15) %></td>
-        <td><%= @summary.get_profit(1.05) %></td>
-        <td><%= @summary.get_profit(1.1) %></td>
-        <td><%= @summary.get_profit(1.15) %></td>
+        <td><%= number_to_currency(@summary.labor.values[0][0], unit: "R") %></td>
+        <td><%= number_to_currency(@summary.overheads, unit: "R") %></td>
+        <td><%= number_to_currency(@summary.orders.values[0][0], unit: "R") %></td>
+        <td><%= number_to_currency(@summary.target_jobs, unit: "R") %></td>
+        <td><%= number_to_currency(@summary.get_cost(1.05), unit: "R") %></td>
+        <td><%= number_to_currency(@summary.get_cost(1.1), unit: "R") %></td>
+        <td><%= number_to_currency(@summary.get_cost(1.15), unit: "R") %></td>
+        <td><%= number_to_currency(@summary.get_profit(1.05), unit: "R") %></td>
+        <td><%= number_to_currency(@summary.get_profit(1.1), unit: "R") %></td>
+        <td><%= number_to_currency(@summary.get_profit(1.15), unit: "R") %></td>
       </tr>
   </tbody>
 </table>
