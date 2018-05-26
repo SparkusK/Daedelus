@@ -18,7 +18,7 @@
     <% @debtor_payments.each do |debtor_payment| %>
       <tr>
         <td><%= debtor_payment.debtor_order.debtor_order_name %></td>
-        <td><%= debtor_payment.payment_amount.truncate(2) %></td>
+        <td><%= number_to_currency(debtor_payment.payment_amount, unit: "R") %></td>
         <td><%= debtor_payment.payment_date %></td>
         <td><%= debtor_payment.payment_type %></td>
         <td><%= debtor_payment.note %></td>

@@ -21,11 +21,11 @@
   <tbody>
     <% @jobs.each do |job| %>
       <tr>
-        <td><%= job.receive_date %></td>
+        <td><%= job.receive_date.strftime("%a, %d %b %Y") %></td>
         <td><%= job.section.name %></td>
         <td><%= job.contact_person %></td>
         <td><%= job.balow_section %></td>
-        <td><%= job.total.truncate(2) %></td>
+        <td><%= number_to_currency(job.total, unit: "R") %></td>
         <td><%= job.work_description %></td>
         <td><%= job.jce_number %></td>
         <td><%= job.debtor_order.id %></td>

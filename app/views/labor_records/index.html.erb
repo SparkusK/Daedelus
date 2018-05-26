@@ -22,8 +22,8 @@
         <td><%= labor_record.employee.employee_name %></td>
         <td><%= labor_record.labor_date.strftime("%a, %d %b %Y") %></td>
         <td><%= labor_record.hours %></td>
-        <td><%= labor_record.total_before.truncate(2) %></td>
-        <td><%= labor_record.total_after.truncate(2) %></td>
+        <td><%= number_to_currency(labor_record.total_before, unit: "R") %></td>
+        <td><%= number_to_currency(labor_record.total_after, unit: "R") %></td>
         <% if labor_record.supervisor.nil? %>
           <td></td>
         <% else %>
