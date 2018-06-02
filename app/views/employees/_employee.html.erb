@@ -1,0 +1,9 @@
+<td><%= employee.first_name %></td>
+<td><%= employee.last_name %></td>
+<td><%= employee.occupation %></td>
+<td><%= employee.section.name %></td>
+<td><%= employee.company_number %></td>
+<td><%= number_to_currency(employee.net_rate, unit: "R") %></td>
+<td><%= number_to_currency(employee.inclusive_rate, unit: "R") %></td>
+<td><%= button_to 'Edit', edit_employee_path(employee), remote: true, method: :get, class: "btn btn-primary" %></td>
+<td><%= button_to 'Destroy', employee, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>

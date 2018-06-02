@@ -1,0 +1,43 @@
+<%= form_with(model: @employee) do |form| %>
+  <% if @employee.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(employee.errors.count, "error") %> prohibited this employee from being saved:</h2>
+
+      <ul>
+      <% @employee.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+  <td>
+    <%= form.text_field :first_name, id: :employee_first_name, class: "form-control" %>
+  </td>
+  <td>
+    <%= form.text_field :last_name, id: :employee_last_name, class: "form-control" %>
+  </td>
+  <td>
+    <%= form.text_field :occupation, id: :employee_occupation, class: "form-control" %>
+  </td>
+  <td>
+    <%= collection_select(:employee, :section_id, Section.all, :id, :section_name, {prompt: true}, {class: "custom-select"}) %>
+  </td>
+  <td>
+    <%= form.text_field :company_number, id: :employee_company_number, class: "form-control" %>
+  </td>
+  <td>
+    <%= form.text_field :net_rate, id: :employee_net_rate, class: "form-control" %>
+  </td>
+  <td>
+    <%= form.text_field :inclusive_rate, id: :employee_inclusive_rate, class: "form-control"%>
+  </td>
+
+  <td>
+    <div class="actions">
+      <%= form.submit "Save", class: "btn btn-primary", remote: true %>
+    </div>
+  </td>
+  <td>
+    <%= button_to "Cancel", cancel_employee_path(id: @employee.id), class: "btn btn-disabled", remote: true, method: :get %>
+  </td>
+<% end %>

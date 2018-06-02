@@ -16,10 +16,6 @@ class EmployeesController < ApplicationController
     end
   end
 
-  # GET /employees/1
-  # GET /employees/1.json
-  def show
-  end
 
   # GET /employees/new
   def new
@@ -28,6 +24,10 @@ class EmployeesController < ApplicationController
 
   # GET /employees/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /employees
@@ -39,6 +39,7 @@ class EmployeesController < ApplicationController
       if @employee.save
         format.html { redirect_to @employee, notice: 'Employee was successfully created.' }
         format.json { render :show, status: :created, location: @employee }
+        format.js
       else
         format.html { render :new }
         format.json { render json: @employee.errors, status: :unprocessable_entity }
@@ -53,9 +54,12 @@ class EmployeesController < ApplicationController
       if @employee.update(employee_params)
         format.html { redirect_to @employee, notice: 'Employee was successfully updated.' }
         format.json { render :show, status: :ok, location: @employee }
+        format.js
       else
         format.html { render :edit }
         format.json { render json: @employee.errors, status: :unprocessable_entity }
+        format.js
+
       end
     end
   end
@@ -67,6 +71,15 @@ class EmployeesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to employees_url, notice: 'Employee was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  # GET /employees/2.js
+  def cancel()
+    id = params[:id]
+    @employee = Employee.find_by(id: id)
+    respond_to do |format|
+      format.js
     end
   end
 
