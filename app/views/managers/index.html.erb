@@ -2,6 +2,21 @@
 
 <h1>Managers</h1>
 
+<section class="search-form">
+  <%= form_for :employees, method: :get do |f| %>
+    <div class="input-group input-group-lg">
+      <%= label_tag :keywords, nil, class: "sr-only" %>
+      <%= text_field_tag :keywords, nil,
+            placeholder: "First name or last name",
+            class: "form-control input-lg" %>
+      <span class="input-group-btn">
+        <%= submit_tag "Find Managers",
+              class: "btn btn-primary btn-lg" %>
+      </span>
+    </div>
+  <% end %>
+</section>
+
 <table class="table table-striped table-hover">
   <thead>
     <tr>
