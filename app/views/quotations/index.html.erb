@@ -1,21 +1,25 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Quotations</h1>
-
-<section class="search-form">
-  <%= form_for :employees, method: :get do |f| %>
-    <div class="input-group input-group-lg">
-      <%= label_tag :keywords, nil, class: "sr-only" %>
-      <%= text_field_tag :keywords, nil,
-            placeholder: "Quotation code",
-            class: "form-control input-lg" %>
-      <span class="input-group-btn">
-        <%= submit_tag "Find Quotations",
-              class: "btn btn-primary btn-lg" %>
-      </span>
-    </div>
-  <% end %>
+<section class="header">
+  <div class="d-flex justify-content-between">
+    <h1 class="col-md-3">Quotations</h1>
+    <section class="search-form col-md-9">
+      <%= form_for :employees, method: :get do |f| %>
+        <div class="input-group input-group-lg">
+          <%= label_tag :keywords, nil, class: "sr-only" %>
+          <%= text_field_tag :keywords, nil,
+                placeholder: "Quotation code",
+                class: "form-control input-lg" %>
+          <span class="input-group-btn">
+            <%= submit_tag "Find Quotations",
+                  class: "btn btn-primary btn-lg" %>
+          </span>
+        </div>
+      <% end %>
+    </section>
+  </div>
 </section>
+
 
 <table class="table table-striped table-hover">
   <thead>
