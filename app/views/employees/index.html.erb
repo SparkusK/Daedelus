@@ -2,33 +2,34 @@
 
 <section class="header">
   <div class="d-flex justify-content-between">
-    <h1>Employees</h1>
-    <%= button_to 'New Employee', new_employee_path, class: "btn" %>
+    <h1 class="col-md-3">Employees</h1>
+    <section class="search-form col-md-9">
+      <%= form_for :employees, method: :get do |f| %>
+        <div class="input-group input-group-lg">
+          <%= label_tag :keywords, nil, class: "sr-only" %>
+          <%= text_field_tag :keywords, nil,
+                placeholder: "First name or last name",
+                class: "form-control input-lg" %>
+          <span class="input-group-btn">
+            <%= submit_tag "Find Employees",
+                  class: "btn btn-primary btn-lg" %>
+          </span>
+        </div>
+      <% end %>
+    </section>
   </div>
 </section>
 
-<section class="search-form">
-  <%= form_for :employees, method: :get do |f| %>
-    <div class="input-group input-group-lg">
-      <%= label_tag :keywords, nil, class: "sr-only" %>
-      <%= text_field_tag :keywords, nil,
-            placeholder: "First name or last name",
-            class: "form-control input-lg" %>
-      <span class="input-group-btn">
-        <%= submit_tag "Find Employees",
-              class: "btn btn-primary btn-lg" %>
-      </span>
-    </div>
-  <% end %>
-</section>
+
 
 <br>
-
 <section class="top-pager">
-
-<%= will_paginate @employees, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-
+  <div class="d-flex justify-content-between">
+    <%= will_paginate @employees, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
+    <%= button_to 'New Employee', new_employee_path, class: "btn" %>
+  </div>
 </section>
+<br>
 
 <section class="employee-panels">
   <% @employees.each do |employee| %>
@@ -37,7 +38,7 @@
 </section>
 
 <br>
-
+<section class="bottom-pager">
 <%= will_paginate @employees, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-
+</section>
 <br>
