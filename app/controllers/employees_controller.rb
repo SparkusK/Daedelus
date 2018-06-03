@@ -54,6 +54,7 @@ class EmployeesController < ApplicationController
       if @employee.update(employee_params)
         format.html { redirect_to @employee, notice: 'Employee was successfully updated.' }
         format.json { render :show, status: :ok, location: @employee }
+        params[:commit] == "Save" ? format.js : format.js { render action: "cancel" }
         format.js
       else
         format.html { render :edit }
@@ -75,7 +76,7 @@ class EmployeesController < ApplicationController
   end
 
   # GET /employees/2.js
-  def cancel()
+  def cancel
     id = params[:id]
     @employee = Employee.find_by(id: id)
     respond_to do |format|
