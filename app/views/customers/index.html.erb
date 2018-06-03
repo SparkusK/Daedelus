@@ -20,6 +20,16 @@
   </div>
 </section>
 
+<br>
+<section class="top-pager">
+  <div class="d-flex justify-content-between">
+    <%= will_paginate @customers, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
+    <%= button_to 'New Customer', new_customer_path, class: "btn" %>
+
+  </div>
+</section>
+<br>
+
 
 <table class="table table-striped table-hover">
   <thead>
@@ -50,5 +60,3 @@
 <%= will_paginate @customers, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
 
 <br>
-
-<%= link_to 'New Customer', new_customer_path %>
