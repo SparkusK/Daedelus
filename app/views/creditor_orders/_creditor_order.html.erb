@@ -6,16 +6,38 @@
     </div>
   </div>
   <div class="card-body">
-    <div class="row">
-      <%= creditor_order.invoice.code %>
-      <%= creditor_order.delivery_note %>
-      <%= creditor_order.date_issued.strftime("%a, %d %b %Y") %>
-      <%= number_to_currency(creditor_order.value_excluding_tax, unit: "R") %>
-      <%= number_to_currency(creditor_order.value_including_tax, unit: "R") %>
-      <%= number_to_currency(creditor_order.still_owed_amount, unit: "R") %>
+    <div class="d-flex justify-content-between">
+      <div>
+        <h6><small class="text-muted">INVOICE CODE: </small> <%= creditor_order.invoice.code %> </h6>
+      </div>
+      <div>
+        <h6><small class="text-muted">DATE ISSUED: </small> <%= creditor_order.date_issued.strftime("%a, %d %b %Y") %> </h6>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between">
+      <div>
+        <h6>
+          <small class="text-muted">VALUE EXCLUDING TAX: </small>
+          <%= number_to_currency(creditor_order.value_excluding_tax, unit: "R") %>
+        </h6>
+      </div>
+      <div>
+        <h6>
+          <small class="text-muted">VALUE INCLUDING TAX: </small>
+          <%= number_to_currency(creditor_order.value_including_tax, unit: "R") %>
+        </h6>
+      </div>
+      <div>
+        <h6>
+          <small class="text-muted">STILL OWED AMOUNT: </small>
+          <%= number_to_currency(creditor_order.still_owed_amount, unit: "R") %>
+        </h6>
+      </div>
     </div>
     <div class="row">
-      <div class="col-md-10"></div>
+      <div class="col-md-10">
+        <h6><small class="text-muted">NOTE: </small> <%= creditor_order.delivery_note %> </h6>
+      </div>
       <div class="d-flex col-md-2">
         <%= button_to 'Edit', edit_creditor_order_path(creditor_order), class: "btn btn-primary" %>
         <%= button_to 'Remove', creditor_order, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
