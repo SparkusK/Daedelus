@@ -1,1 +1,1 @@
-$('table tbody tr.<%= @employee.id %>').html("<%= escape_javascript(render 'inline_edit', employee: @employee).html_safe %>");
+$('#<%= @employee.id %>').html("<%= escape_javascript(render 'inline_edit', employee: @employee).html_safe %>");

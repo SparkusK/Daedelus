@@ -1,6 +1,13 @@
 <p id="notice"><%= notice %></p>
 
-<h1>Employees</h1>
+<section class="header">
+  <div class="d-flex justify-content-between">
+    <h1>Employees</h1>
+    <%= button_to 'New Employee', new_employee_path, class: "btn" %>
+  </div>
+
+
+</section>
 
 <section class="search-form">
   <%= form_for :employees, method: :get do |f| %>
@@ -34,5 +41,3 @@
 <%= will_paginate @employees, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
 
 <br>
-
-<%= link_to 'New Employee', new_employee_path %>
