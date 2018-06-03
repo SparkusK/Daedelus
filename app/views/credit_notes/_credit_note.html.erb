@@ -2,16 +2,16 @@
   <div class="card-header">
     <div class="d-flex justify-content-between">
       <h4>
+        <%= credit_note.creditor_order.creditor_order_name %>
       </h4>
       <h5>
+        <%= number_to_currency(credit_note.amount_paid, unit: "R") %>
       </h5>
     </div>
   </div>
   <div class="card-body">
     <div class="row">
-      <%= credit_note.creditor_order.creditor_order_name %>
       <%= credit_note.payment_type %>
-      <%= number_to_currency(credit_note.amount_paid, unit: "R") %>
       <%= credit_note.note %>
     </div>
     <div class="row">

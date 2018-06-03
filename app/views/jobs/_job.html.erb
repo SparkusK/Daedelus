@@ -11,8 +11,8 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <%= job.section.name %>
-      <%= job.contact_person %>
+      <p>Section: <%= job.section.name %></p>
+      <p> <%= job.contact_person %>
       <%= job.balow_section %>
       <%= number_to_currency(job.total, unit: "R") %>
       <%= job.work_description %>

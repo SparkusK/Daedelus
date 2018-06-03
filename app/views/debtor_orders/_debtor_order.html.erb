@@ -2,20 +2,20 @@
   <div class="card-header">
     <div class="d-flex justify-content-between">
       <h4>
+        <%= debtor_order.customer.customer_name %>
       </h4>
       <h5>
+        <%= debtor_order.invoice.code %>
       </h5>
     </div>
   </div>
   <div class="card-body">
     <div class="row">
-      <%= debtor_order.customer.customer_name %>
       <% if debtor_order.job.nil? %>
       No Job
       <% else %>
       <%= debtor_order.job.job_name %>
       <% end %>
-      <%= debtor_order.invoice.code %>
       <%= debtor_order.SA_number %>
       <%= number_to_currency(debtor_order.value_including_tax, unit: "R") %>
       <%= number_to_currency(debtor_order.tax_amount, unit: "R") %>

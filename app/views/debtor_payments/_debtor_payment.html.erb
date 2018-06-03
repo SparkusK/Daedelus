@@ -2,15 +2,15 @@
   <div class="card-header">
     <div class="d-flex justify-content-between">
       <h4>
+        <%= debtor_payment.debtor_order.debtor_order_name %>
       </h4>
       <h5>
+        <%= number_to_currency(debtor_payment.payment_amount, unit: "R") %>
       </h5>
     </div>
   </div>
   <div class="card-body">
     <div class="row">
-      <%= debtor_payment.debtor_order.debtor_order_name %>
-      <%= number_to_currency(debtor_payment.payment_amount, unit: "R") %>
       <%= debtor_payment.payment_date %>
       <%= debtor_payment.payment_type %>
       <%= debtor_payment.note %>
