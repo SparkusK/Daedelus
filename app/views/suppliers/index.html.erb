@@ -42,14 +42,7 @@
 
   <tbody>
     <% @suppliers.each do |supplier| %>
-      <tr>
-        <td><%= supplier.name %></td>
-        <td><%= supplier.email %></td>
-        <td><%= supplier.phone %></td>
-        <td><%= link_to 'Show', supplier %></td>
-        <td><%= link_to 'Edit', edit_supplier_path(supplier) %></td>
-        <td><%= link_to 'Destroy', supplier, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+      <%= render supplier %>
     <% end %>
   </tbody>
 </table>

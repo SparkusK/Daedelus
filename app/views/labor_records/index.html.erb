@@ -46,22 +46,7 @@
 
   <tbody>
     <% @labor_records.each do |labor_record| %>
-      <tr>
-        <td><%= labor_record.employee.employee_name %></td>
-        <td><%= labor_record.labor_date.strftime("%a, %d %b %Y") %></td>
-        <td><%= labor_record.hours %></td>
-        <td><%= number_to_currency(labor_record.total_before, unit: "R") %></td>
-        <td><%= number_to_currency(labor_record.total_after, unit: "R") %></td>
-        <% if labor_record.supervisor.nil? %>
-          <td></td>
-        <% else %>
-        <td><%= labor_record.supervisor.supervisor_name %></td>
-        <% end %>
-        <td><%= labor_record.job.jce_number %></td>
-        <td><%= link_to 'Show', labor_record %></td>
-        <td><%= link_to 'Edit', edit_labor_record_path(labor_record) %></td>
-        <td><%= link_to 'Destroy', labor_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+      <%= render labor_record %>
     <% end %>
   </tbody>
 </table>

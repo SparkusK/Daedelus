@@ -48,23 +48,7 @@
 
   <tbody>
     <% @debtor_orders.each do |debtor_order| %>
-      <tr>
-        <td><%= debtor_order.customer.customer_name %></td>
-        <% if debtor_order.job.nil? %>
-          <td>No Job</td>
-        <% else %>
-          <td><%= debtor_order.job.job_name %></td>
-        <% end %>
-        <td><%= debtor_order.invoice.code %></td>
-        <td><%= debtor_order.SA_number %></td>
-        <td><%= number_to_currency(debtor_order.value_including_tax, unit: "R") %></td>
-        <td><%= number_to_currency(debtor_order.tax_amount, unit: "R") %></td>
-        <td><%= number_to_currency(debtor_order.value_excluding_tax, unit: "R") %></td>
-        <td><%= number_to_currency(debtor_order.still_owed_amount, unit: "R") %></td>
-        <td><%= link_to 'Show', debtor_order %></td>
-        <td><%= link_to 'Edit', edit_debtor_order_path(debtor_order) %></td>
-        <td><%= link_to 'Destroy', debtor_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+      <%= render debtor_order %>
     <% end %>
   </tbody>
 </table>

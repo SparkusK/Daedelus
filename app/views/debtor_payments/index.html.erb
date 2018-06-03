@@ -44,16 +44,7 @@
 
   <tbody>
     <% @debtor_payments.each do |debtor_payment| %>
-      <tr>
-        <td><%= debtor_payment.debtor_order.debtor_order_name %></td>
-        <td><%= number_to_currency(debtor_payment.payment_amount, unit: "R") %></td>
-        <td><%= debtor_payment.payment_date %></td>
-        <td><%= debtor_payment.payment_type %></td>
-        <td><%= debtor_payment.note %></td>
-        <td><%= link_to 'Show', debtor_payment %></td>
-        <td><%= link_to 'Edit', edit_debtor_payment_path(debtor_payment) %></td>
-        <td><%= link_to 'Destroy', debtor_payment, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+      <%= render debtor_payment %>
     <% end %>
   </tbody>
 </table>

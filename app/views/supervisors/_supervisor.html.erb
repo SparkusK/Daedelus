@@ -1,0 +1,7 @@
+<tr>
+  <td><%= supervisor.employee.employee_name %></td>
+  <td><%= supervisor.section.name %></td>
+  <td><%= link_to 'Show', supervisor %></td>
+  <td><%= link_to 'Edit', edit_supervisor_path(supervisor) %></td>
+  <td><%= link_to 'Destroy', supervisor, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+</tr>

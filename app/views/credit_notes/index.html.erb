@@ -42,15 +42,7 @@
 
   <tbody>
     <% @credit_notes.each do |credit_note| %>
-      <tr>
-        <td><%= credit_note.creditor_order.creditor_order_name %></td>
-        <td><%= credit_note.payment_type %></td>
-        <td><%= number_to_currency(credit_note.amount_paid, unit: "R") %></td>
-        <td><%= credit_note.note %></td>
-        <td><%= link_to 'Show', credit_note %></td>
-        <td><%= link_to 'Edit', edit_credit_note_path(credit_note) %></td>
-        <td><%= link_to 'Destroy', credit_note, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+      <%= render credit_note %>
     <% end %>
   </tbody>
 </table>

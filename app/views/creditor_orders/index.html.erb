@@ -46,19 +46,7 @@
 
   <tbody>
     <% @creditor_orders.each do |creditor_order| %>
-      <tr>
-        <td><%= creditor_order.supplier.supplier_name %></td>
-        <td><%= creditor_order.job.job_name %></td>
-        <td><%= creditor_order.invoice.code %></td>
-        <td><%= creditor_order.delivery_note %></td>
-        <td><%= creditor_order.date_issued.strftime("%a, %d %b %Y") %></td>
-        <td><%= number_to_currency(creditor_order.value_excluding_tax, unit: "R") %></td>
-        <td><%= number_to_currency(creditor_order.value_including_tax, unit: "R") %></td>
-        <td><%= number_to_currency(creditor_order.still_owed_amount, unit: "R") %></td>
-        <td><%= link_to 'Show', creditor_order %></td>
-        <td><%= link_to 'Edit', edit_creditor_order_path(creditor_order) %></td>
-        <td><%= link_to 'Destroy', creditor_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
+      <%= render creditor_order %>
     <% end %>
   </tbody>
 </table>
