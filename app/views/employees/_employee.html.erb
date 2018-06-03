@@ -8,18 +8,18 @@
   <div class="card-body">
     <div class="row">
       <div class="col-md-6">
-        Section: <%= employee.section.name %>
+        <small class="text-muted">SECTION: </small><%= employee.section.name %>
       </div>
       <div class="col-md-6">
-        Company number: <%= employee.company_number %>
+        <small class="text-muted">COMPANY NUMBER: </small><%= employee.company_number %>
       </div>
     </div>
     <div class="row">
       <div class="col-md-6">
-        Net rate: <%= number_to_currency(employee.net_rate, unit: "R") %>
+        <small class="text-muted">NET RATE: </small><%= number_to_currency(employee.net_rate, unit: "R") %>
       </div>
       <div class="col-md-6">
-        Inclusive rate: <%= number_to_currency(employee.inclusive_rate, unit: "R") %>
+        <small class="text-muted">INCLUSIVE RATE: </small><%= number_to_currency(employee.inclusive_rate, unit: "R") %>
       </div>
     </div>
     <div class="row">
