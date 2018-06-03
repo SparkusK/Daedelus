@@ -1,9 +1,32 @@
-<td><%= employee.first_name %></td>
-<td><%= employee.last_name %></td>
-<td><%= employee.occupation %></td>
-<td><%= employee.section.name %></td>
-<td><%= employee.company_number %></td>
-<td><%= number_to_currency(employee.net_rate, unit: "R") %></td>
-<td><%= number_to_currency(employee.inclusive_rate, unit: "R") %></td>
-<td><%= button_to 'Edit', edit_employee_path(employee), remote: true, method: :get, class: "btn btn-primary" %></td>
-<td><%= button_to 'Destroy', employee, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %></td>
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4 class="card-text"> <%= "#{employee.first_name} #{employee.last_name}" %> </h4>
+      <h5 class="card-text"> <%= employee.occupation %> </h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        Section: <%= employee.section.name %>
+      </div>
+      <div class="col-md-6">
+        Company number: <%= employee.company_number %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        Net rate: <%= number_to_currency(employee.net_rate, unit: "R") %>
+      </div>
+      <div class="col-md-6">
+        Inclusive rate: <%= number_to_currency(employee.inclusive_rate, unit: "R") %>
+      </div>
+    </div>
+  </div>
+  <div class="card-footer">
+    <div class="d-flex">
+      <%= button_to 'Edit', edit_employee_path(employee), remote: true, method: :get, class: "btn btn-primary" %>
+      <%= button_to 'Remove', employee, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+    </div>
+  </div>
+</div>

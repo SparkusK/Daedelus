@@ -22,28 +22,13 @@
 <%= will_paginate @employees, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
 
 </section>
-<table class="table table-striped table-hover">
-  <thead>
-    <tr>
-      <th>First name</th>
-      <th>Last name</th>
-      <th>Occupation</th>
-      <th>Section</th>
-      <th>Company number</th>
-      <th>Net rate</th>
-      <th>Inclusive rate</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
 
-  <tbody>
-    <% @employees.each do |employee| %>
-      <tr class="<%= employee.id %>">
-        <%= render employee %>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
+<section class="employee-panels">
+  <% @employees.each do |employee| %>
+    <%= render employee %>
+  <% end %>
+</section>
+
 <br>
 
 <%= will_paginate @employees, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
