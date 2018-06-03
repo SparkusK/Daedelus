@@ -1,6 +1,18 @@
-<tr>
-  <td><%= section.name %></td>
-  <td><%= link_to 'Show', section %></td>
-  <td><%= link_to 'Edit', edit_section_path(section) %></td>
-  <td><%= link_to 'Destroy', section, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>
+<div class="card" id="<%= section.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4 class="col-md-8"><%= section.name %></h4>
+      <div class="row">
+        <%= button_to 'Edit', edit_section_path(section), class: "btn btn-primary" %>
+        <%= button_to 'Remove', section, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      Managed by: <%= section.manager.manager_name %>
+    </div>
+  </div>
+</div>
+
+<br>

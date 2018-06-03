@@ -30,21 +30,11 @@
 </section>
 <br>
 
-
-<table class="table table-striped table-hover">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @sections.each do |section| %>
-      <%= render section %> 
-    <% end %>
-  </tbody>
-</table>
+<section class="sections">
+  <% @sections.each do |section| %>
+    <%= render section %>
+  <% end %>
+</section>
 
 <br>
 
