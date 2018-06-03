@@ -5,8 +5,6 @@
     <h1>Employees</h1>
     <%= button_to 'New Employee', new_employee_path, class: "btn" %>
   </div>
-
-
 </section>
 
 <section class="search-form">
@@ -23,7 +21,9 @@
     </div>
   <% end %>
 </section>
+
 <br>
+
 <section class="top-pager">
 
 <%= will_paginate @employees, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
