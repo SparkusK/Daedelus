@@ -1,13 +1,27 @@
-<tr>
-  <td><%= creditor_order.supplier.supplier_name %></td>
-  <td><%= creditor_order.job.job_name %></td>
-  <td><%= creditor_order.invoice.code %></td>
-  <td><%= creditor_order.delivery_note %></td>
-  <td><%= creditor_order.date_issued.strftime("%a, %d %b %Y") %></td>
-  <td><%= number_to_currency(creditor_order.value_excluding_tax, unit: "R") %></td>
-  <td><%= number_to_currency(creditor_order.value_including_tax, unit: "R") %></td>
-  <td><%= number_to_currency(creditor_order.still_owed_amount, unit: "R") %></td>
-  <td><%= link_to 'Show', creditor_order %></td>
-  <td><%= link_to 'Edit', edit_creditor_order_path(creditor_order) %></td>
-  <td><%= link_to 'Destroy', creditor_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>
+<div class="card" id="<%= creditor_order.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4><%= creditor_order.supplier.supplier_name %></h4>
+      <h5><%= creditor_order.job.job_name %></h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <%= creditor_order.invoice.code %>
+      <%= creditor_order.delivery_note %>
+      <%= creditor_order.date_issued.strftime("%a, %d %b %Y") %>
+      <%= number_to_currency(creditor_order.value_excluding_tax, unit: "R") %>
+      <%= number_to_currency(creditor_order.value_including_tax, unit: "R") %>
+      <%= number_to_currency(creditor_order.still_owed_amount, unit: "R") %>
+    </div>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="d-flex col-md-2">
+        <%= button_to 'Edit', edit_creditor_order_path(creditor_order), class: "btn btn-primary" %>
+        <%= button_to 'Remove', creditor_order, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>

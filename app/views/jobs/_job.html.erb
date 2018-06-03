@@ -1,14 +1,32 @@
-<tr>
-  <td><%= job.receive_date.strftime("%a, %d %b %Y") %></td>
-  <td><%= job.section.name %></td>
-  <td><%= job.contact_person %></td>
-  <td><%= job.balow_section %></td>
-  <td><%= number_to_currency(job.total, unit: "R") %></td>
-  <td><%= job.work_description %></td>
-  <td><%= job.jce_number %></td>
-  <td><%= job.debtor_order.id %></td>
-  <td><%= job.quotation.code %></td>
-  <td><%= link_to 'Show', job %></td>
-  <td><%= link_to 'Edit', edit_job_path(job) %></td>
-  <td><%= link_to 'Destroy', job, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>
+<div class="card" id="<%= job.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4>
+        <%= job.jce_number %>
+      </h4>
+      <h5>
+        <%= job.receive_date.strftime("%a, %d %b %Y") %>
+      </h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <%= job.section.name %>
+      <%= job.contact_person %>
+      <%= job.balow_section %>
+      <%= number_to_currency(job.total, unit: "R") %>
+      <%= job.work_description %>
+      <%= job.debtor_order.id %>
+      <p>Quotation code: <%= job.quotation.code %> </p>
+    </div>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="d-flex col-md-2">
+        <%= button_to 'Edit', edit_job_path(job), class: "btn btn-primary" %>
+        <%= button_to 'Remove', job, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>

@@ -1,16 +1,34 @@
-<tr>
-  <td><%= labor_record.employee.employee_name %></td>
-  <td><%= labor_record.labor_date.strftime("%a, %d %b %Y") %></td>
-  <td><%= labor_record.hours %></td>
-  <td><%= number_to_currency(labor_record.total_before, unit: "R") %></td>
-  <td><%= number_to_currency(labor_record.total_after, unit: "R") %></td>
-  <% if labor_record.supervisor.nil? %>
-    <td></td>
-  <% else %>
-  <td><%= labor_record.supervisor.supervisor_name %></td>
-  <% end %>
-  <td><%= labor_record.job.jce_number %></td>
-  <td><%= link_to 'Show', labor_record %></td>
-  <td><%= link_to 'Edit', edit_labor_record_path(labor_record) %></td>
-  <td><%= link_to 'Destroy', labor_record, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>
+<div class="card" id="<%= labor_record.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4>
+      </h4>
+      <h5>
+      </h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <%= labor_record.employee.employee_name %>
+      <%= labor_record.labor_date.strftime("%a, %d %b %Y") %>
+      <%= labor_record.hours %>
+      <%= number_to_currency(labor_record.total_before, unit: "R") %>
+      <%= number_to_currency(labor_record.total_after, unit: "R") %>
+      <% if labor_record.supervisor.nil? %>
+
+      <% else %>
+      <%= labor_record.supervisor.supervisor_name %>
+      <% end %>
+      <%= labor_record.job.jce_number %>
+    </div>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="d-flex col-md-2">
+        <%= button_to 'Edit', edit_labor_record_path(labor_record), class: "btn btn-primary" %>
+        <%= button_to 'Remove', labor_record, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>

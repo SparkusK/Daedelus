@@ -1,17 +1,35 @@
-<tr>
-  <td><%= debtor_order.customer.customer_name %></td>
-  <% if debtor_order.job.nil? %>
-    <td>No Job</td>
-  <% else %>
-    <td><%= debtor_order.job.job_name %></td>
-  <% end %>
-  <td><%= debtor_order.invoice.code %></td>
-  <td><%= debtor_order.SA_number %></td>
-  <td><%= number_to_currency(debtor_order.value_including_tax, unit: "R") %></td>
-  <td><%= number_to_currency(debtor_order.tax_amount, unit: "R") %></td>
-  <td><%= number_to_currency(debtor_order.value_excluding_tax, unit: "R") %></td>
-  <td><%= number_to_currency(debtor_order.still_owed_amount, unit: "R") %></td>
-  <td><%= link_to 'Show', debtor_order %></td>
-  <td><%= link_to 'Edit', edit_debtor_order_path(debtor_order) %></td>
-  <td><%= link_to 'Destroy', debtor_order, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>
+<div class="card" id="<%= debtor_order.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4>
+      </h4>
+      <h5>
+      </h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <%= debtor_order.customer.customer_name %>
+      <% if debtor_order.job.nil? %>
+      No Job
+      <% else %>
+      <%= debtor_order.job.job_name %>
+      <% end %>
+      <%= debtor_order.invoice.code %>
+      <%= debtor_order.SA_number %>
+      <%= number_to_currency(debtor_order.value_including_tax, unit: "R") %>
+      <%= number_to_currency(debtor_order.tax_amount, unit: "R") %>
+      <%= number_to_currency(debtor_order.value_excluding_tax, unit: "R") %>
+      <%= number_to_currency(debtor_order.still_owed_amount, unit: "R") %>
+    </div>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="d-flex col-md-2">
+        <%= button_to 'Edit', edit_debtor_order_path(debtor_order), class: "btn btn-primary" %>
+        <%= button_to 'Remove', debtor_order, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>

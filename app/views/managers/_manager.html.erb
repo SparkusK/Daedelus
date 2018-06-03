@@ -1,7 +1,27 @@
-<tr>
-  <td><%= manager.manager_name %></td>
-  <td><%= manager.section.name %></td>
-  <td><%= link_to 'Show', manager %></td>
-  <td><%= link_to 'Edit', edit_manager_path(manager) %></td>
-  <td><%= link_to 'Destroy', manager, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>
+<div class="card" id="<%= manager.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4>
+        <%= manager.manager_name %>
+      </h4>
+      <h5>
+        <%= manager.section.name %>
+      </h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <p>Stub. More stuff to go here.
+      Possibly a small summary showing the manager's performance </p>
+    </div>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="d-flex col-md-2">
+        <%= button_to 'Edit', edit_manager_path(manager), class: "btn btn-primary" %>
+        <%= button_to 'Remove', manager, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>

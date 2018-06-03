@@ -1,8 +1,26 @@
-<tr>
-  <td><%= customer.name %></td>
-  <td><%= customer.email %></td>
-  <td><%= customer.phone %></td>
-  <td><%= link_to 'Show', customer %></td>
-  <td><%= link_to 'Edit', edit_customer_path(customer) %></td>
-  <td><%= link_to 'Destroy', customer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>
+<div class="card" id="<%= customer.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4>
+      </h4>
+      <h5>
+      </h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <%= customer.name %>
+      <%= customer.email %>
+      <%= customer.phone %>
+    </div>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="d-flex col-md-2">
+        <%= button_to 'Edit', edit_customer_path(customer), class: "btn btn-primary" %>
+        <%= button_to 'Remove', customer, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>

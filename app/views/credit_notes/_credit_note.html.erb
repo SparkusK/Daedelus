@@ -1,9 +1,27 @@
-<tr>
-  <td><%= credit_note.creditor_order.creditor_order_name %></td>
-  <td><%= credit_note.payment_type %></td>
-  <td><%= number_to_currency(credit_note.amount_paid, unit: "R") %></td>
-  <td><%= credit_note.note %></td>
-  <td><%= link_to 'Show', credit_note %></td>
-  <td><%= link_to 'Edit', edit_credit_note_path(credit_note) %></td>
-  <td><%= link_to 'Destroy', credit_note, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>
+<div class="card" id="<%= credit_note.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4>
+      </h4>
+      <h5>
+      </h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <%= credit_note.creditor_order.creditor_order_name %>
+      <%= credit_note.payment_type %>
+      <%= number_to_currency(credit_note.amount_paid, unit: "R") %>
+      <%= credit_note.note %>
+    </div>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="d-flex col-md-2">
+        <%= button_to 'Edit', edit_credit_note_path(credit_note), class: "btn btn-primary" %>
+        <%= button_to 'Remove', credit_note, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>

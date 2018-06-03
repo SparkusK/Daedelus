@@ -1,8 +1,26 @@
-<tr>
-  <td><%= supplier.name %></td>
-  <td><%= supplier.email %></td>
-  <td><%= supplier.phone %></td>
-  <td><%= link_to 'Show', supplier %></td>
-  <td><%= link_to 'Edit', edit_supplier_path(supplier) %></td>
-  <td><%= link_to 'Destroy', supplier, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>
+<div class="card" id="<%= supplier.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4>
+        <%= supplier.name %>
+      </h4>
+      <h5>
+        <%= supplier.email %>
+      </h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <%= supplier.phone %>
+    </div>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="d-flex col-md-2">
+        <%= button_to 'Edit', edit_supplier_path(supplier), class: "btn btn-primary" %>
+        <%= button_to 'Remove', supplier, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>

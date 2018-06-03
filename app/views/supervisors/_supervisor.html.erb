@@ -1,7 +1,26 @@
-<tr>
-  <td><%= supervisor.employee.employee_name %></td>
-  <td><%= supervisor.section.name %></td>
-  <td><%= link_to 'Show', supervisor %></td>
-  <td><%= link_to 'Edit', edit_supervisor_path(supervisor) %></td>
-  <td><%= link_to 'Destroy', supervisor, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-</tr>
+<div class="card" id="<%= supervisor.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4>
+        <%= supervisor.employee.employee_name %>
+      </h4>
+      <h5>
+        <%= supervisor.section.name %>
+      </h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      Stub. More stuff to go here.
+    </div>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="d-flex col-md-2">
+        <%= button_to 'Edit', edit_supervisor_path(supervisor), class: "btn btn-primary" %>
+        <%= button_to 'Remove', supervisor, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
