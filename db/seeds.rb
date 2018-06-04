@@ -246,9 +246,9 @@ def gen_records_for_employee(loop_date, emp)
 end
 
 def do_stuff(loop_date, emp)
-  if (loop_date.wday == 0 && rng_percentage_check(0.15))
+  if (loop_date.wday == 0 && rng_percentage_check(0.85))
     # puts "Skipping because Sunday rng"
-  elsif (loop_date.wday == 6 && rng_percentage_check(0.25))
+  elsif (loop_date.wday == 6 && rng_percentage_check(0.65))
     # puts "Skipping because Saturday rng"
   else
     random_job = Job.where("receive_date < ?", loop_date).sample
@@ -269,7 +269,7 @@ idx = 0
 
 @employees.each { |emp|
   start_time_emp = Time.now
-  starting_date = Faker::Time.backward(730)
+  starting_date = Faker::Time.backward(90)
   puts "Employee #{idx+1}:"
   puts "  Starting date: #{starting_date}"
   loop_date = starting_date
@@ -320,7 +320,7 @@ def create_debtor_payment(order_id, amount, date)
 end
 
 @debtor_orders_base.each { |order|
-  amt_payments = Random.rand(15)
+  amt_payments = Random.rand(4)
   if (amt_payments == 0) then next
   else
     if rng_percentage_check(0.2) # Partially fulfilled
@@ -401,7 +401,7 @@ def create_credit_note(order_id, amount)
 end
 
 CreditorOrder.all.to_a.shuffle.each { |order|
-  amt_payments = Random.rand(15)
+  amt_payments = Random.rand(4)
   if (amt_payments == 0) then next
   else
     if rng_percentage_check(0.2) # Partially fulfilled
