@@ -4,8 +4,8 @@ class PayrollsController < ApplicationController
   # GET /payrolls
   # GET /payrolls.json
   def index
-    start_date = 3.months.ago
-    end_date = 4.months.ago
+    start_date = 1.months.ago
+    end_date = 2.months.ago
     records = LaborRecord.where("labor_date < '#{start_date}' AND labor_date > '#{end_date}'")
     @employee_details = Hash.new{ |hash, key| hash[key] = {normal_time: 0.0, sunday_time: 0.0}}
     records.each { |record|
