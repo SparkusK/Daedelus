@@ -1,0 +1,53 @@
+<%= form_with(model: @debtor_payment) do |form| %>
+  <% if @debtor_payment.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@debtor_payment.errors.count, "error") %> prohibited this debtor_payment from being saved:</h2>
+
+      <ul>
+      <% @debtor_payment.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <%= form.label :debtor_order_id %>
+      <%= collection_select(:debtor_payment,
+                          :debtor_order_id,
+                          DebtorOrder.all,
+                          :id,
+                          :debtor_order_name,
+                          {prompt: true},
+                          {class: "custom-select"}) %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :payment_amount %>
+      <%= form.text_field :payment_amount, id: :debtor_payment_payment_amount, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :payment_type %>
+      <%= form.text_field :payment_type, id: :debtor_payment_payment_type, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="field">
+    <%= form.label :payment_date %>
+    <%= form.datetime_select  :payment_date, id: :debtor_payment_payment_date %>
+  </div>
+
+  <div class="form-row">
+    <%= form.label :note %>
+    <%= form.text_field :note, id: :debtor_payment_note, class: "form-control" %>
+  </div>
+
+  <br>
+  <div class="row">
+    <div class="col-md-10"></div>
+    <div class="d-flex col-md-2">
+      <%= form.submit "Save", class: "btn btn-primary", remote: true %>
+      <%= form.submit "Cancel", class: "btn btn-disabled", remote: true, method: :get %>
+    </div>
+  </div>
+<% end %>

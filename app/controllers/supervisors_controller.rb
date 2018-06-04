@@ -19,6 +19,10 @@ class SupervisorsController < ApplicationController
 
   # GET /supervisors/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /supervisors
@@ -43,13 +47,26 @@ class SupervisorsController < ApplicationController
   # PATCH/PUT /supervisors/1.json
   def update
     respond_to do |format|
-      if @supervisor.update(supervisor_params)
-        format.html { redirect_to @supervisor, notice: 'Supervisor was successfully updated.' }
-        format.json { render :show, status: :ok, location: @supervisor }
+      if params[:commit] == "Save"
+        if @supervisor.update(supervisor_params)
+          format.html { redirect_to @supervisor, notice: 'Supervisor was successfully updated.' }
+          format.json { render :show, status: :ok, location: @supervisor }
+          format.js
+        else
+          format.html { render :edit }
+          format.json { render json: @supervisor.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @supervisor.errors, status: :unprocessable_entity }
+        format.js { render action: "cancel" }
       end
+    end
+  end
+
+  def cancel
+    id = params[:id]
+    @supervisor = Supervisor.find_by(id: id)
+    respond_to do |format|
+      format.js
     end
   end
 

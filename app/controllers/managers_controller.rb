@@ -19,6 +19,10 @@ class ManagersController < ApplicationController
 
   # GET /managers/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /managers
@@ -42,12 +46,17 @@ class ManagersController < ApplicationController
   # PATCH/PUT /managers/1.json
   def update
     respond_to do |format|
-      if @manager.update(manager_params)
-        format.html { redirect_to @manager, notice: 'Manager was successfully updated.' }
-        format.json { render :show, status: :ok, location: @manager }
+      if params[:commit] == "Save"
+        if @manager.update(manager_params)
+          format.html { redirect_to @manager, notice: 'Manager was successfully updated.' }
+          format.json { render :show, status: :ok, location: @manager }
+          format.js
+        else
+          format.html { render :edit }
+          format.json { render json: @manager.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @manager.errors, status: :unprocessable_entity }
+        format.js { render action: "cancel" }
       end
     end
   end
@@ -59,6 +68,14 @@ class ManagersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to managers_url, notice: 'Manager was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def cancel
+    id = params[:id]
+    @manager = Manager.find_by(id: id)
+    respond_to do |format|
+      format.js
     end
   end
 

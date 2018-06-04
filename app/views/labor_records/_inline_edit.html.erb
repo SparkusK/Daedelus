@@ -1,0 +1,82 @@
+<%= form_with(model: @labor_record) do |form| %>
+  <% if @labor_record.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@labor_record.errors.count, "error") %> prohibited this labor_record from being saved:</h2>
+
+      <ul>
+      <% @labor_record.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-row">
+    <%= form.label :employee_id %>
+    <%= collection_select(:labor_record,
+                        :employee_id,
+                        Employee.all,
+                        :id,
+                        :employee_name,
+                        {prompt: true}, {class: "custom-select"}) %>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= form.label :labor_date %> </br>
+      <span><%= form.date_select :labor_date, id: :labor_record_labor_date %></span>
+    </div>
+    <div class="form-group col-md-6">
+      <%= form.label :day_of_the_week %>
+      <%= form.text_field :day_of_the_week, id: :labor_record_day_of_the_week, class: "form-control" %>
+    </div>
+  </div>
+
+
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <%= form.label :hours %>
+      <%= form.text_field :hours, id: :labor_record_hours, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :total_before %>
+      <%= form.text_field :total_before, id: :labor_record_total_before, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :total_after %>
+      <%= form.text_field :total_after, id: :labor_record_total_after, class: "form-control" %>
+    </div>
+  </div>
+
+
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= form.label :supervisor %>
+      <%= collection_select(:labor_record,
+                          :supervisor_id,
+                          get_supervisors,
+                          :id,
+                          :supervisor_name,
+                          {prompt: true}, {class: "custom-select"}) %>
+    </div>
+    <div class="form-group col-md-6">
+      <%= form.label :job_id %>
+      <%= collection_select(:labor_record,
+                          :job_id,
+                          get_all_jobs,
+                          :id,
+                          :job_name,
+                          {prompt: true}, {class: "custom-select"}) %>
+    </div>
+  </div>
+
+  <br>
+  <div class="row">
+    <div class="col-md-10"></div>
+    <div class="d-flex col-md-2">
+      <%= form.submit "Save", class: "btn btn-primary", remote: true %>
+      <%= form.submit "Cancel", class: "btn btn-disabled", remote: true, method: :get %>
+    </div>
+  </div>
+<% end %>

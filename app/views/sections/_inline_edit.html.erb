@@ -1,0 +1,27 @@
+<%= form_with(model: @section) do |form| %>
+  <% if @section.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@section.errors.count, "error") %> prohibited this section from being saved:</h2>
+
+      <ul>
+      <% @section.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= form.label :name %>
+    <%= form.text_field :name, id: :section_name %>
+  </div>
+
+  <br>
+  <div class="row">
+    <div class="col-md-10"></div>
+    <div class="d-flex col-md-2">
+      <%= form.submit "Save", class: "btn btn-primary", remote: true %>
+      <%= form.submit "Cancel", class: "btn btn-disabled", remote: true, method: :get %>
+    </div>
+  </div>
+<% end %>

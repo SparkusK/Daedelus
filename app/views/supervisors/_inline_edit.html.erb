@@ -1,0 +1,50 @@
+<%= form_with(model: @supervisor) do |form| %>
+  <% if @supervisor.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@supervisor.errors.count, "error") %> prohibited this supervisor from being saved:</h2>
+
+      <ul>
+      <% @supervisor.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= form.label :employee_id %>
+      <%= collection_select(:employee,
+                            :employee_id,
+                            leaf_employees(),
+                            :id,
+                            :employee_name,
+                            {prompt: true},
+                            {class: "custom-select"}) %>
+    </div>
+    <div class="form-group col-md-6">
+      <%= form.label :section_id %>
+      <%= collection_select(:section,
+                            :section_id,
+                            Section.all(),
+                            :id,
+                            :section_name,
+                            {prompt: true},
+                            {class: "custom-select"}) %>
+    </div>
+  </div>
+
+
+
+
+
+
+  <br>
+  <div class="row">
+    <div class="col-md-10"></div>
+    <div class="d-flex col-md-2">
+      <%= form.submit "Save", class: "btn btn-primary", remote: true %>
+      <%= form.submit "Cancel", class: "btn btn-disabled", remote: true, method: :get %>
+    </div>
+  </div>
+<% end %>

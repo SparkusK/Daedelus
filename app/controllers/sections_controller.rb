@@ -19,6 +19,10 @@ class SectionsController < ApplicationController
 
   # GET /sections/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /sections
@@ -41,12 +45,17 @@ class SectionsController < ApplicationController
   # PATCH/PUT /sections/1.json
   def update
     respond_to do |format|
-      if @section.update(section_params)
-        format.html { redirect_to @section, notice: 'Section was successfully updated.' }
-        format.json { render :show, status: :ok, location: @section }
+      if params[:commit] == "Save"
+        if @section.update(section_params)
+          format.html { redirect_to @section, notice: 'Section was successfully updated.' }
+          format.json { render :show, status: :ok, location: @section }
+          format.js
+        else
+          format.html { render :edit }
+          format.json { render json: @section.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @section.errors, status: :unprocessable_entity }
+        format.js { render action: "cancel" }
       end
     end
   end
@@ -58,6 +67,14 @@ class SectionsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to sections_url, notice: 'Section was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def cancel
+    id = params[:id]
+    @section = Section.find_by(id: id)
+    respond_to do |format|
+      format.js
     end
   end
 

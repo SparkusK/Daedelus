@@ -19,6 +19,10 @@ class LaborRecordsController < ApplicationController
 
   # GET /labor_records/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /labor_records
@@ -41,12 +45,17 @@ class LaborRecordsController < ApplicationController
   # PATCH/PUT /labor_records/1.json
   def update
     respond_to do |format|
-      if @labor_record.update(labor_record_params)
-        format.html { redirect_to @labor_record, notice: 'Labor record was successfully updated.' }
-        format.json { render :show, status: :ok, location: @labor_record }
+      if params[:commit] == "Save"
+        if @labor_record.update(labor_record_params)
+          format.html { redirect_to @labor_record, notice: 'Labor record was successfully updated.' }
+          format.json { render :show, status: :ok, location: @labor_record }
+          format.js
+        else
+          format.html { render :edit }
+          format.json { render json: @labor_record.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @labor_record.errors, status: :unprocessable_entity }
+        format.js { render action: "cancel" }
       end
     end
   end
@@ -58,6 +67,14 @@ class LaborRecordsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to labor_records_url, notice: 'Labor record was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def cancel
+    id = params[:id]
+    @labor_record = LaborRecord.find_by(id: id)
+    respond_to do |format|
+      format.js
     end
   end
 

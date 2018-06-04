@@ -36,7 +36,7 @@
         <% end %>
       </div>
       <div class="d-flex col-md-2">
-        <%= button_to 'Edit', edit_debtor_order_path(debtor_order), class: "btn btn-primary" %>
+        <%= button_to 'Edit', edit_debtor_order_path(debtor_order), remote: true, method: :get, class: "btn btn-primary" %>
         <%= button_to 'Remove', debtor_order, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
       </div>
     </div>

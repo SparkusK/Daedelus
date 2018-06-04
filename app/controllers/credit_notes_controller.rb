@@ -19,6 +19,10 @@ class CreditNotesController < ApplicationController
 
   # GET /credit_notes/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /credit_notes
@@ -41,12 +45,17 @@ class CreditNotesController < ApplicationController
   # PATCH/PUT /credit_notes/1.json
   def update
     respond_to do |format|
-      if @credit_note.update(credit_note_params)
-        format.html { redirect_to @credit_note, notice: 'Credit note was successfully updated.' }
-        format.json { render :show, status: :ok, location: @credit_note }
+      if params[:commit] == "Save"
+        if @credit_note.update(credit_note_params)
+          format.html { redirect_to @credit_note, notice: 'Credit note was successfully updated.' }
+          format.json { render :show, status: :ok, location: @credit_note }
+          format.js
+        else
+          format.html { render :edit }
+          format.json { render json: @credit_note.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @credit_note.errors, status: :unprocessable_entity }
+        format.js { render action: "cancel" }
       end
     end
   end
@@ -58,6 +67,14 @@ class CreditNotesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to credit_notes_url, notice: 'Credit note was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def cancel
+    id = params[:id]
+    @credit_note = CreditorPayment.find_by(id: id)
+    respond_to do |format|
+      format.js
     end
   end
 

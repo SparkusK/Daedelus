@@ -1,0 +1,71 @@
+<%= form_with(model: @job) do |form| %>
+  <% if @job.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@job.errors.count, "error") %> prohibited this job from being saved:</h2>
+
+      <ul>
+      <% @job.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+
+
+  <div class="form-row">
+    <%= form.label :receive_date %>
+    <%= form.datetime_select :receive_date, id: :job_receive_date %>
+  </div>
+
+
+  <div class="form-row">
+    <%= form.label :section_id %>
+    <%= collection_select(:job, :section_id, Section.all, :id, :section_name, {prompt: true}, {class: "custom-select"}) %>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= form.label :contact_person %>
+      <%= form.text_field :contact_person, id: :job_contact_person, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-6">
+      <%= form.label :balow_section %>
+      <%= form.text_field :balow_section, id: :job_balow_section, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <%= form.label :work_description %>
+    <%= form.text_field :work_description, id: :job_work_description, class: "form-control" %>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <%= form.label :jce_number %>
+      <%= form.text_field :jce_number, id: :job_jce_number, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :order_id %>
+      <%= collection_select(:job, :debtor_order_id, DebtorOrder.all, :id, :debtor_order_name, {prompt: true}, {class: "custom-select"}) %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :quotation_id %>
+      <%= collection_select(:job, :quotation_id, Quotation.all, :id, :quotation_code, {prompt: true}, {class: "custom-select"}) %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <%= form.label :total %>
+    <%= form.text_field :total, id: :job_total, class: "form-control" %>
+  </div>
+
+  <br>
+  <div class="row">
+    <div class="col-md-10"></div>
+    <div class="d-flex col-md-2">
+      <%= form.submit "Save", class: "btn btn-primary", remote: true %>
+      <%= form.submit "Cancel", class: "btn btn-disabled", remote: true, method: :get %>
+    </div>
+  </div>
+<% end %>

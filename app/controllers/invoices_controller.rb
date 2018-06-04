@@ -19,6 +19,10 @@ class InvoicesController < ApplicationController
 
   # GET /invoices/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /invoices
@@ -41,12 +45,17 @@ class InvoicesController < ApplicationController
   # PATCH/PUT /invoices/1.json
   def update
     respond_to do |format|
-      if @invoice.update(invoice_params)
-        format.html { redirect_to @invoice, notice: 'Invoice was successfully updated.' }
-        format.json { render :show, status: :ok, location: @invoice }
+      if params[:commit] == "Save"
+        if @invoice.update(invoice_params)
+          format.html { redirect_to @invoice, notice: 'Invoice was successfully updated.' }
+          format.json { render :show, status: :ok, location: @invoice }
+          format.js
+        else
+          format.html { render :edit }
+          format.json { render json: @invoice.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @invoice.errors, status: :unprocessable_entity }
+        format.js { render action: "cancel" }
       end
     end
   end
@@ -58,6 +67,14 @@ class InvoicesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to invoices_url, notice: 'Invoice was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def cancel
+    id = params[:id]
+    @invoice = Invoice.find_by(id: id)
+    respond_to do |format|
+      format.js
     end
   end
 

@@ -19,6 +19,10 @@ class DebtorPaymentsController < ApplicationController
 
   # GET /debtor_payments/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /debtor_payments
@@ -41,12 +45,17 @@ class DebtorPaymentsController < ApplicationController
   # PATCH/PUT /debtor_payments/1.json
   def update
     respond_to do |format|
-      if @debtor_payment.update(debtor_payment_params)
-        format.html { redirect_to @debtor_payment, notice: 'Debtor payment was successfully updated.' }
-        format.json { render :show, status: :ok, location: @debtor_payment }
+      if params[:commit] == "Save"
+        if @debtor_payment.update(debtor_payment_params)
+          format.html { redirect_to @debtor_payment, notice: 'Debtor payment was successfully updated.' }
+          format.json { render :show, status: :ok, location: @debtor_payment }
+          format.js
+        else
+          format.html { render :edit }
+          format.json { render json: @debtor_payment.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @debtor_payment.errors, status: :unprocessable_entity }
+        format.js { render action: "cancel" }
       end
     end
   end
@@ -58,6 +67,14 @@ class DebtorPaymentsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to debtor_payments_url, notice: 'Debtor payment was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def cancel
+    id = params[:id]
+    @debtor_payment = DebtorPayment.find_by(id: id)
+    respond_to do |format|
+      format.js
     end
   end
 

@@ -19,6 +19,10 @@ class SuppliersController < ApplicationController
 
   # GET /suppliers/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /suppliers
@@ -41,13 +45,26 @@ class SuppliersController < ApplicationController
   # PATCH/PUT /suppliers/1.json
   def update
     respond_to do |format|
-      if @supplier.update(supplier_params)
-        format.html { redirect_to @supplier, notice: 'Supplier was successfully updated.' }
-        format.json { render :show, status: :ok, location: @supplier }
+      if params[:commit] == "Save"
+        if @supplier.update(supplier_params)
+          format.html { redirect_to @supplier, notice: 'Supplier was successfully updated.' }
+          format.json { render :show, status: :ok, location: @supplier }
+          format.js
+        else
+          format.html { render :edit }
+          format.json { render json: @supplier.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @supplier.errors, status: :unprocessable_entity }
+        format.js { render action: "cancel" }
       end
+    end
+  end
+
+  def cancel
+    id = params[:id]
+    @supplier = Supplier.find_by(id: id)
+    respond_to do |format|
+      format.js
     end
   end
 

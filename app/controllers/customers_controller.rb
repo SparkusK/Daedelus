@@ -19,6 +19,10 @@ class CustomersController < ApplicationController
 
   # GET /customers/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /customers
@@ -41,12 +45,17 @@ class CustomersController < ApplicationController
   # PATCH/PUT /customers/1.json
   def update
     respond_to do |format|
-      if @customer.update(customer_params)
-        format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
-        format.json { render :show, status: :ok, location: @customer }
+      if params[:commit] == "Save"
+        if @customer.update(customer_params)
+          format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
+          format.json { render :show, status: :ok, location: @customer }
+          format.js
+        else
+          format.html { render :edit }
+          format.json { render json: @customer.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @customer.errors, status: :unprocessable_entity }
+        format.js { render action: "cancel" }
       end
     end
   end
@@ -58,6 +67,14 @@ class CustomersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to customers_url, notice: 'Customer was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def cancel
+    id = params[:id]
+    @customer = Customer.find_by(id: id)
+    respond_to do |format|
+      format.js
     end
   end
 

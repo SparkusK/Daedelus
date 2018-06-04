@@ -19,6 +19,10 @@ class QuotationsController < ApplicationController
 
   # GET /quotations/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /quotations
@@ -41,12 +45,17 @@ class QuotationsController < ApplicationController
   # PATCH/PUT /quotations/1.json
   def update
     respond_to do |format|
-      if @quotation.update(quotation_params)
-        format.html { redirect_to @quotation, notice: 'Quotation was successfully updated.' }
-        format.json { render :show, status: :ok, location: @quotation }
+      if params[:commit] == "Save"
+        if @quotation.update(quotation_params)
+          format.html { redirect_to @quotation, notice: 'Quotation was successfully updated.' }
+          format.json { render :show, status: :ok, location: @quotation }
+          format.js
+        else
+          format.html { render :edit }
+          format.json { render json: @quotation.errors, status: :unprocessable_entity }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @quotation.errors, status: :unprocessable_entity }
+        format.js { render action: "cancel" }
       end
     end
   end
@@ -58,6 +67,14 @@ class QuotationsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to quotations_url, notice: 'Quotation was successfully destroyed.' }
       format.json { head :no_content }
+    end
+  end
+
+  def cancel
+    id = params[:id]
+    @quotation = Quotation.find_by(id: id)
+    respond_to do |format|
+      format.js
     end
   end
 
