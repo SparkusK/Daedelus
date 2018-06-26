@@ -4,15 +4,12 @@
   <div class="d-flex justify-content-between">
     <h1 class="col-md-4">Labor Records</h1>
     <section class="search-form col-md-8">
-      <%= form_for :employees, method: :get do |f| %>
+      <%= form_for :labor_records, method: :get do |f| %>
         <div class="input-group input-group-lg">
           <%= label_tag :keywords, nil, class: "sr-only" %>
           <%= text_field_tag :keywords, nil,
-                placeholder: "Employee first name or last name",
+                placeholder: "employee first name or last name",
                 class: "form-control input-lg" %>
-          <span class="input-group-btn">
-            <%= submit_tag "Find Labor Records",
-                  class: "btn btn-primary btn-lg" %>
           </span>
         </div>
       <% end %>
@@ -20,39 +17,12 @@
   </div>
 </section>
 
-<br>
-<section class="top-pager">
-  <div class="d-flex justify-content-between">
-    <%= will_paginate @labor_records, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-    <%= button_to 'New Labor Record', new_labor_record_path, class: "btn", method: :get %>
+<%= render partial: 'top_pager' %>
 
-  </div>
-</section>
-<br>
-
-<table class="table table-striped table-hover">
-  <thead>
-    <tr>
-      <th>Employee</th>
-      <th>Labor date</th>
-      <th>Hours</th>
-      <th>Total before</th>
-      <th>Total after</th>
-      <th>Supervisor</th>
-      <th>Job JCE</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @labor_records.each do |labor_record| %>
+<section class="labor-record-panels">
+  <% @labor_records.each do |labor_record| %>
       <%= render labor_record %>
-    <% end %>
-  </tbody>
-</table>
+  <% end %>
+</section>
 
-<br>
-
-<%= will_paginate @labor_records, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-
-<br>
+<%= render partial: 'bottom_pager' %>

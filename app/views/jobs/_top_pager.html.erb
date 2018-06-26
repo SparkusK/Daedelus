@@ -1,0 +1,8 @@
+<br>
+<section class="top-pager">
+  <div class="d-flex justify-content-between">
+    <%= will_paginate @jobs, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
+    <%= button_to 'New Job', new_job_path, class: "btn", method: :get %>
+  </div>
+</section>
+<br>

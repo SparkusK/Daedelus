@@ -1,0 +1,37 @@
+// Impose a duration of time between the point where the user presses
+// a key, and the point where the JavaScript handles the event that was
+// fired. We do this because else the event gets fired before
+// the text field on the form gets updated with the keyboard input,
+// thus causing back-end stuff to happen with out-of-date input data.
+var timeout;
+
+// Bind the handler only when the document is ready.
+$(document).ready(function () {
+  // Bind a keyup handler to the #keywords text field.
+  $('#keywords').keyup(function() {
+    // If a timeout exists, clear it first.
+    if(timeout) {
+      clearTimeout(timeout);
+    }
+    // Set a timer.
+    timeout = setTimeout(function() {
+      var keywords = $('#keywords').val();
+      if (keywords.length >= 0) {
+        // This is where we handle the Ajax magic.
+
+        var action = $('#keywords').attr('action');
+        var method = $('#keywords').attr('method');
+
+        var data = $('#keywords').serializeArray();
+
+        $.ajax({
+          method: method,
+          url: action,
+          data: data,
+
+          dataType: 'script'
+        });
+      }
+    }, 80); // time in ms for the timeout
+  });
+});

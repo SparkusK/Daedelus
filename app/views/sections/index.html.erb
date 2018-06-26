@@ -4,15 +4,12 @@
   <div class="d-flex justify-content-between">
     <h1 class="col-md-3">Sections</h1>
     <section class="search-form col-md-9">
-      <%= form_for :employees, method: :get do |f| %>
+      <%= form_for :sections, method: :get do |f| %>
         <div class="input-group input-group-lg">
           <%= label_tag :keywords, nil, class: "sr-only" %>
           <%= text_field_tag :keywords, nil,
                 placeholder: "Section Name",
                 class: "form-control input-lg" %>
-          <span class="input-group-btn">
-            <%= submit_tag "Find Sections",
-                  class: "btn btn-primary btn-lg" %>
           </span>
         </div>
       <% end %>
@@ -20,24 +17,12 @@
   </div>
 </section>
 
-<br>
-<section class="top-pager">
-  <div class="d-flex justify-content-between">
-    <%= will_paginate @sections, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-    <%= button_to 'New Section', new_section_path, class: "btn", method: :get %>
+<%= render partial: 'top_pager' %>
 
-  </div>
-</section>
-<br>
-
-<section class="sections">
+<section class="section-panels">
   <% @sections.each do |section| %>
-    <%= render section %>
+      <%= render section %>
   <% end %>
 </section>
 
-<br>
-
-<%= will_paginate @sections, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-
-<br>
+<%= render partial: 'bottom_pager' %>

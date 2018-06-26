@@ -9,8 +9,10 @@ class Employee < ApplicationRecord
   end
 
   # Search by first_name, last_name, occupation, section, or company number
-  def fuzzy_search(params)
-
+  def self.search(keywords)
+    search_term = keywords.downcase + '%'
+    Employee.where("lower(first_name) LIKE ? OR lower(last_name) LIKE ?", search_term, search_term)
+      .order("last_name asc")
   end
 
 

@@ -4,15 +4,12 @@
   <div class="d-flex justify-content-between">
     <h1 class="col-md-3">Suppliers</h1>
     <section class="search-form col-md-9">
-      <%= form_for :employees, method: :get do |f| %>
+      <%= form_for :suppliers, method: :get do |f| %>
         <div class="input-group input-group-lg">
           <%= label_tag :keywords, nil, class: "sr-only" %>
           <%= text_field_tag :keywords, nil,
                 placeholder: "Supplier name",
                 class: "form-control input-lg" %>
-          <span class="input-group-btn">
-            <%= submit_tag "Find Suppliers",
-                  class: "btn btn-primary btn-lg" %>
           </span>
         </div>
       <% end %>
@@ -20,35 +17,12 @@
   </div>
 </section>
 
-<br>
-<section class="top-pager">
-  <div class="d-flex justify-content-between">
-    <%= will_paginate @suppliers, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-    <%= button_to 'New Supplier', new_supplier_path, class: "btn", method: :get %>
+<%= render partial: 'top_pager' %>
 
-  </div>
-</section>
-<br>
-
-<table class="table table-striped table-hover">
-  <thead>
-    <tr>
-      <th>Name</th>
-      <th>Email</th>
-      <th>Phone</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @suppliers.each do |supplier| %>
+<section class="supplier-panels">
+  <% @suppliers.each do |supplier| %>
       <%= render supplier %>
-    <% end %>
-  </tbody>
-</table>
+  <% end %>
+</section>
 
-<br>
-
-<%= will_paginate @suppliers, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-
-<br>
+<%= render partial: 'bottom_pager' %>

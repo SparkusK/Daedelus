@@ -4,15 +4,12 @@
   <div class="d-flex justify-content-between">
     <h1 class="col-md-4">Creditor Orders</h1>
     <section class="search-form col-md-8">
-      <%= form_for :employees, method: :get do |f| %>
+      <%= form_for :creditor_orders, method: :get do |f| %>
         <div class="input-group input-group-lg">
           <%= label_tag :keywords, nil, class: "sr-only" %>
           <%= text_field_tag :keywords, nil,
                 placeholder: "Supplier name or invoice code",
                 class: "form-control input-lg" %>
-          <span class="input-group-btn">
-            <%= submit_tag "Find Creditor Orders",
-                  class: "btn btn-primary btn-lg" %>
           </span>
         </div>
       <% end %>
@@ -20,39 +17,12 @@
   </div>
 </section>
 
-<br>
-<section class="top-pager">
-  <div class="d-flex justify-content-between">
-    <%= will_paginate @creditor_orders, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-    <%= button_to 'New Creditor Order', new_creditor_order_path, class: "btn", method: :get %>
-  </div>
-</section>
-<br>
+<%= render partial: 'top_pager' %>
 
-<table class="table table-striped table-hover">
-  <thead>
-    <tr>
-      <th>Supplier</th>
-      <th>Job</th>
-      <th>Invoice</th>
-      <th>Delivery note</th>
-      <th>Date issued</th>
-      <th>Value excluding tax</th>
-      <th>Value including tax</th>
-      <th>Still owed amount</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
-
-  <tbody>
-    <% @creditor_orders.each do |creditor_order| %>
+<section class="creditor-order-panels">
+  <% @creditor_orders.each do |creditor_order| %>
       <%= render creditor_order %>
-    <% end %>
-  </tbody>
-</table>
+  <% end %>
+</section>
 
-<br>
-
-<%= will_paginate @creditor_orders, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-
-<br>
+<%= render partial: 'bottom_pager' %>

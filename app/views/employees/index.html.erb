@@ -8,26 +8,15 @@
         <div class="input-group input-group-lg">
           <%= label_tag :keywords, nil, class: "sr-only" %>
           <%= text_field_tag :keywords, nil,
-                placeholder: "First name or last name",
+                placeholder: "Search by first name or last name",
                 class: "form-control input-lg" %>
-          <span class="input-group-btn">
-            <%= submit_tag "Find Employees",
-                  class: "btn btn-primary btn-lg" %>
-          </span>
         </div>
       <% end %>
     </section>
   </div>
 </section>
 
-<br>
-<section class="top-pager">
-  <div class="d-flex justify-content-between">
-    <%= will_paginate @employees, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-    <%= button_to 'New Employee', new_employee_path, class: "btn", method: :get %>
-  </div>
-</section>
-<br>
+<%= render partial: 'top_pager' %>
 
 <section class="employee-panels">
   <% @employees.each do |employee| %>
@@ -35,8 +24,4 @@
   <% end %>
 </section>
 
-<br>
-<section class="bottom-pager">
-<%= will_paginate @employees, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-</section>
-<br>
+<%= render partial: 'bottom_pager' %>
