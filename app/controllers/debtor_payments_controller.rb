@@ -4,7 +4,13 @@ class DebtorPaymentsController < ApplicationController
   # GET /debtor_payments
   # GET /debtor_payments.json
   def index
-    @debtor_payments = DebtorPayment.paginate(page: params[:page])
+    @debtor_payments = params[:keywords].present? ?
+      DebtorPayment.search(params[:keywords]).paginate(page: params[:page]) :
+      DebtorPayment.paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /debtor_payments/1

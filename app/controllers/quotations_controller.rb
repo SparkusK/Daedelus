@@ -4,7 +4,13 @@ class QuotationsController < ApplicationController
   # GET /quotations
   # GET /quotations.json
   def index
-    @quotations = Quotation.paginate(page: params[:page])
+    @quotations = params[:keywords].present? ?
+      Quotation.search(params[:keywords]).paginate(page: params[:page]) :
+      Quotation.paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /quotations/1

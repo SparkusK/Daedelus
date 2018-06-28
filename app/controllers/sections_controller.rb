@@ -4,7 +4,13 @@ class SectionsController < ApplicationController
   # GET /sections
   # GET /sections.json
   def index
-    @sections = Section.paginate(page: params[:page])
+    @sections = params[:keywords].present? ?
+      Section.search(params[:keywords]).includes(manager: :employee).paginate(page: params[:page]) :
+      Section.includes(manager: :employee).paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /sections/1

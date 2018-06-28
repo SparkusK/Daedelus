@@ -4,7 +4,13 @@ class CustomersController < ApplicationController
   # GET /customers
   # GET /customers.json
   def index
-    @customers = Customer.paginate(page: params[:page])
+    @customers = params[:keywords].present? ?
+      Customer.search(params[:keywords]).paginate(page: params[:page]) :
+      Customer.paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /customers/1

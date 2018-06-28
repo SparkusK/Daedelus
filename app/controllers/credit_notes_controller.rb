@@ -4,7 +4,13 @@ class CreditNotesController < ApplicationController
   # GET /credit_notes
   # GET /credit_notes.json
   def index
-    @credit_notes = CreditNote.paginate(page: params[:page])
+    @credit_notes = params[:keywords].present? ?
+      CreditNote.search(params[:keywords]).paginate(page: params[:page]) :
+      CreditNote.paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /credit_notes/1

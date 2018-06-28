@@ -4,7 +4,13 @@ class SuppliersController < ApplicationController
   # GET /suppliers
   # GET /suppliers.json
   def index
-    @suppliers = Supplier.paginate(page: params[:page])
+    @suppliers = params[:keywords].present? ?
+      Supplier.search(params[:keywords]).paginate(page: params[:page]) :
+      Supplier.paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /suppliers/1

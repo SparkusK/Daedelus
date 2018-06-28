@@ -8,9 +8,17 @@ class Section < ApplicationRecord
     "#{name}"
   end
 
-  # Search by name
-  def fuzzy_search(params)
+  def self.search(keywords)
 
+    search_term = keywords.downcase + '%'
+
+    where_term = %{
+      lower(name) LIKE ?
+    }.gsub(/\s+/, " ").strip
+
+    order_term = "name asc"
+
+    Section.where(where_term, search_term).order(order_term)
   end
 
 end

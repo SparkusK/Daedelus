@@ -8,6 +8,26 @@ class Supervisor < ApplicationRecord
   end
 
 
+  def self.search(keywords)
+
+    search_term = keywords.downcase + '%'
+
+    where_term = %{
+      lower(employees.first_name) LIKE ?
+      OR lower(employees.last_name) LIKE ?
+      OR lower(sections.name) LIKE ?
+    }.gsub(/\s+/, " ").strip
+
+    order_term = "last_name asc"
+
+    Supervisor.joins(:employee, :section)
+    .where(where_term,
+      search_term,
+      search_term,
+      search_term
+    ).order(order_term)
+  end
+
   validates :employee_id, presence: true
     # , message: "A Section has to be supervised by an Employee."
   validates :section_id, presence: true
@@ -15,6 +35,7 @@ class Supervisor < ApplicationRecord
 
     # Search by employee.first_name, employee.last_name, or section.name
     def fuzzy_search(params)
+
 
     end
 

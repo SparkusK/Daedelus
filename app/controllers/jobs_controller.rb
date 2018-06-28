@@ -4,7 +4,13 @@ class JobsController < ApplicationController
   # GET /jobs
   # GET /jobs.json
   def index
-    @jobs = Job.paginate(page: params[:page])
+    @jobs = params[:keywords].present? ?
+      Job.search(params[:keywords]).paginate(page: params[:page]) :
+      Job.paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /jobs/1

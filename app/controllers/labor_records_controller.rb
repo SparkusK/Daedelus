@@ -4,7 +4,13 @@ class LaborRecordsController < ApplicationController
   # GET /labor_records
   # GET /labor_records.json
   def index
-    @labor_records = LaborRecord.order(:labor_date).paginate(page: params[:page])
+    @labor_records = params[:keywords].present? ?
+      LaborRecord.search(params[:keywords]).paginate(page: params[:page]) :
+      LaborRecord.paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /labor_records/1

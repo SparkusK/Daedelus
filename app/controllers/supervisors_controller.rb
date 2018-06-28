@@ -4,7 +4,13 @@ class SupervisorsController < ApplicationController
   # GET /supervisors
   # GET /supervisors.json
   def index
-    @supervisors = Supervisor.paginate(page: params[:page])
+    @supervisors = params[:keywords].present? ?
+      Supervisor.search(params[:keywords]).paginate(page: params[:page]) :
+      Supervisor.paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /supervisors/1

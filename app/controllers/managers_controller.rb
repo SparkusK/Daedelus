@@ -4,7 +4,13 @@ class ManagersController < ApplicationController
   # GET /managers
   # GET /managers.json
   def index
-    @managers = Manager.paginate(page: params[:page])
+    @managers = params[:keywords].present? ?
+      Manager.search(params[:keywords]).paginate(page: params[:page]) :
+      Manager.paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /managers/1

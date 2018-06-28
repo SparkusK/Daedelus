@@ -13,8 +13,28 @@ class Job < ApplicationRecord
     "Job no. #{id}, supervised by #{@supervisor.employee.first_name}"
   end
 
-  # Search by section, jce_number, or quotation
-  def fuzzy_search(params)
+  # Search by:
+  #   sections.name,
+  #   jobs.contact_person,
+  #   jobs.balow_section,
+  #   jobs.work_description (if " ".count > 1)
+  #   debtor_orders.?
+  #   quotations.code
+  #   jobs.jce_number
+  def self.search(keywords)
 
+    # If there are numbers, we only search:
+    #   JCE number, balow section, quotation code
+    # Else search everything
+    search_term = keywords.downcase + '%'
+
+    where_term = %{
+      lower(first_name) LIKE ?
+      OR lower(last_name) LIKE ?
+    }.gsub(/\s+/, " ").strip
+
+    order_term = "last_name asc"
+
+    Employee.where(where_term, search_term, search_term).order(order_term)
   end
 end

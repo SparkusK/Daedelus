@@ -5,11 +5,11 @@ class EmployeesController < ApplicationController
   # GET /employees.json
   def index
     @employees = params[:keywords].present? ?
-      Employee.search(params[:keywords]).paginate(page: params[:page]) :
-      Employee.paginate(page: params[:page])
+      Employee.search(params[:keywords]).includes(:section).paginate(page: params[:page]) :
+      Employee.includes(:section).paginate(page: params[:page])
     respond_to do |format|
       format.html {}
-      format.js { params[:page] = 1 }
+      format.js {}
     end
   end
 

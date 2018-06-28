@@ -4,7 +4,13 @@ class CreditorOrdersController < ApplicationController
   # GET /creditor_orders
   # GET /creditor_orders.json
   def index
-    @creditor_orders = CreditorOrder.paginate(page: params[:page])
+    @creditor_orders = params[:keywords].present? ?
+      CreditorOrder.search(params[:keywords]).paginate(page: params[:page]) :
+      CreditorOrder.paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /creditor_orders/1

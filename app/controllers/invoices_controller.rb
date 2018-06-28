@@ -4,7 +4,13 @@ class InvoicesController < ApplicationController
   # GET /invoices
   # GET /invoices.json
   def index
-    @invoices = Invoice.paginate(page: params[:page])
+    @invoices = params[:keywords].present? ?
+      Invoice.search(params[:keywords]).paginate(page: params[:page]) :
+      Invoice.paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /invoices/1

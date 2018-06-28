@@ -5,8 +5,16 @@ class Quotation < ApplicationRecord
     "#{code}"
   end
 
-  # Search by code
-  def fuzzy_search(params)
+  def self.search(keywords)
 
+    search_term = '%' + keywords.downcase + '%'
+
+    where_term = %{
+      lower(code) LIKE ?
+    }.gsub(/\s+/, " ").strip
+
+    order_term = "code asc"
+
+    Quotation.where(where_term, search_term).order(order_term)
   end
 end
