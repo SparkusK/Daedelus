@@ -5,8 +5,8 @@ class LaborRecordsController < ApplicationController
   # GET /labor_records.json
   def index
     @labor_records = params[:keywords].present? ?
-      LaborRecord.search(params[:keywords]).paginate(page: params[:page]) :
-      LaborRecord.paginate(page: params[:page])
+      LaborRecord.search(params[:keywords]).includes(:employee, :job, supervisor: :employee).paginate(page: params[:page]) :
+      LaborRecord.includes(:employee, :job, supervisor: :employee).paginate(page: params[:page])
     respond_to do |format|
       format.html {}
       format.js {}

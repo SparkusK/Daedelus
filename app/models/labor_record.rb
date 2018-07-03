@@ -5,22 +5,44 @@ class LaborRecord < ApplicationRecord
 
   # Search by employee.first_name, employee.last_name,
   #   supervisor.first_name, supervisor.last_name, or job.jce_number
-  def fuzzy_search(params)
-
-
-  end
-
   def self.search(keywords)
 
-    search_term = keywords.downcase + '%'
+    search_term = '%' + keywords.downcase + '%'
 
-    where_term = %{
-      lower(first_name) LIKE ?
-      OR lower(last_name) LIKE ?
-    }.gsub(/\s+/, " ").strip
+    # If there are numbers, we only search JCE number
+    if keywords =~ /\d/
+      where_term = %{
+        lower(jobs.jce_number) LIKE ?
+      }.gsub(/\s+/, " ").strip
 
-    order_term = "last_name asc"
+      order_term = "labor_records.labor_date desc"
 
-    Employee.where(where_term, search_term, search_term).order(order_term)
+      LaborRecord.joins(:job)
+      .where(
+        where_term,
+        search_term
+      ).order(order_term)
+    else
+      # search everything
+      where_term = %{
+        lower(employees.first_name) LIKE ?
+        OR lower(employees.last_name) LIKE ?
+        OR lower(employees_supervisors.first_name) LIKE ?
+        OR lower(employees_supervisors.last_name) LIKE ?
+        OR lower(jobs.jce_number) LIKE ?
+      }.gsub(/\s+/, " ").strip
+
+      order_term = "employees.first_name asc, labor_records.labor_date desc"
+
+      LaborRecord.left_outer_joins(:employee, :job, supervisor: :employee)
+      .where(
+        where_term,
+        search_term,
+        search_term,
+        search_term,
+        search_term,
+        search_term
+      ).order(order_term)
+    end
   end
 end

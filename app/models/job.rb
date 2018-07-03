@@ -18,23 +18,56 @@ class Job < ApplicationRecord
   #   jobs.contact_person,
   #   jobs.balow_section,
   #   jobs.work_description (if " ".count > 1)
-  #   debtor_orders.?
+  #   debtor_orders.customer.name
   #   quotations.code
   #   jobs.jce_number
   def self.search(keywords)
 
+    search_term = '%' + keywords.downcase + '%'
+
     # If there are numbers, we only search:
     #   JCE number, balow section, quotation code
-    # Else search everything
-    search_term = keywords.downcase + '%'
+    if keywords =~ /\d/
+      where_term = %{
+        lower(jobs.jce_number) LIKE ?
+        OR lower(jobs.balow_section) LIKE ?
+        OR lower(quotations.code) LIKE ?
+      }.gsub(/\s+/, " ").strip
 
-    where_term = %{
-      lower(first_name) LIKE ?
-      OR lower(last_name) LIKE ?
-    }.gsub(/\s+/, " ").strip
+      order_term = "jobs.receive_date desc"
 
-    order_term = "last_name asc"
+      Job.joins(:quotation)
+      .where(
+        where_term,
+        search_term,
+        search_term,
+        search_term
+      ).order(order_term)
+    else
+      # search everything
+      where_term = %{
+        lower(sections.name) LIKE ?
+        OR lower(jobs.contact_person) LIKE ?
+        OR lower(jobs.balow_section) LIKE ?
+        OR lower(jobs.work_description) LIKE ?
+        OR lower(customers.name) LIKE ?
+        OR lower(quotations.code) LIKE ?
+        OR lower(jobs.jce_number) LIKE ?
+      }.gsub(/\s+/, " ").strip
 
-    Employee.where(where_term, search_term, search_term).order(order_term)
+      order_term = "jobs.receive_date desc"
+
+      Job.joins(:section, :quotation, debtor_order: :customer)
+      .where(
+        where_term,
+        search_term,
+        search_term,
+        search_term,
+        search_term,
+        search_term,
+        search_term,
+        search_term
+      ).order(order_term)
+    end
   end
 end

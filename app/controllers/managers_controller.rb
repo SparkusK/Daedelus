@@ -5,8 +5,8 @@ class ManagersController < ApplicationController
   # GET /managers.json
   def index
     @managers = params[:keywords].present? ?
-      Manager.search(params[:keywords]).paginate(page: params[:page]) :
-      Manager.paginate(page: params[:page])
+      Manager.search(params[:keywords]).includes(:employee, :section).paginate(page: params[:page]) :
+      Manager.includes(:employee, :section).paginate(page: params[:page])
     respond_to do |format|
       format.html {}
       format.js {}
