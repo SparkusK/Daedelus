@@ -5,8 +5,8 @@ class SupervisorsController < ApplicationController
   # GET /supervisors.json
   def index
     @supervisors = params[:keywords].present? ?
-      Supervisor.search(params[:keywords]).paginate(page: params[:page]) :
-      Supervisor.paginate(page: params[:page])
+      Supervisor.search(params[:keywords]).includes(:employee, :section).paginate(page: params[:page]) :
+      Supervisor.includes(:employee, :section).paginate(page: params[:page])
     respond_to do |format|
       format.html {}
       format.js {}

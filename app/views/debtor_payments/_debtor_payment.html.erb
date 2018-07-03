@@ -12,7 +12,7 @@
   <div class="card-body">
     <div class="row">
       <div class="col-md-6">
-        <h6><small class="text-muted">PAYMENT DATE: </small><%= debtor_payment.payment_date %></h6>
+        <h6><small class="text-muted">PAYMENT DATE: </small><%= debtor_payment.payment_date.strftime("%a, %d %b %Y: %H:%M:%S") %></h6>
       </div>
       <div class="col-md-6">
         <h6><small class="text-muted">PAYMENT TYPE: </small><%= debtor_payment.payment_type %></h6>

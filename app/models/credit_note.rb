@@ -1,29 +1,29 @@
 class CreditNote < ApplicationRecord
   belongs_to :creditor_order
 
-  # Search by creditor_order.job.jce_number,
-  #           creditor_order.supplier.name,
-  #           payment_type
-  def fuzzy_search(params)
-    # if params contains numbers
-      # search phone
-    # else
-      # search the rest
-    # end
-
-  end
-
   def self.search(keywords)
 
-    search_term = keywords.downcase + '%'
+    search_term = '%' + keywords.downcase + '%'
 
     where_term = %{
-      lower(first_name) LIKE ?
-      OR lower(last_name) LIKE ?
+      lower(suppliers.name) LIKE ?
+      OR lower(credit_notes.payment_type) LIKE ?
+      OR lower(credit_notes.note) LIKE ?
+      OR lower(jobs.jce_number) LIKE ?
+      OR lower(invoices.code) LIKE ?
     }.gsub(/\s+/, " ").strip
 
-    order_term = "last_name asc"
+    order_term = "credit_notes.updated_at desc"
 
-    Employee.where(where_term, search_term, search_term).order(order_term)
+    CreditNote.joins(creditor_order: [:job, :invoice, :supplier])
+    .where(where_term,
+       search_term,
+       search_term,
+       search_term,
+       search_term,
+       search_term)
+    .order(order_term)
   end
+
+
 end

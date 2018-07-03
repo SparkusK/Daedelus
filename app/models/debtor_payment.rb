@@ -1,27 +1,24 @@
 class DebtorPayment < ApplicationRecord
   belongs_to :debtor_order
 
-  # Search by debtor_order.name or payment_type
-  def fuzzy_search(params)
-    # if params contains numbers
-      # search phone
-    # else
-      # search the rest
-    # end
-
-  end
-
   def self.search(keywords)
 
-    search_term = keywords.downcase + '%'
+    search_term = '%' + keywords.downcase + '%'
 
     where_term = %{
-      lower(first_name) LIKE ?
-      OR lower(last_name) LIKE ?
+      lower(customers.name) LIKE ?
+      OR lower(debtor_payments.payment_type) LIKE ?
+      OR lower(debtor_payments.note) LIKE ?
     }.gsub(/\s+/, " ").strip
 
-    order_term = "last_name asc"
+    order_term = "debtor_payments.payment_date desc"
 
-    Employee.where(where_term, search_term, search_term).order(order_term)
+    DebtorPayment.joins(debtor_order: :customer)
+    .where(where_term,
+       search_term,
+       search_term,
+       search_term)
+    .order(order_term)
   end
+
 end

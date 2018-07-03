@@ -5,8 +5,8 @@ class CreditNotesController < ApplicationController
   # GET /credit_notes.json
   def index
     @credit_notes = params[:keywords].present? ?
-      CreditNote.search(params[:keywords]).paginate(page: params[:page]) :
-      CreditNote.paginate(page: params[:page])
+      CreditNote.search(params[:keywords]).includes(creditor_order: [:supplier, :job]).paginate(page: params[:page]) :
+      CreditNote.includes(creditor_order: [:supplier, :job]).paginate(page: params[:page])
     respond_to do |format|
       format.html {}
       format.js {}

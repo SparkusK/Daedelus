@@ -5,8 +5,8 @@ class DebtorOrdersController < ApplicationController
   # GET /debtor_orders.json
   def index
     @debtor_orders = params[:keywords].present? ?
-      DebtorOrder.search(params[:keywords]).paginate(page: params[:page]) :
-      DebtorOrder.paginate(page: params[:page])
+      DebtorOrder.search(params[:keywords]).includes(:customer, :invoice).paginate(page: params[:page]) :
+      DebtorOrder.includes(:customer, :invoice).paginate(page: params[:page])
     respond_to do |format|
       format.html {}
       format.js {}

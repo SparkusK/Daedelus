@@ -9,8 +9,7 @@ class Job < ApplicationRecord
   end
 
   def job_name
-    @supervisor = get_supervisor
-    "Job no. #{id}, supervised by #{@supervisor.employee.first_name}"
+    "Job no. #{jce_number}"
   end
 
   # Search by:

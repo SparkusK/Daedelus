@@ -7,27 +7,76 @@ class DebtorOrder < ApplicationRecord
     "Customer #{customer.name}"
   end
 
-  # Search by customer.name, invoice.code, or SA_number
-  def fuzzy_search(params)
-    # if params contains numbers
-      # search phone
-    # else
-      # search the rest
-    # end
-
-  end
-
+  # Search by:
+  #   Customer:
+  #     * name
+  #     * email
+  #     * phone
+  #   Job:
+  #     * JCE number
+  #     * contact person
+  #     * balow_section
+  #   Invoice:
+  #     * Invoice code
   def self.search(keywords)
 
-    search_term = keywords.downcase + '%'
+    is_email = !(( keywords =~ /@|\./ ).nil?)
+    has_numbers = !(( keywords =~ /\d/ ).nil?)
 
-    where_term = %{
-      lower(first_name) LIKE ?
-      OR lower(last_name) LIKE ?
-    }.gsub(/\s+/, " ").strip
 
-    order_term = "last_name asc"
+    search_term = '%' + keywords.downcase + '%'
 
-    Employee.where(where_term, search_term, search_term).order(order_term)
+    if is_email
+      where_term = %{
+        lower(customers.email) LIKE ?
+      }.gsub(/\s+/, " ").strip
+
+      order_term = "customers.email asc"
+
+      DebtorOrder.left_outer_joins( :customer, :invoice, :job)
+      .where(where_term,
+        search_term)
+      .order(order_term)
+
+    elsif has_numbers
+      where_term = %{
+        lower(customers.email) LIKE ?
+        OR customers.phone LIKE ?
+        OR lower(jobs.jce_number) LIKE ?
+        OR lower(invoices.code) LIKE ?
+      }.gsub(/\s+/, " ").strip
+
+      order_term = "debtor_orders.still_owed_amount desc"
+
+      DebtorOrder.left_outer_joins( :customer, :invoice, :job)
+      .where(where_term,
+        search_term,
+        search_term,
+        search_term,
+        search_term)
+      .order(order_term)
+    else
+      where_term = %{
+        lower(customers.name) LIKE ?
+        OR lower(customers.email) LIKE ?
+        OR lower(jobs.jce_number) LIKE ?
+        OR lower(jobs.contact_person) LIKE ?
+        OR lower(jobs.balow_section) LIKE ?
+        OR lower(invoices.code) LIKE ?
+      }.gsub(/\s+/, " ").strip
+
+      order_term = "customers.name asc, debtor_orders.still_owed_amount desc"
+
+      DebtorOrder.left_outer_joins( :customer, :invoice, :job)
+      .where(where_term,
+        search_term,
+        search_term,
+        search_term,
+        search_term,
+        search_term,
+        search_term)
+      .order(order_term)
+    end
+
   end
 end
