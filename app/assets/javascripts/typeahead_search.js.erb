@@ -2,6 +2,9 @@ var timeout;
 
 // Bind the handler only when the document is ready.
 $(document).ready(function () {
+
+  var currentRequest = null;
+
   $(".loading_gif").hide();
   $(".typing_gif").hide();
   // Bind a keyup handler to the #keywords text field.
@@ -22,12 +25,17 @@ $(document).ready(function () {
 
         var data = $('#keywords').serializeArray();
 
-        $.ajax({
+        currentRequest = $.ajax({
           method: method,
           url: action,
           data: data,
 
-          dataType: 'script'
+          dataType: 'script',
+          beforeSend : function() {
+            if(currentRequest != null) {
+              currentRequest.abort();
+            }
+          }
         });
         $(".typing_gif").hide();
         $(".loading_gif").show();
