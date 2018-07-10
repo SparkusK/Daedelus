@@ -7,6 +7,10 @@
       <%= form_for :employees, method: :get do |f| %>
         <div class="input-group input-group-lg">
           <%= label_tag :keywords, nil, class: "sr-only" %>
+          <div class="input-group-prepend">
+            <%= image_tag("loading.gif", class: "loading_gif") %>
+            <%= image_tag("typing.gif", class: "typing_gif") %>
+          </div>
           <%= text_field_tag :keywords, nil,
                 placeholder: "Search employees",
                 class: "form-control input-lg" %>
