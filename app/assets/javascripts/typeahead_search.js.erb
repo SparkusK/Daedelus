@@ -35,12 +35,20 @@ $(document).ready(function () {
             if(currentRequest != null) {
               currentRequest.abort();
             }
+          },
+          success : function () {
+            currentRequest = null;
+          },
+          error : function () {
+            currentRequest = null;
+            alert("Something went wrong with the search.");
+            $(".loading_gif").hide();
           }
         });
         $(".typing_gif").hide();
         $(".loading_gif").show();
       }
-    }, 1500); // time in ms for the timeout
+    }, 400); // time in ms for the timeout
 
   });
 });

@@ -1,24 +1,8 @@
-<p id="notice"><%= notice %></p>
-
-<section class="header">
-  <div class="d-flex justify-content-between">
-    <h1 class="col-md-3">Employees</h1>
-    <section class="search-form col-md-9">
-      <%= form_for :employees, method: :get do |f| %>
-        <div class="input-group input-group-lg">
-          <%= label_tag :keywords, nil, class: "sr-only" %>
-          <div class="input-group-prepend">
-            <%= image_tag("loading.gif", class: "loading_gif") %>
-            <%= image_tag("typing.gif", class: "typing_gif") %>
-          </div>
-          <%= text_field_tag :keywords, nil,
-                placeholder: "Search employees",
-                class: "form-control input-lg" %>
-        </div>
-      <% end %>
-    </section>
-  </div>
-</section>
+<%= render partial: "shared/subpage_header",
+  locals: {
+    header_text: "Employees",
+    entity: :employees,
+    placeholder_text: "Search Employees" } %>
 
 <%= render partial: 'top_pager' %>
 

@@ -1,21 +1,8 @@
-<p id="notice"><%= notice %></p>
-
-<section class="header">
-  <div class="d-flex justify-content-between">
-    <h1 class="col-md-4">Creditor Orders</h1>
-    <section class="search-form col-md-8">
-      <%= form_for :creditor_orders, method: :get do |f| %>
-        <div class="input-group input-group-lg">
-          <%= label_tag :keywords, nil, class: "sr-only" %>
-          <%= text_field_tag :keywords, nil,
-                placeholder: "Search creditor orders",
-                class: "form-control input-lg" %>
-          </span>
-        </div>
-      <% end %>
-    </section>
-  </div>
-</section>
+<%= render partial: "shared/subpage_header",
+  locals: {
+    header_text: "Creditor Orders",
+    entity: :creditor_orders,
+    placeholder_text: "Search creditor orders" } %>
 
 <%= render partial: 'top_pager' %>
 

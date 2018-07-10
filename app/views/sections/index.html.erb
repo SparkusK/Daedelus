@@ -1,21 +1,8 @@
-<p id="notice"><%= notice %></p>
-
-<section class="header">
-  <div class="d-flex justify-content-between">
-    <h1 class="col-md-3">Sections</h1>
-    <section class="search-form col-md-9">
-      <%= form_for :sections, method: :get do |f| %>
-        <div class="input-group input-group-lg">
-          <%= label_tag :keywords, nil, class: "sr-only" %>
-          <%= text_field_tag :keywords, nil,
-                placeholder: "Search sections",
-                class: "form-control input-lg" %>
-          </span>
-        </div>
-      <% end %>
-    </section>
-  </div>
-</section>
+<%= render partial: "shared/subpage_header",
+  locals: {
+    header_text: "Sections",
+    entity: :sections,
+    placeholder_text: "Search sections" } %>
 
 <%= render partial: 'top_pager' %>
 

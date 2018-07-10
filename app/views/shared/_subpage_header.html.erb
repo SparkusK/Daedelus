@@ -1,0 +1,17 @@
+<section class="header">
+  <div class="d-flex justify-content-between">
+    <h1 class="col-md-3"><%= header_text %></h1>
+    <section class="search-form col-md-9">
+      <%= form_for entity, method: :get do |f| %>
+      <%= label_tag :keywords, nil, class: "sr-only" %>
+      <div class="input-group input-group-lg">
+        <%= text_field_tag :keywords, nil,
+              placeholder: placeholder_text,
+              class: "form-control input-lg" %>
+        <%= image_tag("loading.gif", class: "img-thumbnail loading_gif") %>
+        <%= image_tag("typing.gif", class: "img-thumbnail typing_gif") %>
+      </div>
+      <% end %>
+    </section>
+  </div>
+</section>
