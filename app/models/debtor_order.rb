@@ -1,7 +1,6 @@
 class DebtorOrder < ApplicationRecord
   belongs_to :customer
   belongs_to :job, optional: true
-  belongs_to :invoice
 
   def debtor_order_name
     "Customer #{customer.name}"
@@ -15,9 +14,9 @@ class DebtorOrder < ApplicationRecord
   #   Job:
   #     * JCE number
   #     * contact person
-  #     * balow_section
+  #     * responsible_person
   #   Invoice:
-  #     * Invoice code
+  # => *** This changed! We're moving Invoice to the Debtor Payments now.
   def self.search(keywords)
 
     is_email = !(( keywords =~ /@|\./ ).nil?)
@@ -33,7 +32,7 @@ class DebtorOrder < ApplicationRecord
 
       order_term = "customers.email asc"
 
-      DebtorOrder.left_outer_joins( :customer, :invoice, :job)
+      DebtorOrder.left_outer_joins(:customer, :job)
       .where(where_term,
         search_term)
       .order(order_term)
@@ -43,14 +42,12 @@ class DebtorOrder < ApplicationRecord
         lower(customers.email) LIKE ?
         OR customers.phone LIKE ?
         OR lower(jobs.jce_number) LIKE ?
-        OR lower(invoices.code) LIKE ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "debtor_orders.still_owed_amount desc"
 
-      DebtorOrder.left_outer_joins( :customer, :invoice, :job)
+      DebtorOrder.left_outer_joins(:customer, :job)
       .where(where_term,
-        search_term,
         search_term,
         search_term,
         search_term)
@@ -61,15 +58,13 @@ class DebtorOrder < ApplicationRecord
         OR lower(customers.email) LIKE ?
         OR lower(jobs.jce_number) LIKE ?
         OR lower(jobs.contact_person) LIKE ?
-        OR lower(jobs.balow_section) LIKE ?
-        OR lower(invoices.code) LIKE ?
+        OR lower(jobs.responsible_person) LIKE ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "customers.name asc, debtor_orders.still_owed_amount desc"
 
       DebtorOrder.left_outer_joins( :customer, :invoice, :job)
       .where(where_term,
-        search_term,
         search_term,
         search_term,
         search_term,

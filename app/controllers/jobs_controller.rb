@@ -5,8 +5,8 @@ class JobsController < ApplicationController
   # GET /jobs.json
   def index
     @jobs = params[:keywords].present? ?
-      Job.search(params[:keywords]).includes(:section, :quotation, :debtor_order, debtor_order: :customer).paginate(page: params[:page]) :
-      Job.includes(:section, :quotation, :debtor_order, debtor_order: :customer).paginate(page: params[:page])
+      Job.search(params[:keywords]).includes(:section, :quotation).paginate(page: params[:page]) :
+      Job.includes(:section, :quotation).paginate(page: params[:page])
     respond_to do |format|
       format.html {}
       format.js {}
@@ -92,6 +92,6 @@ class JobsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_params
-      params.require(:job).permit(:receive_date, :section_id, :contact_person, :balow_section, :total, :work_description, :jce_number, :order_id, :quotation_id)
+      params.require(:job).permit(:receive_date, :section_id, :contact_person, :responsible_person, :total, :work_description, :jce_number, :order_id, :quotation_id)
     end
 end

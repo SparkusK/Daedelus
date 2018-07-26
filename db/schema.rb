@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180703142718) do
+ActiveRecord::Schema.define(version: 20180726032832) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,7 +54,6 @@ ActiveRecord::Schema.define(version: 20180703142718) do
   create_table "debtor_orders", force: :cascade do |t|
     t.bigint "customer_id"
     t.bigint "job_id"
-    t.bigint "invoice_id"
     t.string "SA_number"
     t.decimal "value_including_tax"
     t.decimal "tax_amount"
@@ -63,7 +62,6 @@ ActiveRecord::Schema.define(version: 20180703142718) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["customer_id"], name: "index_debtor_orders_on_customer_id"
-    t.index ["invoice_id"], name: "index_debtor_orders_on_invoice_id"
     t.index ["job_id"], name: "index_debtor_orders_on_job_id"
   end
 
@@ -101,15 +99,13 @@ ActiveRecord::Schema.define(version: 20180703142718) do
     t.datetime "receive_date"
     t.bigint "section_id"
     t.string "contact_person"
-    t.string "balow_section"
+    t.string "responsible_person"
     t.decimal "total"
     t.string "work_description"
     t.string "jce_number"
-    t.bigint "debtor_order_id"
     t.bigint "quotation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["debtor_order_id"], name: "index_jobs_on_debtor_order_id"
     t.index ["quotation_id"], name: "index_jobs_on_quotation_id"
     t.index ["section_id"], name: "index_jobs_on_section_id"
   end
@@ -189,11 +185,9 @@ ActiveRecord::Schema.define(version: 20180703142718) do
   add_foreign_key "creditor_orders", "jobs"
   add_foreign_key "creditor_orders", "suppliers"
   add_foreign_key "debtor_orders", "customers"
-  add_foreign_key "debtor_orders", "invoices"
   add_foreign_key "debtor_orders", "jobs"
   add_foreign_key "debtor_payments", "debtor_orders"
   add_foreign_key "employees", "sections"
-  add_foreign_key "jobs", "debtor_orders"
   add_foreign_key "jobs", "quotations"
   add_foreign_key "jobs", "sections"
   add_foreign_key "labor_records", "employees"

@@ -20,7 +20,7 @@
     </div>
     <div class="row d-flex justify-content-between">
       <div class="col-md-8">
-        <h6><small class="text-muted">BALOW SECTION: </small><%= job.balow_section %></h6>
+        <h6><small class="text-muted">RESPONSIBLE PERSON: </small><%= job.responsible_person %></h6>
       </div>
       <div class="col-md-4">
         <h6><small class="text-muted">QUOTATION CODE: </small><%= job.quotation.code %> </h6>
@@ -28,7 +28,6 @@
     </div>
     <div class="row d-flex justify-content-between">
       <div class="col-md-8">
-        <h6><small class="text-muted">DEBTOR ORDER: </small><%= job.debtor_order.debtor_order_name %></h6>
       </div>
       <div class="col-md-4">
         <h5><small class="text-muted">JOB TOTAL: </small> <%= number_to_currency(job.total, unit: "R") %></h5>

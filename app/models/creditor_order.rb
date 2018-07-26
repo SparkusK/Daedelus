@@ -14,7 +14,7 @@ class CreditorOrder < ApplicationRecord
   #   Job:
   #     * JCE number
   #     * contact person
-  #     * balow_section
+  #     * responsible_person
   #   Invoice:
   #     * Invoice code
   def self.search(keywords)
@@ -60,7 +60,7 @@ class CreditorOrder < ApplicationRecord
         OR lower(suppliers.email) LIKE ?
         OR lower(jobs.jce_number) LIKE ?
         OR lower(jobs.contact_person) LIKE ?
-        OR lower(jobs.balow_section) LIKE ?
+        OR lower(jobs.responsible_person) LIKE ?
         OR lower(invoices.code) LIKE ?
       }.gsub(/\s+/, " ").strip
 
