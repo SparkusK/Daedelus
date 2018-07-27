@@ -5,28 +5,25 @@
         <%= debtor_order.customer.customer_name %>
       </h4>
       <h5>
-        <%= "We changed this to remove Invoice, putting it in Debtor Payments. Maybe reflect the new view" %>
+        <%= debtor_order.SA_number %>
       </h5>
     </div>
   </div>
   <div class="card-body">
     <div class="row d-flex justify-content-between">
-      <div class="col-md-8">
+      <div class="col-md-6">
         <h6><small class="text-muted">STILL OWED AMOUNT:  </small> <%= number_to_currency(debtor_order.still_owed_amount, unit: "R") %> </h6>
       </div>
-      <div class="col-md-4">
-        <h6><small class="text-muted">SA NUMBER: </small><%= debtor_order.SA_number %> </h6>
+      <div class="col-md-6">
+        <h6><small class="text-muted">VALUE INCLUDING TAX: </small><%= number_to_currency(debtor_order.value_including_tax, unit: "R") %>  </h6>
       </div>
     </div>
     <div class="row">
-      <div class="col-md-4">
-        <h6><small class="text-muted">VALUE INCLUDING TAX: </small><%= number_to_currency(debtor_order.value_including_tax, unit: "R") %> </h6>
-      </div>
-      <div class="col-md-4">
-        <h6><small class="text-muted">VALUE EXCLUDING TAX: </small><%= number_to_currency(debtor_order.value_excluding_tax, unit: "R") %> </h6>
-      </div>
-      <div class="col-md-4">
+      <div class="col-md-6">
         <h6><small class="text-muted">TAX AMOUNT: </small><%= number_to_currency(debtor_order.tax_amount, unit: "R") %> </h6>
+      </div>
+      <div class="col-md-6">
+        <h6><small class="text-muted">VALUE EXCLUDING TAX: </small><%= number_to_currency(debtor_order.value_excluding_tax, unit: "R") %> </h6>
       </div>
     </div>
     <div class="row">
