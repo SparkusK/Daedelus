@@ -92,6 +92,6 @@ class DebtorPaymentsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def debtor_payment_params
-      params.require(:debtor_payment).permit(:debtor_order_id, :payment_amount, :payment_date, :payment_type, :note)
+      params.require(:debtor_payment).permit(:debtor_order_id, :invoice_id, :payment_amount, :payment_date, :payment_type, :note)
     end
 end

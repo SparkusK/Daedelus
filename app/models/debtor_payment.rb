@@ -1,5 +1,6 @@
 class DebtorPayment < ApplicationRecord
   belongs_to :debtor_order
+  belongs_to :invoice
 
   def self.search(keywords)
 
@@ -19,6 +20,14 @@ class DebtorPayment < ApplicationRecord
        search_term,
        search_term)
     .order(order_term)
+  end
+
+  def show_invoice_code
+    self.invoice.nil? ? "" : self.invoice.code
+  end
+
+  def self.invoice_ids
+    self.select(:invoice_id)
   end
 
 end

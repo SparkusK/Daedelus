@@ -11,11 +11,16 @@
   </div>
   <div class="card-body">
     <div class="row">
-      <div class="col-md-6">
+      <div class="col-md-12">
         <h6><small class="text-muted">PAYMENT DATE: </small><%= debtor_payment.payment_date.strftime("%a, %d %b %Y: %H:%M:%S") %></h6>
       </div>
-      <div class="col-md-6">
+    </div>
+    <div class="row">
+      <div class="col-md-4">
         <h6><small class="text-muted">PAYMENT TYPE: </small><%= debtor_payment.payment_type %></h6>
+      </div>
+      <div class="col-md-4">
+        <h6><small class="text-muted">INVOICE CODE: </small><%= debtor_payment.show_invoice_code %></h6>
       </div>
     </div>
     <div class="row">

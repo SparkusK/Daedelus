@@ -1,10 +1,10 @@
-<%= form_with(model: @debtor_payment) do |form| %>
-  <% if @debtor_payment.errors.any? %>
+<%= form_with(model: debtor_payment) do |form| %>
+  <% if debtor_payment.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@debtor_payment.errors.count, "error") %> prohibited this debtor_payment from being saved:</h2>
+      <h2><%= pluralize(debtor_payment.errors.count, "error") %> prohibited this debtor_payment from being saved:</h2>
 
       <ul>
-      <% @debtor_payment.errors.full_messages.each do |message| %>
+      <% debtor_payment.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>
@@ -32,9 +32,22 @@
     </div>
   </div>
 
-  <div class="field">
-    <%= form.label :payment_date %>
-    <%= form.datetime_select  :payment_date, id: :debtor_payment_payment_date %>
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= form.label :payment_date %>
+      <%= form.datetime_select  :payment_date, id: :debtor_payment_payment_date %>
+    </div>
+    <div class="form-group col-md-6">
+      <%= form.label :invoice %>
+      <%= collection_select(:debtor_payment,
+                            :invoice_id,
+                            Invoice.unused,
+                            :id,
+                            :code,
+                            {prompt: true},
+                            {class: "custom-select"}) %>
+
+    </div>
   </div>
 
   <div class="form-row">

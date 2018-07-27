@@ -6,11 +6,6 @@ class Manager < ApplicationRecord
   def manager_name
     "#{employee.first_name} #{employee.last_name}"
   end
-  # Search by employee.first_name, employee.last_name, or section.name
-  def fuzzy_search(params)
-
-
-  end
 
   def self.search(keywords)
 

@@ -1,4 +1,6 @@
 class Invoice < ApplicationRecord
+  has_one :debtor_payment
+
   def invoice_code
     "#{code}"
   end
@@ -15,4 +17,14 @@ class Invoice < ApplicationRecord
 
     Invoice.where(where_term, search_term).order(order_term)
   end
+
+  def self.unused
+    Invoice.where.not(
+      id: DebtorPayment.select("invoice_id").where.not(invoice_id: nil)
+    )
+  end
 end
+
+# .and(
+#   CreditorPayment.select("invoice_id").where.not(invoice_id: nil)
+# )
