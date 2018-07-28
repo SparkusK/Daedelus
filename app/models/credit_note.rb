@@ -16,7 +16,7 @@ class CreditNote < ApplicationRecord
 
     order_term = "credit_notes.updated_at desc"
 
-    CreditNote.joins(creditor_order: [:job, :supplier], :invoice)
+    CreditNote.joins(:invoice, creditor_order: [:job, :supplier] )
     .where(where_term,
        search_term,
        search_term,

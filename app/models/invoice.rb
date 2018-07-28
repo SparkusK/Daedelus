@@ -1,5 +1,6 @@
 class Invoice < ApplicationRecord
   has_one :debtor_payment
+  has_one :creditor_payment
 
   def invoice_code
     "#{code}"
@@ -19,12 +20,14 @@ class Invoice < ApplicationRecord
   end
 
   def self.unused
-    Invoice.where.not(
-      id: DebtorPayment.select("invoice_id").where.not(invoice_id: nil)
-    )
+    query = "SELECT * FROM invoices WHERE id NOT IN (
+      SELECT DISTINCT invoice_id FROM (
+        SELECT invoice_id FROM credit_notes
+          UNION
+        SELECT invoice_id FROM debtor_payments
+      ) AS used_invoices WHERE invoice_id IS NOT NULL
+    );"
+    Invoice.find_by_sql(query)
   end
-end
 
-# .and(
-#   CreditorPayment.select("invoice_id").where.not(invoice_id: nil)
-# )
+end

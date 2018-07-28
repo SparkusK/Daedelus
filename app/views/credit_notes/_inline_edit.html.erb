@@ -33,8 +33,20 @@
   </div>
 
   <div class="form-row">
-    <%= form.label :note %>
-    <%= form.text_field :note, id: :credit_note_note, class: "form-control" %>
+    <div class="col-md-6">
+      <%= form.label :note %>
+      <%= form.text_field :note, id: :credit_note_note, class: "form-control" %>
+    </div>
+    <div class="col-md-6">
+      <%= form.label :invoice %>
+      <%= collection_select(:credit_note,
+                            :invoice_id,
+                            Invoice.unused,
+                            :id,
+                            :code,
+                            {prompt: true},
+                            {class: "custom-select"}) %>
+    </div>
   </div>
 
   <br>
