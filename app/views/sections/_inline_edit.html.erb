@@ -11,17 +11,25 @@
     </div>
   <% end %>
 
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name, id: :section_name %>
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4 class="card-text">
+        Section Name: <%= form.text_field :name, id: :section_name, class: "form-control" %>
+      </h4>
+    </div>
   </div>
-
-  <br>
-  <div class="row">
-    <div class="col-md-10"></div>
-    <div class="d-flex col-md-2">
-      <%= form.submit "Save", class: "btn btn-primary", remote: true %>
-      <%= form.submit "Cancel", class: "btn btn-disabled", remote: true, method: :get %>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        Overheads: <%= form.text_field :overheads, id: :section_overheads, class: "form-control" %>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="d-flex col-md-2">
+        <%= form.submit "Save", class: "btn btn-primary", remote: true %>
+        <%= form.submit "Cancel", class: "btn btn-disabled", remote: true, method: :get %>
+      </div>
     </div>
   </div>
 <% end %>

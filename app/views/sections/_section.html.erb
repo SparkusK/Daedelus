@@ -6,7 +6,12 @@
   </div>
   <div class="card-body">
     <div class="row">
-      Managed by: <%= section.manager.manager_name %>
+      <div class="col-md-6">
+        <small class="text-muted">MANAGED BY: </small><%= section.manager.nil? ? "No manager yet" : section.manager.manager_name %>
+      </div>
+      <div class="col-md-6">
+        <small class="text-muted">OVERHEADS: </small><%= number_to_currency(section.overheads, unit: "R") %>
+      </div>
     </div>
     <div class="row">
       <div class="col-md-10"></div>

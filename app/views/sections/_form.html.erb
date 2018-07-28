@@ -10,13 +10,24 @@
       </ul>
     </div>
   <% end %>
-
-  <div class="field">
-    <%= form.label :name %>
-    <%= form.text_field :name, id: :section_name %>
+  <div class="card">
+    <div class="card-header">
+      <div class="d-flex justify-content-between">
+        <h4 class="card-text">
+          Section Name: <%= form.text_field :name, id: :section_name, class: "form-control" %>
+        </h4>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-md-6">
+          Overheads: <%= form.text_field :overheads, id: :section_overheads, class: "form-control" %>
+        </div>
+      </div>
+    </div>
   </div>
-
+  <br>
   <div class="actions">
-    <%= form.submit %>
+    <%= form.submit  "Create Section", class: "btn btn-primary btn-lg"  %>
   </div>
 <% end %>
