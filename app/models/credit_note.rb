@@ -1,5 +1,6 @@
 class CreditNote < ApplicationRecord
   belongs_to :creditor_order
+  belongs_to :invoice
 
   def self.search(keywords)
 
@@ -15,7 +16,7 @@ class CreditNote < ApplicationRecord
 
     order_term = "credit_notes.updated_at desc"
 
-    CreditNote.joins(creditor_order: [:job, :invoice, :supplier])
+    CreditNote.joins(creditor_order: [:job, :supplier], :invoice)
     .where(where_term,
        search_term,
        search_term,

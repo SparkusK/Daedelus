@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180727232426) do
+ActiveRecord::Schema.define(version: 20180728003252) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -28,7 +28,6 @@ ActiveRecord::Schema.define(version: 20180727232426) do
   create_table "creditor_orders", force: :cascade do |t|
     t.bigint "supplier_id"
     t.bigint "job_id"
-    t.bigint "invoice_id"
     t.string "delivery_note"
     t.datetime "date_issued"
     t.decimal "value_excluding_tax"
@@ -38,7 +37,6 @@ ActiveRecord::Schema.define(version: 20180727232426) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "reference_number"
-    t.index ["invoice_id"], name: "index_creditor_orders_on_invoice_id"
     t.index ["job_id"], name: "index_creditor_orders_on_job_id"
     t.index ["supplier_id"], name: "index_creditor_orders_on_supplier_id"
   end
@@ -185,7 +183,6 @@ ActiveRecord::Schema.define(version: 20180727232426) do
   end
 
   add_foreign_key "credit_notes", "creditor_orders"
-  add_foreign_key "creditor_orders", "invoices"
   add_foreign_key "creditor_orders", "jobs"
   add_foreign_key "creditor_orders", "suppliers"
   add_foreign_key "debtor_orders", "customers"

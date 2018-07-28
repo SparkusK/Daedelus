@@ -8,14 +8,6 @@
   <div class="card-body">
     <div class="d-flex justify-content-between">
       <div>
-        <h6><small class="text-muted">INVOICE CODE: </small> <%= creditor_order.invoice.code %> </h6>
-      </div>
-      <div>
-        <h6><small class="text-muted">DATE ISSUED: </small> <%= creditor_order.date_issued.strftime("%a, %d %b %Y") %> </h6>
-      </div>
-    </div>
-    <div class="d-flex justify-content-between">
-      <div>
         <h6>
           <small class="text-muted">VALUE EXCLUDING TAX: </small>
           <%= number_to_currency(creditor_order.value_excluding_tax, unit: "R") %>
@@ -32,6 +24,11 @@
           <small class="text-muted">STILL OWED AMOUNT: </small>
           <%= number_to_currency(creditor_order.still_owed_amount, unit: "R") %>
         </h6>
+      </div>
+    </div>
+    <div class="d-flex justify-content-between">
+      <div>
+        <h6><small class="text-muted">DATE ISSUED: </small> <%= creditor_order.date_issued.strftime("%a, %d %b %Y") %> </h6>
       </div>
     </div>
     <div class="row">

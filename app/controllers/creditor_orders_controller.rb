@@ -5,8 +5,8 @@ class CreditorOrdersController < ApplicationController
   # GET /creditor_orders.json
   def index
     @creditor_orders = params[:keywords].present? ?
-      CreditorOrder.search(params[:keywords]).includes(:supplier, :invoice, job: :section).paginate(page: params[:page]) :
-      CreditorOrder.includes(:supplier, :invoice, job: :section).paginate(page: params[:page])
+      CreditorOrder.search(params[:keywords]).includes(:supplier, job: :section).paginate(page: params[:page]) :
+      CreditorOrder.includes(:supplier, job: :section).paginate(page: params[:page])
     respond_to do |format|
       format.html {}
       format.js {}
@@ -92,6 +92,6 @@ class CreditorOrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def creditor_order_params
-      params.require(:creditor_order).permit(:supplier_id, :job_id, :invoice_id, :delivery_note, :date_issued, :value_excluding_tax, :tax_amount, :value_including_tax, :still_owed_amount)
+      params.require(:creditor_order).permit(:supplier_id, :job_id, :delivery_note, :date_issued, :value_excluding_tax, :tax_amount, :value_including_tax, :still_owed_amount)
     end
 end

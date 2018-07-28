@@ -1,7 +1,7 @@
 class CreditorOrder < ApplicationRecord
   belongs_to :supplier
   belongs_to :job
-  belongs_to :invoice
+
 
   def creditor_order_name
     "Supplier #{supplier.name}, job #{job.jce_number}"
@@ -17,6 +17,7 @@ class CreditorOrder < ApplicationRecord
   #     * responsible_person
   #   Invoice:
   #     * Invoice code
+  #     ** This changed: Invoices now belong to Payments, not Orders
   def self.search(keywords)
 
     is_email = !(( keywords =~ /@|\./ ).nil?)
@@ -32,7 +33,7 @@ class CreditorOrder < ApplicationRecord
 
       order_term = "suppliers.email asc"
 
-      CreditorOrder.joins(:supplier, :invoice, :job)
+      CreditorOrder.joins(:supplier, :job)
       .where(where_term,
         search_term)
       .order(order_term)
@@ -42,14 +43,12 @@ class CreditorOrder < ApplicationRecord
         lower(suppliers.email) LIKE ?
         OR suppliers.phone LIKE ?
         OR lower(jobs.jce_number) LIKE ?
-        OR lower(invoices.code) LIKE ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "creditor_orders.still_owed_amount desc"
 
-      CreditorOrder.joins(:supplier, :invoice, :job)
+      CreditorOrder.joins(:supplier, :job)
       .where(where_term,
-        search_term,
         search_term,
         search_term,
         search_term)
@@ -61,14 +60,12 @@ class CreditorOrder < ApplicationRecord
         OR lower(jobs.jce_number) LIKE ?
         OR lower(jobs.contact_person) LIKE ?
         OR lower(jobs.responsible_person) LIKE ?
-        OR lower(invoices.code) LIKE ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "suppliers.name asc, creditor_orders.still_owed_amount desc"
 
-      CreditorOrder.joins(:supplier, :invoice, :job)
+      CreditorOrder.joins(:supplier, :job)
       .where(where_term,
-        search_term,
         search_term,
         search_term,
         search_term,
