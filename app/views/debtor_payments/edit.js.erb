@@ -1,1 +1,28 @@
 $('#<%= @debtor_payment.id %>').html("<%= escape_javascript(render 'inline_edit', debtor_payment: @debtor_payment).html_safe %>");
+
+function DebtorOrderAmounts(debtor_order_id) {
+  this.debtor_order_id = debtor_order_id;
+
+  this.getAmounts = function() {
+    $.get("/debtor_orders/" + this.debtor_order_id + "/amounts", function( response ) {
+      var total = response.value_including_tax;
+      var remaining = response.still_owed_amount;
+      $("#total").html("R" + parseFloat(total).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+      $("#remaining").html("R" + parseFloat(remaining).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+    });
+  }
+}
+
+$(document).ready(function () {
+
+  $("#datetimepicker").datetimepicker({
+    format: 'Y-m-d H:i'
+  });
+
+  $('#debtor_payment_debtor_order_id').change(function() {
+    var inputOrderId = $('#debtor_payment_debtor_order_id').val();
+    var dbtOrderAmts = new DebtorOrderAmounts(inputOrderId);
+    dbtOrderAmts.getAmounts();
+  });
+
+});

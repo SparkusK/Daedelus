@@ -3,7 +3,7 @@ class DebtorOrder < ApplicationRecord
   belongs_to :job, optional: true
 
   def debtor_order_name
-    "Customer #{customer.name}"
+    "#{order_number.upcase} \t(#{customer.name})"
   end
 
   # Search by:

@@ -21,6 +21,26 @@
                           :debtor_order_name,
                           {prompt: true},
                           {class: "custom-select"}) %>
+
+
+    </div>
+
+    <div class="col-md-4">
+      <%= form.label :total %>
+      <h5 id="total"><%= number_to_currency(12000, unit: "R") %></h5>
+    </div>
+    <div class="col-md-4">
+      <%= form.label :still_owed_amount %>
+      <h5 id="remaining"><%= number_to_currency(12000, unit: "R") %></h5>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <%= form.label :payment_date %>
+      <%= form.text_field  :payment_date,
+        id: :datetimepicker, class: "form-control",
+        placeholder: "YYYY-MM-DD hh:mm", autocomplete: false %>
     </div>
     <div class="form-group col-md-4">
       <%= form.label :payment_amount %>
@@ -32,12 +52,13 @@
     </div>
   </div>
 
+
   <div class="form-row">
-    <div class="form-group col-md-6">
-      <%= form.label :payment_date %>
-      <%= form.datetime_select  :payment_date, id: :debtor_payment_payment_date %>
+    <div class="form-group col-md-9">
+      <%= form.label :note %>
+      <%= form.text_field :note, id: :debtor_payment_note, class: "form-control" %>
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-3">
       <%= form.label :invoice %>
       <%= collection_select(:debtor_payment,
                             :invoice_id,
@@ -50,11 +71,7 @@
     </div>
   </div>
 
-  <div class="form-row">
-    <%= form.label :note %>
-    <%= form.text_field :note, id: :debtor_payment_note, class: "form-control" %>
-  </div>
-
+  </br>
   <div class="actions">
     <%= form.submit "Create Debtor Payment", class: "btn btn-primary btn-lg" %>
   </div>

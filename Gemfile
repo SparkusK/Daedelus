@@ -37,6 +37,7 @@ gem 'will_paginate'
 gem 'bootstrap-will_paginate'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
+gem 'jquery-datetimepicker-rails'
 
 gem 'octicons'
 gem 'octicons_helper'

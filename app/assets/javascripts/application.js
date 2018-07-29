@@ -13,4 +13,5 @@
 //= require rails-ujs
 //= require jquery
 //= require jquery-ui/widgets/datepicker
+//= require jquery.datetimepicker
 //= require_tree .

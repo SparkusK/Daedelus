@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   get '/employees/:id', to: "employees#cancel", as: :cancel_employee
 
   get '/employees/:id/rates', to: "employees#ajax_rates"
+  get '/debtor_orders/:id/amounts', to: "debtor_orders#ajax_amounts"
 
 end
 
