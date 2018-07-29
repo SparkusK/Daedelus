@@ -1,12 +1,24 @@
 class PayrollsController < ApplicationController
-  before_action :set_payroll, only: [:show, :edit, :update, :destroy]
+  # before_action :set_payroll, only: [:show, :edit, :update, :destroy]
 
   # GET /payrolls
   # GET /payrolls.json
   def index
-    start_date = 1.months.ago
-    end_date = 2.months.ago
-    records = LaborRecord.where("labor_date < '#{start_date}' AND labor_date > '#{end_date}'")
+    params[:start_date] = 2.months.ago if params[:start_date].nil?
+    params[:end_date] = 1.months.ago if params[:end_date].nil?
+    date1 = params[:start_date]
+    date2 = params[:end_date]
+
+    if date1 < date2
+      start_date = date1
+      end_date = date2
+    else
+      start_date = date2
+      end_date = date1
+    end
+
+    records = LaborRecord.where("labor_date > ? AND labor_date < ?", start_date, end_date)
+
     @employee_details = Hash.new{ |hash, key| hash[key] = {normal_time: 0.0, sunday_time: 0.0}}
     records.each { |record|
       if record.labor_date.wday == 0 #sundays
@@ -18,68 +30,21 @@ class PayrollsController < ApplicationController
     @employee_details
   end
 
-  # GET /payrolls/1
-  # GET /payrolls/1.json
-  def show
-  end
-
   # GET /payrolls/new
   def new
     @payroll = Payroll.new
   end
 
-  # GET /payrolls/1/edit
-  def edit
-  end
-
-  # POST /payrolls
-  # POST /payrolls.json
-  def create
-    @payroll = Payroll.new(payroll_params)
-
-    respond_to do |format|
-      if @payroll.save
-        format.html { redirect_to @payroll, notice: 'Payroll was successfully created.' }
-        format.json { render :show, status: :created, location: @payroll }
-      else
-        format.html { render :new }
-        format.json { render json: @payroll.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # PATCH/PUT /payrolls/1
-  # PATCH/PUT /payrolls/1.json
-  def update
-    respond_to do |format|
-      if @payroll.update(payroll_params)
-        format.html { redirect_to @payroll, notice: 'Payroll was successfully updated.' }
-        format.json { render :show, status: :ok, location: @payroll }
-      else
-        format.html { render :edit }
-        format.json { render json: @payroll.errors, status: :unprocessable_entity }
-      end
-    end
-  end
-
-  # DELETE /payrolls/1
-  # DELETE /payrolls/1.json
-  def destroy
-    @payroll.destroy
-    respond_to do |format|
-      format.html { redirect_to payrolls_url, notice: 'Payroll was successfully destroyed.' }
-      format.json { head :no_content }
-    end
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_payroll
-      @payroll = Payroll.find(params[:id])
-    end
+    # def set_payroll
+    #   @payroll = Payroll.find(params[:id])
+    # end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def payroll_params
-      params.fetch(:payroll, {})
+      params.fetch(:start_date) {2.months.ago}
+      params.fetch(:end_date) {1.months.ago}
     end
 end

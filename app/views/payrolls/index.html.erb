@@ -1,10 +1,34 @@
-<p id="notice"><%= notice %></p>
-
 <h1>Payroll</h1>
-<h3>Normal time hours: 160</h3>
-<h3>Dates: <%= 2.months.ago.strftime("%a, %d %b %Y") %> to <%= 1.months.ago.strftime("%a, %d %b %Y") %></h3>
+<% normal_time_hours = normal_time_hours(params[:start_date], params[:end_date]) %>
+<h3>Normal time hours: <%= normal_time_hours %></h3>
+<h3>Dates: </h3>
+<%= form_tag("/payroll", method: "get") do %>
+
+  <div class="row">
+    <div class="form-group col-md-5">
+      <%= label_tag :start_date %> </br>
+      <%= text_field_tag( :start_date,
+                          "#{params[:start_date]}",
+                          {autocomplete: :off,
+                          class: "form-control datepicker"}) %>
+    </div>
+    <div class="form-group col-md-5">
+      <%= label_tag :end_date %> </br>
+      <%= text_field_tag :end_date,
+                          "#{params[:end_date]}",
+                          {autocomplete: :off,
+                          class: "form-control datepicker"} %>
+    </div>
+    <div class="form-group col-md-2">
+      </br>
+      <%= submit_tag("Refresh dates", class: "btn btn-lg btn-primary") %>
+    </div>
+  </div>
+<% end %>
+</br>
 
 <ol class="list-group">
+
   <% @employee_details.each do |key, emp| %>
     <% employee = Employee.find_by(id: key) %>
     <li class="list-group-item">
@@ -37,8 +61,8 @@
             <td>Rate:</td>
             <td>Subtotal:</td>
           </tr>
-          <% if emp[:normal_time] > 160.0 %>
-            <% overtime = emp[:normal_time] - 160.0 %>
+          <% if emp[:normal_time] > normal_time_hours %>
+            <% overtime = emp[:normal_time] - normal_time_hours %>
             <% emp[:normal_time] = emp[:normal_time] - overtime %>
           <% else %>
             <% overtime = 0 %>
@@ -89,6 +113,7 @@
         </div>
       </div>
     </li>
+    </br>
   <% end %>
 </ol>
 
