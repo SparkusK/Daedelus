@@ -1,7 +1,12 @@
 class LaborRecord < ApplicationRecord
+  
   belongs_to :employee
   belongs_to :supervisor, optional: true
   belongs_to :job
+
+  def day_of_the_week
+    Date::DAYNAMES[self.labor_date.wday]
+  end
 
   # Search by employee.first_name, employee.last_name,
   #   supervisor.first_name, supervisor.last_name, or job.jce_number

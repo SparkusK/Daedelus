@@ -83,6 +83,19 @@ class EmployeesController < ApplicationController
     end
   end
 
+  # AJAX GET /employees/7/rates.json
+  def ajax_rates
+    emp = Employee.find_by(id: params[:id])
+    @rates = { inclusive_rate: emp.inclusive_rate, exclusive_rate: emp.net_rate }
+
+    respond_to do |format|
+      format.json {
+        render json: @rates
+      }
+    end
+  end
+
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_employee

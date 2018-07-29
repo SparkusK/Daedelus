@@ -1,1 +1,18 @@
 $('#<%= @labor_record.id %>').html("<%= escape_javascript(render 'inline_edit', employee: @labor_record).html_safe %>");
+$(document).ready(function() {
+
+  $('#labor_record_hours').change(function() {
+    var inputHours = $('#labor_record_hours').val();
+    if ( !(isNaN(inputHours))) {
+      update_fields();
+    }
+
+  });
+
+  $('#labor_record_employee_id').change(function() {
+    var inputId = $('#labor_record_employee_id').val();
+    if(Number.isInteger(parseInt(inputId))) {
+      update_fields();
+    }
+  });
+});
