@@ -12,27 +12,31 @@
   <div class="card-body">
     <div class="row">
       <div class="col-md-4">
-        <h5><small class="text-muted">HOURS: </small><%= labor_record.hours %></h5>
+        <h6><small class="text-muted">NET RATE: </small><%= number_to_currency(labor_record.employee.net_rate, unit: "R") %></h5>
       </div>
+      <div class="col-md-4">
+        <h6><small class="text-muted">INCLUSIVE RATE: </small><%= number_to_currency(labor_record.employee.inclusive_rate, unit: "R") %></h5>
+      </div>
+    </div>
+    <div class="row">
       <div class="col-md-4">
         <h5><small class="text-muted">NET RATE TOTAL: </small><%= number_to_currency(labor_record.total_before, unit: "R") %></h5>
       </div>
       <div class="col-md-4">
         <h5><small class="text-muted">INCLUSIVE RATE TOTAL: </small><%= number_to_currency(labor_record.total_after, unit: "R") %></h5>
       </div>
+      <div class="col-md-4">
+        <h5><small class="text-muted">HOURS: </small><%= labor_record.hours %></h5>
+      </div>
     </div>
     <div class="row">
-      <div class="col-md-12">
-        <div class="d-flex justify-content-between">
-          <div>
-            <% if !(labor_record.supervisor.nil?) %>
-              <h6><small class="text-muted">SUPERVISOR: </small><%= labor_record.supervisor.supervisor_name %></h6>
-            <% end %>
-          </div>
-          <div>
-            <h6><small class="text-muted">JOB JCE NUMBER: </small><%= labor_record.job.jce_number %></h6>
-          </div>
-        </div>
+      <div class="col-md-4">
+        <% if !(labor_record.supervisor.nil?) %>
+          <h6><small class="text-muted">SUPERVISOR: </small><%= labor_record.supervisor.supervisor_name %></h6>
+        <% end %>
+      </div>
+      <div class="col-md-4">
+        <h6><small class="text-muted">JOB JCE NUMBER: </small><%= labor_record.job.jce_number %></h6>
       </div>
     </div>
     <div class="row">
