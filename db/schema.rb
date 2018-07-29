@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180728024646) do
+ActiveRecord::Schema.define(version: 20180729003418) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -54,7 +54,7 @@ ActiveRecord::Schema.define(version: 20180728024646) do
   create_table "debtor_orders", force: :cascade do |t|
     t.bigint "customer_id"
     t.bigint "job_id"
-    t.string "SA_number"
+    t.string "order_number"
     t.decimal "value_including_tax"
     t.decimal "tax_amount"
     t.decimal "value_excluding_tax"

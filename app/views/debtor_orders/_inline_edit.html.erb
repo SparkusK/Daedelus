@@ -32,16 +32,7 @@
                             {prompt: true},
                             {class: "custom-select"}) %>
     </div>
-    <div class="form-group col-md-4">
-      <%= form.label :invoice_id %>
-      <%= collection_select(:debtor_order,
-                            :invoice_id,
-                            Invoice.all,
-                            :id,
-                            :invoice_code,
-                            {prompt: true},
-                            {class: "custom-select"}) %>
-    </div>
+
   </div>
 
   <div class="form-row">
@@ -61,8 +52,8 @@
 
   <div class="form-row">
     <div class="form-group col-md-6">
-      <%= form.label "S/A_number" %>
-      <%= form.text_field :SA_number, id: :debtor_order_SA_number, class: "form-control" %>
+      <%= form.label "Order number" %>
+      <%= form.text_field :order_number, id: :debtor_order_order_number, class: "form-control" %>
     </div>
     <div class="form-group col-md-6">
       <%= form.label :still_owed_amount %>
