@@ -1,5 +1,5 @@
 class LaborRecord < ApplicationRecord
-  
+
   belongs_to :employee
   belongs_to :supervisor, optional: true
   belongs_to :job
@@ -32,18 +32,14 @@ class LaborRecord < ApplicationRecord
       where_term = %{
         lower(employees.first_name) LIKE ?
         OR lower(employees.last_name) LIKE ?
-        OR lower(employees_supervisors.first_name) LIKE ?
-        OR lower(employees_supervisors.last_name) LIKE ?
         OR lower(jobs.jce_number) LIKE ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "employees.first_name asc, labor_records.labor_date desc"
 
-      LaborRecord.left_outer_joins(:employee, :job, supervisor: :employee)
+      LaborRecord.joins(:employee, :job)
       .where(
         where_term,
-        search_term,
-        search_term,
         search_term,
         search_term,
         search_term

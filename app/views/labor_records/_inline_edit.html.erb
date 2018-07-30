@@ -12,24 +12,29 @@
   <% end %>
 
   <div class="form-row">
-    <%= form.label :employee_id %>
-    <%= collection_select(:labor_record,
-                        :employee_id,
-                        Employee.all,
-                        :id,
-                        :employee_name,
-                        {prompt: true}, {class: "custom-select"}) %>
+    <div class="col-md-6">
+      <%= form.label :employee_id %>
+      <%= collection_select(:labor_record,
+                          :employee_id,
+                          Employee.all,
+                          :id,
+                          :employee_name,
+                          {prompt: true}, {class: "custom-select"}) %>
+    </div>
+    <div class="form-group col-md-6">
+      <%= form.label :labor_date %> </br>
+      <span>
+        <%= form.text_field :labor_date,
+                             autocomplete: :off,
+                             class: "form-control datepicker",
+                             placeholder: "yyyy-mm-dd" %>
+      </span>
+    </div>
   </div>
 
   <div class="form-row">
-    <div class="form-group col-md-6">
-      <%= form.label :labor_date %> </br>
-      <span><%= form.date_select :labor_date, id: :labor_record_labor_date %></span>
-    </div>
-    <div class="form-group col-md-6">
-      <%= form.label :day_of_the_week %>
-      <%= form.text_field :day_of_the_week, id: :labor_record_day_of_the_week, class: "form-control" %>
-    </div>
+
+
   </div>
 
 

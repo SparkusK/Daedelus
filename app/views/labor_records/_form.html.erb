@@ -23,7 +23,12 @@
     </div>
     <div class="form-group col-md-6">
       <%= form.label :labor_date %> </br>
-      <span><%= form.text_field :labor_date, autocomplete: :off, id: :datepicker, class: "form-control", placeholder: "yyyy-mm-dd" %></span>
+      <span>
+        <%= form.text_field :labor_date,
+                             autocomplete: :off,
+                             class: "form-control datepicker",
+                             placeholder: "yyyy-mm-dd" %>
+      </span>
     </div>
   </div>
 
