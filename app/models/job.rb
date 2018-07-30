@@ -23,7 +23,7 @@ class Job < ApplicationRecord
     search_term = '%' + keywords.downcase + '%'
 
     # If there are numbers, we only search:
-    #   JCE number, balow section, quotation code
+    #   JCE number, responsible_person, quotation code
     if keywords =~ /\d/
       where_term = %{
         lower(jobs.jce_number) LIKE ?

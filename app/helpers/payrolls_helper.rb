@@ -13,9 +13,9 @@ module PayrollsHelper
 
     (start_date .. end_date).each do |date|
       case date.wday
-      when 1..4
+      when 1..4 # Monday to Thursday
         normal_time_hours += 8.75
-      when 5
+      when 5 # Friday
         normal_time_hours += 5
       end
     end
