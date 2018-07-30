@@ -3,8 +3,8 @@ function EmployeeAmounts(employee_id) {
 
   this.getRates = function(hours) {
     $.get("/employees/" + this.employee_id + "/rates", function( response ) {
-      var before = response.inclusive_rate * hours;
-      var after = response.exclusive_rate * hours;
+      var before = response.exclusive_rate * hours;
+      var after = response.inclusive_rate * hours;
       $("#labor_record_total_before").val(before.toFixed(2));
       $("#labor_record_total_after").val(after.toFixed(2));
     });
@@ -35,6 +35,6 @@ $(document).ready(function() {
     var inputId = $('#labor_record_employee_id').val();
     if(Number.isInteger(parseInt(inputId))) {
       update_fields();
-    } 
+    }
   });
 });
