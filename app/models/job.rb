@@ -8,7 +8,7 @@ class Job < ApplicationRecord
   end
 
   def job_name
-    "Job no. #{jce_number}"
+    "#{jce_number}"
   end
 
   # Search by:

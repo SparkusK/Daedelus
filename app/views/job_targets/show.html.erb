@@ -1,0 +1,17 @@
+<p>
+  <strong>Job:</strong>
+  <%= @job_target.job %>
+</p>
+
+<p>
+  <strong>Section:</strong>
+  <%= @job_target.section %>
+</p>
+
+<p>
+  <strong>Target amount:</strong>
+  <%= @job_target.target_amount %>
+</p>
+
+<%= link_to 'Edit', edit_job_target_path(@job_target) %> |
+<%= link_to 'Back', job_targets_path %>
