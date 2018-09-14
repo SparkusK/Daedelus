@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180802102359) do
+ActiveRecord::Schema.define(version: 20180914124547) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -22,9 +22,8 @@ ActiveRecord::Schema.define(version: 20180802102359) do
     t.string "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.bigint "invoice_id"
+    t.string "invoice_code"
     t.index ["creditor_order_id"], name: "index_credit_notes_on_creditor_order_id"
-    t.index ["invoice_id"], name: "index_credit_notes_on_invoice_id", unique: true
   end
 
   create_table "creditor_orders", force: :cascade do |t|
@@ -73,9 +72,8 @@ ActiveRecord::Schema.define(version: 20180802102359) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "payment_date"
-    t.bigint "invoice_id"
+    t.string "invoice_code"
     t.index ["debtor_order_id"], name: "index_debtor_payments_on_debtor_order_id"
-    t.index ["invoice_id"], name: "index_debtor_payments_on_invoice_id", unique: true
   end
 
   create_table "employees", force: :cascade do |t|
@@ -89,13 +87,6 @@ ActiveRecord::Schema.define(version: 20180802102359) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["section_id"], name: "index_employees_on_section_id"
-  end
-
-  create_table "invoices", force: :cascade do |t|
-    t.string "code", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["code"], name: "index_invoices_on_code", unique: true
   end
 
   create_table "job_targets", force: :cascade do |t|
@@ -117,10 +108,9 @@ ActiveRecord::Schema.define(version: 20180802102359) do
     t.decimal "total"
     t.string "work_description"
     t.string "jce_number"
-    t.bigint "quotation_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["quotation_id"], name: "index_jobs_on_quotation_id"
+    t.string "quotation_code"
     t.index ["section_id"], name: "index_jobs_on_section_id"
   end
 
@@ -145,12 +135,6 @@ ActiveRecord::Schema.define(version: 20180802102359) do
     t.datetime "updated_at", null: false
     t.index ["employee_id"], name: "index_managers_on_employee_id"
     t.index ["section_id"], name: "index_managers_on_section_id"
-  end
-
-  create_table "quotations", force: :cascade do |t|
-    t.string "code"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
   end
 
   create_table "sections", force: :cascade do |t|
@@ -195,17 +179,14 @@ ActiveRecord::Schema.define(version: 20180802102359) do
   end
 
   add_foreign_key "credit_notes", "creditor_orders"
-  add_foreign_key "credit_notes", "invoices"
   add_foreign_key "creditor_orders", "jobs"
   add_foreign_key "creditor_orders", "suppliers"
   add_foreign_key "debtor_orders", "customers"
   add_foreign_key "debtor_orders", "jobs"
   add_foreign_key "debtor_payments", "debtor_orders"
-  add_foreign_key "debtor_payments", "invoices"
   add_foreign_key "employees", "sections"
   add_foreign_key "job_targets", "jobs"
   add_foreign_key "job_targets", "sections"
-  add_foreign_key "jobs", "quotations"
   add_foreign_key "jobs", "sections"
   add_foreign_key "labor_records", "employees"
   add_foreign_key "labor_records", "jobs"
