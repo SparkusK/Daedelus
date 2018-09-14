@@ -1,49 +1,24 @@
-<div class="card" id="<%= job.id %>">
-  <div class="card-header">
-    <div class="d-flex justify-content-between">
-      <h4>
-        <%= job.jce_number %>
-      </h4>
-      <h5>
-        <%= job.receive_date.strftime("%a, %d %b %Y") %>
-      </h5>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="row d-flex justify-content-between">
-      <div class="col-md-8">
-        <h6><small class="text-muted">SECTION: </small><%= job.section.name %></h6>
-      </div>
-      <div class="col-md-4">
-        <h6><small class="text-muted">CONTACT PERSON: </small> <%= job.contact_person %></h6>
-      </div>
-    </div>
-    <div class="row d-flex justify-content-between">
-      <div class="col-md-8">
-        <h6><small class="text-muted">RESPONSIBLE PERSON: </small><%= job.responsible_person %></h6>
-      </div>
-      <div class="col-md-4">
-        <h6><small class="text-muted">QUOTATION REFERENCE: </small><%= job.quotation.code %> </h6>
-      </div>
-    </div>
-    <div class="row d-flex justify-content-between">
-      <div class="col-md-8">
-      </div>
-      <div class="col-md-4">
-        <h5><small class="text-muted">JOB TOTAL: </small> <%= number_to_currency(job.total, unit: "R") %></h5>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col-md-10">
-          <h6><small class="text-muted">JOB DESCRIPTION: </small><%= job.work_description %></h6>
-      </div>
-      <div class="d-flex col-md-2">
-        <%= button_to 'Edit', edit_job_path(job), remote: true, method: :get, class: "btn btn-primary" %>
-        <%= button_to 'Remove', job, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
-      </div>
-    </div>
-  </div>
-</div>
-
-<br>
+<%= render partial: "shared/cards/card", locals: {
+  entity: job,
+  card_header_text: job.jce_number,
+  card_subheader_text: job.receive_date.strftime("%a, %d %b %Y"),
+  rows: [
+    {
+      header1: "SECTION:",        text1: job.section.name,
+      header2: "CONTACT_PERSON:", text2: job.contact_person,
+    },
+    {
+      header1: "RESPONSIBLE_PERSON:",  text1: job.responsible_person,
+      header2: "QUOTATION_REFERENCE:", text2: job.quotation_code
+    },
+    {
+      header1: "JOB_DESCRIPTION:", text1: job.work_description,
+      header2: "", text2: ""
+    },
+    {
+      header1: "JOB_TOTAL", text1: number_to_currency(job.total, unit: "R"),
+      header2: "", text2: ""
+    }
+  ],
+  path: edit_job_path(job)
+} %>
