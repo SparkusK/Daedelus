@@ -1,0 +1,27 @@
+<div class="card" id="<%= entity.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4>
+        <%= card_header_text %>
+      </h4>
+      <h5>
+        <%= card_subheader_text %>
+      </h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <% rows.each do |row| %>
+      <%= render partial: "shared/cards/row", locals: { row: row } %>
+    <% end %>
+
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="d-flex col-md-2">
+        <%= button_to 'Edit', path, remote: true, method: :get, class: "btn btn-primary" %>
+        <%= button_to 'Remove', entity, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>

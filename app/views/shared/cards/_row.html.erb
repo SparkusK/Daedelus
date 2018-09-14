@@ -1,0 +1,14 @@
+<div class="row d-flex justify-content-between">
+  <% if row[:header2].empty? %>
+    <div class="col-md-10">
+      <%= render partial: "shared/cards/item", locals: {header: row[:header1], text: row[:text1] } %>
+    </div>
+  <% else %>
+  <div class="col-md-6">
+    <%= render partial: "shared/cards/item", locals: {header: row[:header1], text: row[:text1] } %>
+  </div>
+  <div class="col-md-6">
+    <%= render partial: "shared/cards/item", locals: {header: row[:header2], text: row[:text2] } %>
+  </div>
+  <% end %>
+</div>
