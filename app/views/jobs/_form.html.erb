@@ -41,15 +41,11 @@
   </div>
 
   <div class="form-row">
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-6">
       <%= form.label :jce_number %>
       <%= form.text_field :jce_number, id: :job_jce_number, class: "form-control" %>
     </div>
-    <div class="form-group col-md-4">
-      <%= form.label :order_id %>
-      <%= collection_select(:job, :debtor_order_id, DebtorOrder.all, :id, :debtor_order_name, {prompt: true}, {class: "custom-select"}) %>
-    </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-6">
       <%= form.label :quotation_id %>
       <%= collection_select(:job, :quotation_id, Quotation.all, :id, :quotation_code, {prompt: true}, {class: "custom-select"}) %>
     </div>
