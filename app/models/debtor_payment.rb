@@ -21,12 +21,12 @@ class DebtorPayment < ApplicationRecord
     .order(order_term)
   end
 
-  def show_invoice_code
-    self.invoice.nil? ? "" : self.invoice.code
-  end
-
-  def self.invoice_ids
-    self.select(:invoice_id)
-  end
+  # def show_invoice_code
+  #   self.invoice.nil? ? "" : self.invoice.code
+  # end
+  #
+  # def self.invoice_ids
+  #   self.select(:invoice_id)
+  # end
 
 end

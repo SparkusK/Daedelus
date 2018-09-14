@@ -47,7 +47,7 @@
     </div>
     <div class="form-group col-md-6">
       <%= form.label :quotation_id %>
-      <%= collection_select(:job, :quotation_id, Quotation.all, :id, :quotation_code, {prompt: true}, {class: "custom-select"}) %>
+      <%= form.text_field :quotation_code, id: :job_quotation_code, class: "form-control" %>
     </div>
   </div>
 

@@ -10,14 +10,12 @@ class CreditNote < ApplicationRecord
       OR lower(credit_notes.payment_type) LIKE ?
       OR lower(credit_notes.note) LIKE ?
       OR lower(jobs.jce_number) LIKE ?
-      OR lower(invoices.code) LIKE ?
     }.gsub(/\s+/, " ").strip
 
     order_term = "credit_notes.updated_at desc"
 
-    CreditNote.joins(:invoice, creditor_order: [:job, :supplier] )
+    CreditNote.joins(creditor_order: [:job, :supplier] )
     .where(where_term,
-       search_term,
        search_term,
        search_term,
        search_term,
