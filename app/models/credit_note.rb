@@ -1,6 +1,5 @@
 class CreditNote < ApplicationRecord
   belongs_to :creditor_order
-  belongs_to :invoice
 
   def self.search(keywords)
 

@@ -1,6 +1,5 @@
 class Job < ApplicationRecord
   belongs_to :section
-  belongs_to :quotation
   has_many :labor_records
 
   def get_supervisor

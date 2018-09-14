@@ -5,8 +5,8 @@ class JobsController < ApplicationController
   # GET /jobs.json
   def index
     @jobs = params[:keywords].present? ?
-      Job.search(params[:keywords]).includes(:section, :quotation).paginate(page: params[:page]) :
-      Job.includes(:section, :quotation).paginate(page: params[:page])
+      Job.search(params[:keywords]).includes(:section).paginate(page: params[:page]) :
+      Job.includes(:section).paginate(page: params[:page])
     respond_to do |format|
       format.html {}
       format.js {}

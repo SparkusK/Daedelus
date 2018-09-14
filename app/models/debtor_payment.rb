@@ -1,6 +1,5 @@
 class DebtorPayment < ApplicationRecord
   belongs_to :debtor_order
-  belongs_to :invoice
 
   def self.search(keywords)
 
