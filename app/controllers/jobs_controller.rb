@@ -1,12 +1,10 @@
-class JobsController < ApplicationController
+class JobsController < AdministrativeController
   before_action :set_job, only: [:show, :edit, :update, :destroy]
 
   # GET /jobs
   # GET /jobs.json
   def index
-    @jobs = params[:keywords].present? ?
-      Job.search(params[:keywords]).includes(:section).paginate(page: params[:page]) :
-      Job.includes(:section).paginate(page: params[:page])
+    @jobs = set_index(Job, :section)
     respond_to do |format|
       format.html {}
       format.js {}
@@ -61,7 +59,7 @@ class JobsController < ApplicationController
           format.json { render json: @job.errors, status: :unprocessable_entity }
         end
       else
-        format.js { render action: "cancel" }
+        format.js { render action: "cancel"}
       end
     end
   end
@@ -73,14 +71,6 @@ class JobsController < ApplicationController
     respond_to do |format|
       format.html { redirect_to jobs_url, notice: 'Job was successfully destroyed.' }
       format.json { head :no_content }
-    end
-  end
-
-  def cancel
-    id = params[:id]
-    @job = Job.find_by(id: id)
-    respond_to do |format|
-      format.js
     end
   end
 
