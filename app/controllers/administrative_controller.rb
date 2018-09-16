@@ -13,4 +13,18 @@ class AdministrativeController < ApplicationController
     respond_to { |format| format.js }
   end
 
+  private
+
+  def create_boilerplate(entity)
+    respond_to do |format|
+      if entity.save
+        format.html { redirect_to entity, notice: "#{entity} was successfully created." }
+        format.json { render :show, status: :created, location: entity }
+      else
+        format.html { render :new }
+        format.json { render json: entity.errors, status: :unprocessable_entity }
+      end
+    end
+  end
+
 end

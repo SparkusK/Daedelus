@@ -17,7 +17,7 @@
 
 <p>
   <strong>Balow section:</strong>
-  <%= @job.balow_section %>
+  <%= @job.build_section %>
 </p>
 
 <p>
@@ -36,13 +36,8 @@
 </p>
 
 <p>
-  <strong>Order:</strong>
-  <%= @job.order %>
-</p>
-
-<p>
   <strong>Quotation:</strong>
-  <%= @job.quotation %>
+  <%= @job.quotation_code %>
 </p>
 
 <%= link_to 'Edit', edit_job_path(@job) %> |

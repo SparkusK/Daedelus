@@ -33,16 +33,8 @@ class JobsController < AdministrativeController
   # POST /jobs.json
   def create
     @job = Job.new(job_params)
+    create_boilerplate(@job)
 
-    respond_to do |format|
-      if @job.save
-        format.html { redirect_to @job, notice: 'Job was successfully created.' }
-        format.json { render :show, status: :created, location: @job }
-      else
-        format.html { render :new }
-        format.json { render json: @job.errors, status: :unprocessable_entity }
-      end
-    end
   end
 
   # PATCH/PUT /jobs/1
