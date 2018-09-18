@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180918120354) do
+ActiveRecord::Schema.define(version: 20180918170652) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -88,17 +88,6 @@ ActiveRecord::Schema.define(version: 20180918120354) do
     t.datetime "updated_at", null: false
     t.boolean "eoc"
     t.index ["section_id"], name: "index_employees_on_section_id"
-  end
-
-  create_table "job_targets", force: :cascade do |t|
-    t.bigint "job_id", null: false
-    t.bigint "section_id", null: false
-    t.decimal "target_amount", precision: 12, scale: 2, null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["job_id", "section_id"], name: "index_job_targets_on_job_id_and_section_id", unique: true
-    t.index ["job_id"], name: "index_job_targets_on_job_id"
-    t.index ["section_id"], name: "index_job_targets_on_section_id"
   end
 
   create_table "jobs", force: :cascade do |t|
@@ -186,8 +175,6 @@ ActiveRecord::Schema.define(version: 20180918120354) do
   add_foreign_key "debtor_orders", "jobs"
   add_foreign_key "debtor_payments", "debtor_orders"
   add_foreign_key "employees", "sections"
-  add_foreign_key "job_targets", "jobs"
-  add_foreign_key "job_targets", "sections"
   add_foreign_key "jobs", "sections"
   add_foreign_key "labor_records", "employees"
   add_foreign_key "labor_records", "jobs"
