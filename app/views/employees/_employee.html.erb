@@ -1,4 +1,8 @@
-<div class="card" id="<%= employee.id %>">
+<% if employee.eoc %>
+  <div class="card border-danger" id="<%= employee.id %>">
+<% else %>
+  <div class="card" id="<%= employee.id %>">
+<% end %>
   <div class="card-header">
     <div class="d-flex justify-content-between">
       <h4 class="card-text"> <%= "#{employee.first_name} #{employee.last_name}" %> </h4>
