@@ -8,6 +8,10 @@ class Employee < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  # Labor Records should only be able to choose Employees that are not fired
+  def self.valid
+    Employee.except(eoc: true)
+  end
   # Search by first_name, last_name, occupation, section, or company number
   def self.search(keywords)
 
