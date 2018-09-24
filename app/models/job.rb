@@ -1,4 +1,5 @@
 class Job < ApplicationRecord
+  validates :targeted_amount, numericality: { less_than_or_equal_to: :total }
   belongs_to :section
   has_many :labor_records
 

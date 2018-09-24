@@ -3,12 +3,22 @@
     <div class="col-md-10">
       <%= render partial: "shared/cards/item", locals: {header: row[:header1], text: row[:text1] } %>
     </div>
+  <% elsif row[:header3].nil? %>
+    <div class="col-md-6">
+      <%= render partial: "shared/cards/item", locals: {header: row[:header1], text: row[:text1] } %>
+    </div>
+    <div class="col-md-6">
+      <%= render partial: "shared/cards/item", locals: {header: row[:header2], text: row[:text2] } %>
+    </div>
   <% else %>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <%= render partial: "shared/cards/item", locals: {header: row[:header1], text: row[:text1] } %>
   </div>
-  <div class="col-md-6">
+  <div class="col-md-4">
     <%= render partial: "shared/cards/item", locals: {header: row[:header2], text: row[:text2] } %>
+  </div>
+  <div class="col-md-4">
+    <%= render partial: "shared/cards/item", locals: {header: row[:header3], text: row[:text3] } %>
   </div>
   <% end %>
 </div>
