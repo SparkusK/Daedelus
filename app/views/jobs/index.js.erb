@@ -1,4 +1,4 @@
-$('.job-panels').html("<%= j render @jobs %>");
+$('.job-panels').html("<%= j render partial: 'job', collection: @jobs %>");
 $('.top-pager').html("<%= j render partial: 'top_pager' %>");
 $('.bottom-pager').html("<%= j render partial: 'bottom_pager' %>");
 $(".typing_gif").hide();

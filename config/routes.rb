@@ -6,7 +6,6 @@ Rails.application.routes.draw do
   resources :creditor_orders
   resources :debtor_payments
   resources :debtor_orders
-  resources :supervisors
   resources :suppliers
   resources :customers
   resources :labor_records

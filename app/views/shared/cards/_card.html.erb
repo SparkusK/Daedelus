@@ -10,10 +10,7 @@
     </div>
   </div>
   <div class="card-body">
-    <% rows.each do |row| %>
-      <%= render partial: "shared/cards/row", locals: { row: row } %>
-    <% end %>
-
+    <%= render partial: 'shared/cards/row', collection: rows %>
     <div class="row">
       <div class="col-md-10"></div>
       <div class="d-flex col-md-2">

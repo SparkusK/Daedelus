@@ -32,7 +32,7 @@ class Job < ApplicationRecord
       where_term = %{
         lower(jobs.jce_number) LIKE ?
         OR lower(jobs.responsible_person) LIKE ?
-        OR lower(quotation_code) LIKE ?
+        OR lower(quotation_reference) LIKE ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "jobs.receive_date desc"
@@ -50,7 +50,7 @@ class Job < ApplicationRecord
         OR lower(jobs.contact_person) LIKE ?
         OR lower(jobs.responsible_person) LIKE ?
         OR lower(jobs.work_description) LIKE ?
-        OR lower(quotation_code) LIKE ?
+        OR lower(quotation_reference) LIKE ?
         OR lower(jobs.jce_number) LIKE ?
       }.gsub(/\s+/, " ").strip
 
