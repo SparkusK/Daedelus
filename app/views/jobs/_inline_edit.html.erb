@@ -1,10 +1,10 @@
-<%= form_with(model: @job) do |form| %>
-  <% if @job.errors.any? %>
+<%= form_with(model: job) do |form| %>
+  <% if job.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@job.errors.count, "error") %> prohibited this job from being saved:</h2>
+      <h2><%= pluralize(job.errors.count, "error") %> prohibited this job from being saved:</h2>
 
       <ul>
-      <% @job.errors.full_messages.each do |message| %>
+      <% job.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>
@@ -14,14 +14,19 @@
 
 
   <div class="form-row">
-    <%= form.label :receive_date %>
-    <%= form.datetime_select :receive_date, id: :job_receive_date %>
-  </div>
-
-
-  <div class="form-row">
-    <%= form.label :section_id %>
-    <%= collection_select(:job, :section_id, Section.all, :id, :section_name, {prompt: true}, {class: "custom-select"}) %>
+    <div class="form-group col-md-6">
+      <%= form.label :receive_date %> </br>
+      <span>
+        <%= form.text_field :receive_date,
+                             autocomplete: :off,
+                             class: "form-control datepicker",
+                             placeholder: "yyyy-mm-dd" %>
+      </span>
+    </div>
+    <div class="form-group col-md-6">
+      <%= form.label :section_id %>
+      <%= collection_select(:job, :section_id, Section.all, :id, :section_name, {prompt: true}, {class: "custom-select"}) %>
+    </div>
   </div>
 
   <div class="form-row">
@@ -30,8 +35,8 @@
       <%= form.text_field :contact_person, id: :job_contact_person, class: "form-control" %>
     </div>
     <div class="form-group col-md-6">
-      <%= form.label :balow_section %>
-      <%= form.text_field :balow_section, id: :job_balow_section, class: "form-control" %>
+      <%= form.label :responsible_person %>
+      <%= form.text_field :responsible_person, id: :job_responsible_person, class: "form-control" %>
     </div>
   </div>
 
@@ -46,18 +51,28 @@
       <%= form.text_field :jce_number, id: :job_jce_number, class: "form-control" %>
     </div>
     <div class="form-group col-md-6">
-      <%= form.label :quotation_id %>
-      <%= form.text_field :quotation_code, id: :job_quotation_code, class: "form-control" %>
+      <%= form.label :quotation_reference %>
+      <%= form.text_field :quotation_reference, id: :job_quotation_reference, class: "form-control" %>
     </div>
   </div>
 
   <div class="form-row">
-    <%= form.label :total %>
-    <%= form.text_field :total, id: :job_total, class: "form-control" %>
+    <div class="form-group col-md-4">
+      <%= form.label :total %>
+      <%= form.text_field :total, id: :job_total, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :targeted_amount %>
+      <%= form.text_field :targeted_amount, id: :job_targeted_amount, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :still_available_amount %>
+      <%= form.text_field :still_available_amount, id: :job_still_available_amount, class: "form-control", readonly: true %>
+    </div>
   </div>
 
   <br>
-  
+
   <div class="row">
     <div class="col-md-10"></div>
     <div class="d-flex col-md-2">
@@ -66,3 +81,11 @@
     </div>
   </div>
 <% end %>
+
+<script type="text/javascript">
+$(document).ready(function() {
+  $( ".datepicker" ).datepicker({
+    dateFormat: "yy-mm-dd"
+  });
+});
+</script>

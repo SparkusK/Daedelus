@@ -1,5 +1,5 @@
 class Job < ApplicationRecord
-  validates :targeted_amount, numericality: { less_than_or_equal_to: :total }
+  validates :targeted_amount, numericality: { less_than_or_equal_to: :total, message: "must be less than or equal to Total" }
   belongs_to :section
   has_many :labor_records
 
@@ -9,6 +9,10 @@ class Job < ApplicationRecord
 
   def job_name
     "#{jce_number}"
+  end
+
+  def still_available_amount
+    self.total - self.targeted_amount
   end
 
   # Search by:

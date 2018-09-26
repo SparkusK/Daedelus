@@ -1,12 +1,15 @@
 <%= render partial: "shared/cards/card", locals: {
   entity: job,
-  card_header_text: job.jce_number,
+  card_header_text: job.id,
   card_subheader_text: job.receive_date.strftime("%a, %d %b %Y"),
   rows: [
     {
       header1: "JOB TOTAL:", text1: number_to_currency(job.total, unit: "R"),
       header2: "TARGETED AMOUNT: ", text2: number_to_currency(job.targeted_amount, unit: "R"),
-      header3: "STILL AVAILABLE AMOUNT:", text3: number_to_currency((job.total - job.targeted_amount), unit: "R")
+    },
+    {
+      header1: "STILL AVAILABLE AMOUNT:", text1: number_to_currency((job.total - job.targeted_amount), unit: "R"),
+      header2: "JCE NUMBER: ", text2: job.jce_number
     },
     {
       header1: "SECTION:",        text1: job.section.name,
@@ -14,7 +17,7 @@
     },
     {
       header1: "RESPONSIBLE PERSON:",  text1: job.responsible_person,
-      header2: "QUOTATION REFERENCE:", text2: job.quotation_code
+      header2: "QUOTATION REFERENCE:", text2: job.quotation_reference
     },
     {
       header1: "JOB DESCRIPTION:", text1: job.work_description,

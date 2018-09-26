@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180923143507) do
+ActiveRecord::Schema.define(version: 20180924155133) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -91,17 +91,17 @@ ActiveRecord::Schema.define(version: 20180923143507) do
   end
 
   create_table "jobs", force: :cascade do |t|
-    t.datetime "receive_date"
+    t.date "receive_date"
     t.bigint "section_id"
     t.string "contact_person"
     t.string "responsible_person"
-    t.decimal "total"
+    t.decimal "total", precision: 15, scale: 2, default: "0.0", null: false
     t.string "work_description"
     t.string "jce_number"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "quotation_code"
-    t.decimal "targeted_amount", precision: 15, scale: 2, default: "0.0"
+    t.string "quotation_reference"
+    t.decimal "targeted_amount", precision: 15, scale: 2, default: "0.0", null: false
     t.index ["section_id"], name: "index_jobs_on_section_id"
   end
 
