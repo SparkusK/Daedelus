@@ -1,52 +1,24 @@
-<div class="card" id="<%= labor_record.id %>">
-  <div class="card-header">
-    <div class="d-flex justify-content-between">
-      <h3>
-        <%= labor_record.employee.employee_name %>
-      </h3>
-      <h4>
-        <%= labor_record.labor_date.strftime("%a, %d %b %Y") %>
-      </h4>
-    </div>
-  </div>
-  <div class="card-body">
-    <div class="row">
-      <div class="col-md-4">
-        <h6><small class="text-muted">NET RATE: </small><%= number_to_currency(labor_record.employee.net_rate, unit: "R") %></h5>
-      </div>
-      <div class="col-md-4">
-        <h6><small class="text-muted">INCLUSIVE RATE: </small><%= number_to_currency(labor_record.employee.inclusive_rate, unit: "R") %></h5>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4">
-        <h5><small class="text-muted">NET RATE TOTAL: </small><%= number_to_currency(labor_record.total_before, unit: "R") %></h5>
-      </div>
-      <div class="col-md-4">
-        <h5><small class="text-muted">INCLUSIVE RATE TOTAL: </small><%= number_to_currency(labor_record.total_after, unit: "R") %></h5>
-      </div>
-      <div class="col-md-4">
-        <h5><small class="text-muted">HOURS: </small><%= labor_record.hours %></h5>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-4">
-        <% if !(labor_record.supervisor.nil?) %>
-          <h6><small class="text-muted">SUPERVISOR: </small><%= labor_record.supervisor.supervisor_name %></h6>
-        <% end %>
-      </div>
-      <div class="col-md-4">
-        <h6><small class="text-muted">JOB NUMBER: </small><%= labor_record.job.jce_number %></h6>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-md-10"></div>
-      <div class="d-flex col-md-2">
-        <%= button_to 'Edit', edit_labor_record_path(labor_record), remote: true, method: :get, class: "btn btn-primary" %>
-        <%= button_to 'Remove', labor_record, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
-      </div>
-    </div>
-  </div>
-</div>
-
-<br>
+<%= render partial: "shared/cards/card", locals: {
+  entity: labor_record,
+  card_header_text: labor_record.employee.employee_name,
+  card_subheader_text: labor_record.labor_date.strftime("%a, %d %b %Y"),
+  rows: [
+    {
+      header1: "NET RATE: ", text1: number_to_currency(labor_record.employee.net_rate, unit: "R"),
+      header2: "INCLUSIVE RATE:", text2: number_to_currency(labor_record.employee.inclusive_rate, unit: "R"),
+    },
+    {
+      header1: "NET RATE TOTAL: ", text1: number_to_currency(labor_record.total_before, unit: "R"),
+      header2: "INCLUSIVE RATE TOTAL: ", text2: number_to_currency(labor_record.total_after, unit: "R")
+    },
+    {
+      header1: "HOURS: ",        text1: labor_record.hours ,
+      header2: "SECTION:", text2: labor_record.get_section_name,
+    },
+    {
+      header1: "JOB NUMBER:",  text1: labor_record.job.jce_number,
+      header2: "", text2: ""
+    }
+  ],
+  path: edit_labor_record_path(labor_record)
+} %>

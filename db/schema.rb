@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180924155133) do
+ActiveRecord::Schema.define(version: 20180927120242) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -111,12 +111,13 @@ ActiveRecord::Schema.define(version: 20180924155133) do
     t.decimal "hours"
     t.decimal "total_before"
     t.decimal "total_after"
-    t.bigint "supervisor_id"
     t.bigint "job_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "section_id"
     t.index ["employee_id"], name: "index_labor_records_on_employee_id"
     t.index ["job_id"], name: "index_labor_records_on_job_id"
+    t.index ["section_id"], name: "index_labor_records_on_section_id"
   end
 
   create_table "managers", force: :cascade do |t|
@@ -133,15 +134,6 @@ ActiveRecord::Schema.define(version: 20180924155133) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.decimal "overheads", precision: 12, scale: 2, default: "0.0"
-  end
-
-  create_table "supervisors", force: :cascade do |t|
-    t.bigint "employee_id"
-    t.bigint "section_id"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["employee_id", "section_id"], name: "index_supervisors_on_employee_id_and_section_id", unique: true
-    t.index ["employee_id"], name: "index_supervisors_on_employee_id", unique: true
   end
 
   create_table "suppliers", force: :cascade do |t|
@@ -179,9 +171,7 @@ ActiveRecord::Schema.define(version: 20180924155133) do
   add_foreign_key "jobs", "sections"
   add_foreign_key "labor_records", "employees"
   add_foreign_key "labor_records", "jobs"
-  add_foreign_key "labor_records", "supervisors"
+  add_foreign_key "labor_records", "sections"
   add_foreign_key "managers", "employees"
   add_foreign_key "managers", "sections"
-  add_foreign_key "supervisors", "employees"
-  add_foreign_key "supervisors", "sections"
 end

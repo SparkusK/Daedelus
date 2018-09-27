@@ -1,11 +1,15 @@
 class LaborRecord < ApplicationRecord
 
   belongs_to :employee
-  belongs_to :supervisor, optional: true
+  belongs_to :section
   belongs_to :job
 
   def day_of_the_week
     Date::DAYNAMES[self.labor_date.wday]
+  end
+
+  def get_section_name
+    self.section.nil? ? "" : self.section.name
   end
 
   # Search by employee.first_name, employee.last_name,

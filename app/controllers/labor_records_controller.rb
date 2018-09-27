@@ -92,6 +92,6 @@ class LaborRecordsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def labor_record_params
-      params.require(:labor_record).permit(:employee_id, :labor_date, :hours, :total_before, :total_after, :supervisor_id, :job_id)
+      params.require(:labor_record).permit(:employee_id, :labor_date, :hours, :total_before, :total_after, :section_id, :job_id)
     end
 end

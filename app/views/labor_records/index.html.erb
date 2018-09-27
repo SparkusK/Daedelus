@@ -18,9 +18,7 @@
 <%= render partial: 'top_pager' %>
 
 <section class="labor-record-panels">
-  <% @labor_records.each do |labor_record| %>
-      <%= render labor_record %>
-  <% end %>
+  <%= render partial: 'labor_record', collection: @labor_records %>
 </section>
 
 <%= render partial: 'bottom_pager' %>
