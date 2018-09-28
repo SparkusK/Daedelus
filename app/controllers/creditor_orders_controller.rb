@@ -84,6 +84,19 @@ class CreditorOrdersController < ApplicationController
     end
   end
 
+  # GET /debtor_orders/1/amounts.json
+  def ajax_amounts
+    order = CreditorOrder.find_by(id: params[:id])
+    owed = order.get_still_owed_amount
+    @amounts = {value: order.value_excluding_tax, owed: owed }
+
+    respond_to do |format|
+      format.json {
+        render json: @amounts
+      }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_creditor_order

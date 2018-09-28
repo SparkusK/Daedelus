@@ -1,10 +1,9 @@
 class CreditNote < ApplicationRecord
   belongs_to :creditor_order
-  validates :amount_paid,
-    numericality: {
-      less_than_or_equal_to: self.creditor_order.get_still_owed_amount,
-                    message: ". Can't pay more than is still owed"
-                  }
+  validates_each :amount_paid do |record, attr, value|
+    record.errors.add(attr, "Can't pay more than is still owed") if
+      value > record.creditor_order.get_still_owed_amount
+    end
 
   def self.search(keywords)
 

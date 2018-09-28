@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180928142246) do
+ActiveRecord::Schema.define(version: 20180928163946) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -34,7 +34,6 @@ ActiveRecord::Schema.define(version: 20180928142246) do
     t.decimal "value_excluding_tax", precision: 15, scale: 2, default: "0.0"
     t.decimal "tax_amount", precision: 15, scale: 2, default: "0.0"
     t.decimal "value_including_tax", precision: 15, scale: 2, default: "0.0"
-    t.decimal "still_owed_amount", precision: 15, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "reference_number"
@@ -57,7 +56,6 @@ ActiveRecord::Schema.define(version: 20180928142246) do
     t.decimal "value_including_tax", precision: 15, scale: 2, default: "0.0"
     t.decimal "tax_amount", precision: 15, scale: 2, default: "0.0"
     t.decimal "value_excluding_tax", precision: 15, scale: 2, default: "0.0"
-    t.decimal "still_owed_amount", precision: 15, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["customer_id"], name: "index_debtor_orders_on_customer_id"
