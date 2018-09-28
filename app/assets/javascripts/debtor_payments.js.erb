@@ -3,8 +3,8 @@ function DebtorOrderAmounts(debtor_order_id) {
 
   this.getAmounts = function() {
     $.get("/debtor_orders/" + this.debtor_order_id + "/amounts", function( response ) {
-      var total = response.value_including_tax;
-      var remaining = response.still_owed_amount;
+      var total = response.value;
+      var remaining = response.owed;
       $("#total").html("R" + parseFloat(total).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
       $("#remaining").html("R" + parseFloat(remaining).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
     });

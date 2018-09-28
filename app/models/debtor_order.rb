@@ -6,6 +6,13 @@ class DebtorOrder < ApplicationRecord
     "#{order_number.upcase} \t(#{customer.name})"
   end
 
+  def get_still_owed_amount
+    value = self.value_excluding_tax
+    # Sum all payment amounts of debtor payments with debtor_order_id = self.id
+    paid = DebtorPayment.where(debtor_order_id: self.id).sum(:payment_amount)
+    still_owed = value - paid
+  end
+
   # Search by:
   #   Customer:
   #     * name
@@ -63,7 +70,7 @@ class DebtorOrder < ApplicationRecord
 
       order_term = "customers.name asc, debtor_orders.still_owed_amount desc"
 
-      DebtorOrder.left_outer_joins( :customer, :invoice, :job)
+      DebtorOrder.left_outer_joins( :customer, :job)
       .where(where_term,
         search_term,
         search_term,

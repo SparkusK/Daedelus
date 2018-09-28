@@ -87,7 +87,8 @@ class DebtorOrdersController < ApplicationController
   # GET /debtor_orders/1/amounts.json
   def ajax_amounts
     order = DebtorOrder.find_by(id: params[:id])
-    @amounts = {value_including_tax: order.value_including_tax, still_owed_amount: order.still_owed_amount}
+    owed = order.get_still_owed_amount
+    @amounts = {value: order.value_excluding_tax, owed: owed }
 
     respond_to do |format|
       format.json {

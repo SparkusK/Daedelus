@@ -1,5 +1,9 @@
 class DebtorPayment < ApplicationRecord
   belongs_to :debtor_order
+  validates_each :payment_amount do |record, attr, value|
+    record.errors.add(attr, "Can't pay more than is still owed") if
+      value > record.debtor_order.get_still_owed_amount
+    end
 
   def self.search(keywords)
 
