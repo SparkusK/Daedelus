@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180927120242) do
+ActiveRecord::Schema.define(version: 20180928142246) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,7 +18,7 @@ ActiveRecord::Schema.define(version: 20180927120242) do
   create_table "credit_notes", force: :cascade do |t|
     t.bigint "creditor_order_id"
     t.string "payment_type"
-    t.decimal "amount_paid"
+    t.decimal "amount_paid", precision: 15, scale: 2, default: "0.0"
     t.string "note"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -31,10 +31,10 @@ ActiveRecord::Schema.define(version: 20180927120242) do
     t.bigint "job_id"
     t.string "delivery_note"
     t.datetime "date_issued"
-    t.decimal "value_excluding_tax"
-    t.decimal "tax_amount"
-    t.decimal "value_including_tax"
-    t.decimal "still_owed_amount"
+    t.decimal "value_excluding_tax", precision: 15, scale: 2, default: "0.0"
+    t.decimal "tax_amount", precision: 15, scale: 2, default: "0.0"
+    t.decimal "value_including_tax", precision: 15, scale: 2, default: "0.0"
+    t.decimal "still_owed_amount", precision: 15, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "reference_number"
@@ -54,10 +54,10 @@ ActiveRecord::Schema.define(version: 20180927120242) do
     t.bigint "customer_id"
     t.bigint "job_id"
     t.string "order_number"
-    t.decimal "value_including_tax"
-    t.decimal "tax_amount"
-    t.decimal "value_excluding_tax"
-    t.decimal "still_owed_amount"
+    t.decimal "value_including_tax", precision: 15, scale: 2, default: "0.0"
+    t.decimal "tax_amount", precision: 15, scale: 2, default: "0.0"
+    t.decimal "value_excluding_tax", precision: 15, scale: 2, default: "0.0"
+    t.decimal "still_owed_amount", precision: 15, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["customer_id"], name: "index_debtor_orders_on_customer_id"
@@ -66,7 +66,7 @@ ActiveRecord::Schema.define(version: 20180927120242) do
 
   create_table "debtor_payments", force: :cascade do |t|
     t.bigint "debtor_order_id"
-    t.decimal "payment_amount"
+    t.decimal "payment_amount", precision: 15, scale: 2, default: "0.0"
     t.string "payment_type"
     t.string "note"
     t.datetime "created_at", null: false
@@ -82,8 +82,8 @@ ActiveRecord::Schema.define(version: 20180927120242) do
     t.string "occupation"
     t.bigint "section_id"
     t.string "company_number"
-    t.decimal "net_rate"
-    t.decimal "inclusive_rate"
+    t.decimal "net_rate", precision: 15, scale: 2, default: "0.0"
+    t.decimal "inclusive_rate", precision: 15, scale: 2, default: "0.0"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.boolean "eoc"
@@ -108,9 +108,9 @@ ActiveRecord::Schema.define(version: 20180927120242) do
   create_table "labor_records", force: :cascade do |t|
     t.bigint "employee_id"
     t.date "labor_date", null: false
-    t.decimal "hours"
-    t.decimal "total_before"
-    t.decimal "total_after"
+    t.decimal "hours", precision: 6, scale: 4, default: "0.0"
+    t.decimal "total_before", precision: 15, scale: 2, default: "0.0"
+    t.decimal "total_after", precision: 15, scale: 2, default: "0.0"
     t.bigint "job_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
