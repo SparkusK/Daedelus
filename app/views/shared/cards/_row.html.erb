@@ -3,12 +3,22 @@
     <div class="col-md-10">
       <h6><small class="text-muted"><%= row[:header1] %> </small> <%= row[:text1] %></h6>
     </div>
-  <% else %>
+  <% elsif row[:header3].nil? %>
     <div class="col-md-6">
       <h6><small class="text-muted"><%= row[:header1] %> </small> <%= row[:text1] %></h6>
     </div>
     <div class="col-md-6">
       <h6><small class="text-muted"><%= row[:header2] %> </small> <%= row[:text2] %></h6>
     </div>
+  <% else %>
+  <div class="col-md-4">
+    <h6><small class="text-muted"><%= row[:header1] %> </small> <%= row[:text1] %></h6>
+  </div>
+  <div class="col-md-4">
+    <h6><small class="text-muted"><%= row[:header2] %> </small> <%= row[:text2] %></h6>
+  </div>
+  <div class="col-md-4">
+    <h6><small class="text-muted"><%= row[:header3] %> </small> <%= row[:text3] %></h6>
+  </div>
   <% end %>
 </div>

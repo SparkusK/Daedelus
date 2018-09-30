@@ -18,9 +18,7 @@ Rails.application.routes.draw do
 
   root to: "dashboard#index"
 
-  get '/summaries', to: "summaries#new"
-  get '/summaries/new', to: "summaries#new"
-  post 'summaries/new', to: "summaries#show"
+  get '/summaries', to: "summaries#index"
 
   get '/payroll', to: "payrolls#index"
 

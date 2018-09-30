@@ -1,0 +1,26 @@
+<%= render partial: "shared/cards/card", locals: {
+  entity: summary,
+  card_header_text: "Overall",
+  card_subheader_text: "",
+  rows: [
+    {
+      header1: "LABOUR:", text1: number_to_currency(labor, unit: "R"),
+      header2: "OVERHEADS: ", text2: number_to_currency(job.targeted_amount, unit: "R"),
+    },
+    {
+      header1: "ORDERS:", text1: number_to_currency((job.total - job.targeted_amount), unit: "R"),
+      header2: "TARGET JOBS:", text2: number_to_currency(labor, unit: "R")
+    },
+    {
+      header1: "COST @  5%:", text1: number_to_currency(labor, unit: "R"),
+      header2: "COST @ 10%:", text2: number_to_currency(labor, unit: "R"),
+      header3: "COST @ 15%:", text3: number_to_currency(labor, unit: "R")
+    },
+    {
+      header1: "PROFIT @  5%:", text1: number_to_currency(labor, unit: "R"),
+      header2: "PROFIT @ 10%:", text2: number_to_currency(labor, unit: "R"),
+      header3: "PROFIT @ 15%:", text3: number_to_currency(labor, unit: "R")
+    }
+  ],
+  path: edit_job_path(job)
+} %>
