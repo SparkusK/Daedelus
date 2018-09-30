@@ -1,1 +1,8 @@
 $('#<%= @employee.id %>').html("<%= escape_javascript(render 'inline_edit', employee: @employee).html_safe %>");
+$(document).ready(function() {
+  $('#employee_net_rate_<%= @employee.id %>').change(function() {
+    var net_rate = $('#employee_net_rate_<%= @employee.id %>').val();
+    var inclusive_rate = parseFloat(net_rate) * 1.06;
+    $("#employee_inclusive_rate_<%= @employee.id %>").val(inclusive_rate.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+  });
+});

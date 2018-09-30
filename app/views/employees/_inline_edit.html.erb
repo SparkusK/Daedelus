@@ -33,10 +33,10 @@
     </div>
     <div class="row">
       <div class="col-md-6">
-        Net rate: <%= form.text_field :net_rate, id: :employee_net_rate, class: "form-control" %>
+        Net rate: <%= form.text_field :net_rate, id: "employee_net_rate_#{@employee.id}", class: "form-control" %>
       </div>
       <div class="col-md-6">
-        Inclusive rate: <%= form.text_field :inclusive_rate, id: :employee_inclusive_rate, class: "form-control"%>
+        Inclusive rate: <%= form.text_field :inclusive_rate, id: "employee_inclusive_rate_#{@employee.id}", class: "form-control"%>
       </div>
     </div>
     <div class="form-row">
