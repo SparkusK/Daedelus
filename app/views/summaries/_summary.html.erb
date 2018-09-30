@@ -1,4 +1,8 @@
-<div class="card">
+<% if summary.is_overall %>
+  <div class="card border-primary">
+<% else %>
+  <div class="card">
+<% end %>
   <div class="card-header">
     <div class="d-flex justify-content-between">
       <h4>

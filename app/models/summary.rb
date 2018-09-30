@@ -2,7 +2,7 @@ class Summary
   include ActiveModel::Conversion
   include ActiveModel::Model
 
-  attr_accessor :labor, :overheads, :orders, :target_jobs, :header, :subheader
+  attr_accessor :labor, :overheads, :orders, :target_jobs, :header, :subheader, :is_overall
 
   def persisted?
     false
@@ -46,6 +46,7 @@ class Summary
 
   def self.build_summary(section, start_date, end_date)
     @summary = Summary.new
+    @summary.is_overall = false
     @summary.header = section.name
     @summary.subheader = "#{section.manager.employee.first_name} #{section.manager.employee.last_name}"
     @summary.labor = LaborRecord.where("labor_date > ? AND labor_date < ? AND section_id = ?", start_date, end_date, section.id).sum(:total_after)
@@ -64,6 +65,7 @@ class Summary
 
   def self.build_aggregate(start_date, end_date)
     @aggregate = Summary.new
+    @aggregate.is_overall = true
     @aggregate.header = "Overall"
     @aggregate.labor = LaborRecord.where("labor_date > ? AND labor_date < ?", start_date, end_date).sum(:total_after)
     @aggregate.overheads = Section.all.sum(:overheads)
