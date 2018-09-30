@@ -1,22 +1,28 @@
 $('#<%= @credit_note.id %>').html("<%= escape_javascript(render 'inline_edit', employee: @credit_note).html_safe %>");
 
-function CreditorOrderAmounts(creditor_order_id) {
-  this.creditor_order_id = creditor_order_id;
 
-  this.getAmounts = function() {
-    $.get("/creditor_orders/" + this.creditor_order_id + "/amounts", function( response ) {
-      var total = response.value;
-      var remaining = response.owed;
-      $("#total").html("R" + parseFloat(total).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-      $("#remaining").html("R" + parseFloat(remaining).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
-    });
-  }
-}
 
 $(document).ready(function() {
-  $('#credit_note_creditor_order_id').change(function() {
-    var inputOrderId = $('#credit_note_creditor_order_id').val();
+
+  function CreditorOrderAmounts(creditor_order_id) {
+    this.creditor_order_id = creditor_order_id;
+
+    this.getAmounts = function() {
+      $.get("/creditor_orders/" + this.creditor_order_id + "/amounts", function( response ) {
+        var total = response.value;
+        var remaining = response.owed;
+        $("#total_<%= @credit_note.id %>").html("R" + parseFloat(total).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+        $("#remaining_<%= @credit_note.id %>").html("R" + parseFloat(remaining).toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+      });
+    }
+  }
+
+  $('#credit_note_creditor_order_id_<%= @credit_note.id %>').change(function() {
+    var inputOrderId = $('#credit_note_creditor_order_id_<%= @credit_note.id %>').val();
     var cdtOrderAmts = new CreditorOrderAmounts(inputOrderId);
     cdtOrderAmts.getAmounts();
   });
+
+  $('#credit_note_creditor_order_id_<%= @credit_note.id %>').change();
+
 });

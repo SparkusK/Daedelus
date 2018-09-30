@@ -22,7 +22,7 @@
       <div>
         <h6>
           <small class="text-muted">STILL OWED AMOUNT: </small>
-          <%= number_to_currency(creditor_order.still_owed_amount, unit: "R") %>
+          <%= number_to_currency(creditor_order.get_still_owed_amount, unit: "R") %>
         </h6>
       </div>
     </div>

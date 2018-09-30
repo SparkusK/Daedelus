@@ -19,7 +19,9 @@
                           Employee.valid,
                           :id,
                           :employee_name,
-                          {prompt: true}, {class: "custom-select"}) %>
+                          {prompt: true},
+                          {class: "custom-select",
+                            id: "labor_record_employee_id_#{@labor_record.id}"}) %>
     </div>
     <div class="form-group col-md-6">
       <%= form.label :labor_date %> </br>
@@ -32,24 +34,19 @@
     </div>
   </div>
 
-  <div class="form-row">
-
-
-  </div>
-
 
   <div class="form-row">
     <div class="form-group col-md-4">
       <%= form.label :hours %>
-      <%= form.text_field :hours, id: :labor_record_hours, class: "form-control" %>
+      <%= form.text_field :hours, id: "labor_record_hours_#{@labor_record.id}", class: "form-control" %>
     </div>
     <div class="form-group col-md-4">
       <%= form.label :total_before %>
-      <%= form.text_field :total_before, id: :labor_record_total_before, class: "form-control" %>
+      <%= form.text_field :total_before, id: "labor_record_total_before_#{@labor_record.id}", class: "form-control" %>
     </div>
     <div class="form-group col-md-4">
       <%= form.label :total_after %>
-      <%= form.text_field :total_after, id: :labor_record_total_after, class: "form-control" %>
+      <%= form.text_field :total_after, id: "labor_record_total_after_#{@labor_record.id}", class: "form-control" %>
     </div>
   </div>
 

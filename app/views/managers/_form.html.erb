@@ -16,7 +16,7 @@
         <%= form.label :employee_id %>
         <%= collection_select(:employee,
                               :employee_id,
-                              leaf_employees(),
+                              non_manager_employees(),
                               :id,
                               :employee_name,
                               {prompt: true},

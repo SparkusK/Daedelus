@@ -10,25 +10,25 @@
       </ul>
     </div>
   <% end %>
-
   <div class="form-row">
     <div class="form-group col-md-4">
       <%= form.label :creditor_order_id %>
       <%= collection_select(:credit_note,
-                          :creditor_order_id,
-                          CreditorOrder.all,
-                          :id,
-                          :creditor_order_name,
-                          {prompt: true},
-                          {class: "custom-select"}) %>
+                            :creditor_order_id,
+                            CreditorOrder.all,
+                            :id,
+                            :creditor_order_name,
+                            {prompt: true},
+                            {class: "custom-select",
+                                id: "credit_note_creditor_order_id_#{@credit_note.id}"}) %>
     </div>
-    <div class="col-md-4">
+    <div class="form-group col-md-4">
       <%= form.label :total %>
-      <h5 id="total"><%= number_to_currency(0.0, unit: "R") %></h5>
+      <h5 id="total_<%= @credit_note.id %>"><%= number_to_currency(0.0, unit: "R") %></h5>
     </div>
     <div class="col-md-4">
       <%= form.label :still_owed_amount %>
-      <h5 id="remaining"><%= number_to_currency(0.0, unit: "R") %></h5>
+      <h5 id="remaining_<%= @credit_note.id %>"><%= number_to_currency(0.0, unit: "R") %></h5>
     </div>
   </div>
 

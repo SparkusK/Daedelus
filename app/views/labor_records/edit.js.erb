@@ -1,16 +1,39 @@
 $('#<%= @labor_record.id %>').html("<%= escape_javascript(render 'inline_edit', employee: @labor_record).html_safe %>");
-$(document).ready(function() {
 
-  $('#labor_record_hours').change(function() {
-    var inputHours = $('#labor_record_hours').val();
+$(document).ready(function() {
+  function EmployeeAmounts(employee_id) {
+    this.employee_id = employee_id;
+
+    this.getRates = function(hours) {
+      $.get("/employees/" + this.employee_id + "/rates", function( response ) {
+        var before = response.exclusive_rate * hours;
+        var after = response.inclusive_rate * hours;
+        $("#labor_record_total_before_<%= @labor_record.id %>").val(before.toFixed(2));
+        $("#labor_record_total_after_<%= @labor_record.id %>").val(after.toFixed(2));
+      });
+    }
+  }
+
+  function update_fields() {
+    var id = $("#labor_record_employee_id_<%= @labor_record.id %>").val();
+    var hrs = $("#labor_record_hours_<%= @labor_record.id %>").val();
+
+    if (Number.isInteger(parseInt(id)) && !(isNaN(parseFloat(hrs)))) {
+      var empAmts = new EmployeeAmounts(id, parseFloat(hrs));
+      empAmts.getRates(hrs);
+    }
+  }
+  $('#labor_record_hours_<%= @labor_record.id %>').change(function() {
+    var inputHours = $('#labor_record_hours_<%= @labor_record.id %>').val();
     if ( !(isNaN(inputHours))) {
       update_fields();
     }
 
   });
 
-  $('#labor_record_employee_id').change(function() {
-    var inputId = $('#labor_record_employee_id').val();
+  $('#labor_record_employee_id_<%= @labor_record.id %>').change(function() {
+    var inputId = $('#labor_record_employee_id_<%= @labor_record.id %>').val();
+    console.log("Hello from lreid_<%= @labor_record.id %>");
     if(Number.isInteger(parseInt(inputId))) {
       update_fields();
     }
