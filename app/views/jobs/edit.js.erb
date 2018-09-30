@@ -1,1 +1,18 @@
 $('#<%= @job.id %>').html("<%= escape_javascript(render 'inline_edit', job: @job).html_safe %>");
+$(document).ready(function() {
+
+  function doStuff() {
+    var total = $("#job_total_<%= @job.id %>").val();
+    var targeted_amount = $("#job_targeted_amount_<%= @job.id %>").val();
+    var available_amount = total - targeted_amount;
+    $("#job_still_available_amount_<%= @job.id %>").val(available_amount.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
+  }
+
+  $('#job_total_<%= @job.id %>').change(function() {
+    doStuff();
+  });
+  $('#job_targeted_amount_<%= @job.id %>').change(function() {
+    doStuff();
+  });
+
+});

@@ -59,15 +59,15 @@
   <div class="form-row">
     <div class="form-group col-md-4">
       <%= form.label :total %>
-      <%= form.text_field :total, id: :job_total, class: "form-control" %>
+      <%= form.text_field :total, id: "job_total_#{job.id}", class: "form-control" %>
     </div>
     <div class="form-group col-md-4">
       <%= form.label :targeted_amount %>
-      <%= form.text_field :targeted_amount, id: :job_targeted_amount, class: "form-control" %>
+      <%= form.text_field :targeted_amount, id: "job_targeted_amount_#{job.id}", class: "form-control" %>
     </div>
     <div class="form-group col-md-4">
       <%= form.label :still_available_amount %>
-      <%= form.text_field :still_available_amount, id: :job_still_available_amount, class: "form-control", readonly: true %>
+      <%= form.text_field :still_available_amount, id: "job_still_available_amount_#{job.id}", class: "form-control", readonly: true %>
     </div>
   </div>
 
