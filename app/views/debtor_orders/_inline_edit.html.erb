@@ -32,34 +32,28 @@
                             {prompt: true},
                             {class: "custom-select"}) %>
     </div>
-
+    <div class="form-group col-md-4">
+      <%= form.label "Order Number reference" %>
+      <%= form.text_field :order_number, id: :debtor_order_order_number, class: "form-control" %>
+    </div>
   </div>
 
   <div class="form-row">
     <div class="form-group col-md-4">
       <%= form.label :value_including_tax %>
-      <%= form.text_field :value_including_tax, id: :debtor_order_value_including_tax, class: "form-control" %>
+      <%= form.text_field :value_including_tax, id: "debtor_order_value_including_tax_#{@debtor_order.id}", class: "form-control" %>
     </div>
     <div class="form-group col-md-4">
       <%= form.label :tax_amount %>
-      <%= form.text_field :tax_amount, id: :debtor_order_tax_amount, class: "form-control" %>
+      <%= form.text_field :tax_amount, id: "debtor_order_tax_amount_#{@debtor_order.id}", class: "form-control" %>
     </div>
     <div class="form-group col-md-4">
       <%= form.label :value_excluding_tax %>
-      <%= form.text_field :value_excluding_tax, id: :debtor_order_value_excluding_tax, class: "form-control" %>
+      <%= form.text_field :value_excluding_tax, id: "debtor_order_value_excluding_tax_#{@debtor_order.id}", class: "form-control" %>
     </div>
   </div>
 
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <%= form.label "Order number" %>
-      <%= form.text_field :order_number, id: :debtor_order_order_number, class: "form-control" %>
-    </div>
-    <div class="form-group col-md-6">
-      <%= form.label :still_owed_amount %>
-      <%= form.text_field :still_owed_amount, id: :debtor_order_still_owed_amount, class: "form-control" %>
-    </div>
-  </div>
+  <br>
 
 
   <br>

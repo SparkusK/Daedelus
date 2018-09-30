@@ -1,1 +1,32 @@
-$('#<%= @debtor_order.id %>').html("<%= escape_javascript(render 'inline_edit', employee: @debtor_order).html_safe %>");
+$('#<%= @debtor_order.id %>').html("<%= j(render 'inline_edit', employee: @debtor_order).html_safe %>");
+$(document).ready(function() {
+
+  $('#debtor_order_value_including_tax_<%= @debtor_order.id %>').change(function() {
+    var input = parseFloat($("#debtor_order_value_including_tax_<%= @debtor_order.id %>").val());
+    console.log(input);
+    var val_excl = input / 1.15;
+    var tax_amount = val_excl * 0.15;
+    $('#debtor_order_tax_amount_<%= @debtor_order.id %>').val(tax_amount.toFixed(2));
+    $('#debtor_order_value_excluding_tax_<%= @debtor_order.id %>').val(val_excl.toFixed(2));
+  });
+
+  $('#debtor_order_tax_amount_<%= @debtor_order.id %>').change(function() {
+    var input = parseFloat($("#debtor_order_tax_amount_<%= @debtor_order.id %>").val());
+    console.log(input);
+    var val_excl = input / 0.15;
+    var val_incl = val_excl + input;
+    $('#debtor_order_value_including_tax_<%= @debtor_order.id %>').val(val_incl.toFixed(2));
+    $('#debtor_order_value_excluding_tax_<%= @debtor_order.id %>').val(val_excl.toFixed(2));
+  });
+
+  $('#debtor_order_value_excluding_tax_<%= @debtor_order.id %>').change(function() {
+    var input = parseFloat($('#debtor_order_value_excluding_tax_<%= @debtor_order.id %>').val());
+    console.log(input);
+    var tax_amount = input * 0.15;
+    var val_incl = input + tax_amount;
+    $('#debtor_order_value_including_tax_<%= @debtor_order.id %>').val(val_incl.toFixed(2));
+    $('#debtor_order_tax_amount_<%= @debtor_order.id %>').val(tax_amount.toFixed(2));
+  });
+
+
+});
