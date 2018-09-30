@@ -1,6 +1,7 @@
 class Job < ApplicationRecord
   validates :targeted_amount, numericality: { less_than_or_equal_to: :total, message: "must be less than or equal to Total" }
   belongs_to :section
+  has_many :creditor_orders
   has_many :labor_records
 
   def get_supervisor

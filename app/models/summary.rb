@@ -48,10 +48,10 @@ class Summary
     @summary = Summary.new
     @summary.header = section.name
     @summary.subheader = "#{section.manager.employee.first_name} #{section.manager.employee.last_name}"
-    @summary.labor = 1
-    @summary.overheads = 2
-    @summary.orders = 3
-    @summary.target_jobs = 4
+    @summary.labor = LaborRecord.where("labor_date > ? AND labor_date < ? AND section_id = ?", start_date, end_date, section.id).sum(:total_after)
+    @summary.overheads = Section.find_by(id: section.id).overheads
+    @summary.orders = Job.joins(:creditor_orders).where("receive_date > ? AND receive_date < ? AND section_id = ?", start_date, end_date, section.id).sum(:value_excluding_tax)
+    @summary.target_jobs = Job.where("receive_date > ? AND receive_date < ? AND section_id = ?", start_date, end_date, section.id).sum(:targeted_amount)
     @summary
     # Get Labor for Section, Total After
     # Get Overheads for Section
