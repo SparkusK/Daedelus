@@ -2,7 +2,7 @@ class Summary
   include ActiveModel::Conversion
   include ActiveModel::Model
 
-  attr_accessor :labor, :overheads, :orders, :target_jobs
+  attr_accessor :labor, :overheads, :orders, :target_jobs, :header, :subheader
 
   def persisted?
     false
@@ -37,10 +37,58 @@ class Summary
   end
 
   def get_cost(percentage)
-    (self.labor.values[0][0].to_f + self.orders.values[0][0].to_f + self.overheads.to_f) * percentage
+    (self.labor.to_f + self.orders.to_f + self.overheads.to_f) * percentage
   end
 
   def get_profit(percentage)
     self.target_jobs.to_f - get_cost(percentage)
   end
+
+  def self.build_summary(section, start_date, end_date)
+    @summary = Summary.new
+    @summary.header = section.name
+    @summary.subheader = "#{section.manager.employee.first_name} #{section.manager.employee.last_name}"
+    @summary.labor = 1
+    @summary.overheads = 2
+    @summary.orders = 3
+    @summary.target_jobs = 4
+    @summary
+    # Get Labor for Section, Total After
+    # Get Overheads for Section
+    # Get Jobs for the Section, i.e. jobs = Job.where(section_id: section.id)
+    # Get Target Jobs for Section
+    # Get Creditor Orders for Section, Including/Excluding?
+    # Get Costs
+    # Get Profits
+  end
+
+  def self.build_aggregate(start_date, end_date)
+    @aggregate = Summary.new
+    @aggregate.header = "Overall"
+    @aggregate.labor = LaborRecord.where("labor_date > ? AND labor_date < ?", start_date, end_date).sum(:total_after)
+    @aggregate.overheads = Section.all.sum(:overheads)
+    @aggregate.orders = CreditorOrder.where("date_issued > ?
+                                            AND date_issued < ?",
+                                            start_date,
+                                            end_date)
+                                     .sum(:value_excluding_tax)
+    @aggregate.target_jobs = Job.where("receive_date > ? AND receive_date < ?", start_date, end_date).sum(:targeted_amount)
+    @aggregate
+    # Get Total Labor
+    # Get Total Overheads
+    # Get Total Job Targets
+    # Get Total Creditor Orders for Section
+    # Get Costs
+    # Get Profits
+  end
+
+  def self.build_summaries(start_date, end_date)
+    @summaries = []
+    @summaries << build_aggregate(start_date, end_date)
+    Section.all.each do |section|
+      @summaries << build_summary(section, start_date, end_date)
+    end
+    @summaries
+  end
+
 end

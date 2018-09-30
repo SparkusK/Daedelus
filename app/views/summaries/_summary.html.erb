@@ -1,26 +1,57 @@
-<%= render partial: "shared/cards/card", locals: {
-  entity: summary,
-  card_header_text: "Overall",
-  card_subheader_text: "",
-  rows: [
-    {
-      header1: "LABOUR:", text1: number_to_currency(labor, unit: "R"),
-      header2: "OVERHEADS: ", text2: number_to_currency(job.targeted_amount, unit: "R"),
-    },
-    {
-      header1: "ORDERS:", text1: number_to_currency((job.total - job.targeted_amount), unit: "R"),
-      header2: "TARGET JOBS:", text2: number_to_currency(labor, unit: "R")
-    },
-    {
-      header1: "COST @  5%:", text1: number_to_currency(labor, unit: "R"),
-      header2: "COST @ 10%:", text2: number_to_currency(labor, unit: "R"),
-      header3: "COST @ 15%:", text3: number_to_currency(labor, unit: "R")
-    },
-    {
-      header1: "PROFIT @  5%:", text1: number_to_currency(labor, unit: "R"),
-      header2: "PROFIT @ 10%:", text2: number_to_currency(labor, unit: "R"),
-      header3: "PROFIT @ 15%:", text3: number_to_currency(labor, unit: "R")
-    }
-  ],
-  path: edit_job_path(job)
-} %>
+<div class="card">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4>
+        <%= summary.header %>
+      </h4>
+      <h5>
+        <%= summary.subheader %>
+      </h5>
+    </div>
+  </div>
+  <div class="card-body">
+
+    <table class="table table-hover table-striped">
+      <thead>
+        <td><h5 class="text-muted">LABOUR</h5></td>
+        <td><h5 class="text-muted">OVERHEADS</h5></td>
+        <td><h5 class="text-muted">ORDERS</h5></td>
+        <td><h5 class="text-muted">TARGET JOBS</h5></td>
+      </thead>
+      <tbody>
+        <tr>
+          <td><%= number_to_currency(summary.labor, unit: "R") %></td>
+          <td><%= number_to_currency(summary.overheads, unit: "R") %></td>
+          <td><%= number_to_currency(summary.orders, unit: "R") %></td>
+          <td><%= number_to_currency(summary.target_jobs, unit: "R") %></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><h6 class="text-muted">COST</h6></td>
+          <td><h6 class="text-muted">PROFIT</h6></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><small class="text-muted">5%</small></td>
+          <td><%= number_to_currency(summary.get_cost(1.05), unit: "R") %></td>
+          <td><%= number_to_currency(summary.get_profit(1.05), unit: "R") %></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><small class="text-muted">10%</small></td>
+          <td><%= number_to_currency(summary.get_cost(1.1), unit: "R") %></td>
+          <td><%= number_to_currency(summary.get_profit(1.1), unit: "R") %></td>
+          <td></td>
+        </tr>
+        <tr>
+          <td><small class="text-muted">15%</small></td>
+          <td><%= number_to_currency(summary.get_cost(1.15), unit: "R") %></td>
+          <td><%= number_to_currency(summary.get_profit(1.15), unit: "R") %></td>
+          <td></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<br>

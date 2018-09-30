@@ -1,4 +1,31 @@
 <p id="notice"><%= notice %></p>
 
 <h1>Summaries</h1>
-<%= render partial: 'shared/cards/card', collection: @summaries %>
+
+<h3>Dates: </h3>
+<%= form_tag("/summaries", method: "get") do %>
+
+  <div class="row">
+    <div class="form-group col-md-5">
+      <%= label_tag :start_date %> </br>
+      <%= text_field_tag( :start_date,
+                          "#{params[:start_date]}",
+                          {autocomplete: :off,
+                          class: "form-control datepicker"}) %>
+    </div>
+    <div class="form-group col-md-5">
+      <%= label_tag :end_date %> </br>
+      <%= text_field_tag :end_date,
+                          "#{params[:end_date]}",
+                          {autocomplete: :off,
+                          class: "form-control datepicker"} %>
+    </div>
+    <div class="form-group col-md-2">
+      </br>
+      <%= submit_tag("Refresh dates", class: "btn btn-lg btn-primary") %>
+    </div>
+  </div>
+<% end %>
+</br>
+
+<%= render partial: 'summary', collection: @summaries %>
