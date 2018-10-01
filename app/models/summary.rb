@@ -93,12 +93,11 @@ class Summary
     @summaries
   end
 
-  private
-    def get_manager_name(section)
-      if section.manager.nil?
-        ""
-      else
-        "#{section.manager.first_name} #{section.manager.last_name}"
-      end
+  def get_manager_name(section)
+    if section.manager.nil?
+      ""
+    else
+      "#{section.manager.first_name} #{section.manager.last_name}"
     end
+  end
 end
