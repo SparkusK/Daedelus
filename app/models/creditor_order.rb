@@ -1,6 +1,6 @@
 class CreditorOrder < ApplicationRecord
   belongs_to :supplier
-  belongs_to :jobs
+  belongs_to :job
 
   def get_still_owed_amount
     value = self.value_excluding_tax
