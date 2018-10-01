@@ -5,6 +5,14 @@ class DebtorPayment < ApplicationRecord
       value > record.debtor_order.get_still_owed_amount
     end
 
+  def get_payment_date
+    if payment_date.nil?
+      ""
+    else
+      payment_date.strftime("%a, %d %b %Y: %H:%M:%S")
+    end
+  end
+
   def self.search(keywords)
 
     search_term = '%' + keywords.downcase + '%'
