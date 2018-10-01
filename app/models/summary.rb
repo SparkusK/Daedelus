@@ -44,11 +44,19 @@ class Summary
     self.target_jobs.to_f - get_cost(percentage)
   end
 
+  def get_manager_name(section)
+    if section.manager.nil?
+      ""
+    else
+      "#{section.manager.employee.first_name} #{section.manager.employee.last_name}"
+    end
+  end
+
   def self.build_summary(section, start_date, end_date)
     @summary = Summary.new
     @summary.is_overall = false
     @summary.header = section.name
-    @summary.subheader = get_manager_name(section)
+    @summary.subheader = @summary.get_manager_name(section)
     @summary.labor = LaborRecord.where("labor_date > ? AND labor_date < ? AND section_id = ?", start_date, end_date, section.id).sum(:total_after)
     @summary.overheads = Section.find_by(id: section.id).overheads
     @summary.orders = Job.joins(:creditor_orders).where("receive_date > ? AND receive_date < ? AND section_id = ?", start_date, end_date, section.id).sum(:value_excluding_tax)
@@ -93,11 +101,5 @@ class Summary
     @summaries
   end
 
-  def get_manager_name(section)
-    if section.manager.nil?
-      ""
-    else
-      "#{section.manager.first_name} #{section.manager.last_name}"
-    end
-  end
+
 end
