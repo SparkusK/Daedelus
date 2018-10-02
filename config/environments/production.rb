@@ -77,7 +77,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     :user_name => ENV['SPARKPOST_SMTP_USERNAME'],
     :password => ENV['SPARKPOST_SMTP_PASSWORD'],
-    :domain => 'daedelus@no-reply.com',
+    :domain => ENV['SPARKPOST_SANDBOX_DOMAIN'],
     :address => ENV['SPARKPOST_SMTP_HOST'],
     :port => 587,
     :authentication => :plain,
