@@ -1,12 +1,10 @@
-class DebtorOrdersController < ApplicationController
+class DebtorOrdersController < AdministrativeController
   before_action :set_debtor_order, only: [:show, :edit, :update, :destroy]
 
   # GET /debtor_orders
   # GET /debtor_orders.json
   def index
-    @debtor_orders = params[:keywords].present? ?
-      DebtorOrder.search(params[:keywords]).includes(:customer).paginate(page: params[:page]) :
-      DebtorOrder.includes(:customer).paginate(page: params[:page])
+    @debtor_orders = DebtorOrder.search(params[:keywords], @start_date, @end_date, params[:page])
     respond_to do |format|
       format.html {}
       format.js {}
@@ -35,16 +33,7 @@ class DebtorOrdersController < ApplicationController
   # POST /debtor_orders.json
   def create
     @debtor_order = DebtorOrder.new(debtor_order_params)
-
-    respond_to do |format|
-      if @debtor_order.save
-        format.html { redirect_to @debtor_order, notice: 'Debtor order was successfully created.' }
-        format.json { render :show, status: :created, location: @debtor_order }
-      else
-        format.html { render :new }
-        format.json { render json: @debtor_order.errors, status: :unprocessable_entity }
-      end
-    end
+    create_boilerplate(@debtor_order)
   end
 
   # PATCH/PUT /debtor_orders/1
@@ -73,14 +62,6 @@ class DebtorOrdersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to debtor_orders_url, notice: 'Debtor order was successfully destroyed.' }
       format.json { head :no_content }
-    end
-  end
-
-  def cancel
-    id = params[:id]
-    @debtor_order = DebtorOrder.find_by(id: id)
-    respond_to do |format|
-      format.js
     end
   end
 

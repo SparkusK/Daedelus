@@ -13,24 +13,52 @@ class DebtorPayment < ApplicationRecord
     end
   end
 
-  def self.search(keywords)
+  def self.search(keywords, start_date, end_date, page)
 
-    search_term = '%' + keywords.downcase + '%'
 
-    where_term = %{
-      lower(customers.name) LIKE ?
-      OR lower(debtor_payments.payment_type) LIKE ?
-      OR lower(debtor_payments.note) LIKE ?
-    }.gsub(/\s+/, " ").strip
 
-    order_term = "debtor_payments.payment_date desc"
+    if keywords.nil?
+      where_term = "payment_date > ? AND payment_date < ?"
+      order_term = "debtor_payments.payment_date desc"
+      DebtorPayment.where(
+        where_term,
+        start_date,
+        end_date
+      ).order(
+        order_term
+      ).paginate(
+        page: page
+      ).includes(
+        debtor_order: :customer
+      )
+    else
+      search_term = '%' + keywords.downcase + '%'
+      where_term = %{
+        lower(customers.name) LIKE ?
+        OR lower(debtor_payments.payment_type) LIKE ?
+        OR lower(debtor_payments.note) LIKE ?
+        AND payment_date > ? AND payment_date < ?
+      }.gsub(/\s+/, " ").strip
 
-    DebtorPayment.joins(debtor_order: :customer)
-    .where(where_term,
-       search_term,
-       search_term,
-       search_term)
-    .order(order_term)
+      order_term = "debtor_payments.payment_date desc"
+
+      DebtorPayment.joins(
+        debtor_order: :customer
+      ).where(
+        where_term,
+        search_term,
+        search_term,
+        search_term,
+        start_date,
+        end_date
+      ).order(
+        order_term
+      ).paginate(
+        page: page
+      ).includes(
+        debtor_order: :customer
+      )
+    end
   end
 
   # def show_invoice_code

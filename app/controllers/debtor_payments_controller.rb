@@ -1,12 +1,10 @@
-class DebtorPaymentsController < ApplicationController
+class DebtorPaymentsController < AdministrativeController
   before_action :set_debtor_payment, only: [:show, :edit, :update, :destroy]
 
   # GET /debtor_payments
   # GET /debtor_payments.json
   def index
-    @debtor_payments = params[:keywords].present? ?
-      DebtorPayment.search(params[:keywords]).includes(debtor_order: :customer).paginate(page: params[:page]) :
-      DebtorPayment.includes(debtor_order: :customer).paginate(page: params[:page])
+    @debtor_payments = DebtorPayment.search(params[:keywords], @start_date, @end_date, params[:page])
     respond_to do |format|
       format.html {}
       format.js {}
@@ -35,16 +33,7 @@ class DebtorPaymentsController < ApplicationController
   # POST /debtor_payments.json
   def create
     @debtor_payment = DebtorPayment.new(debtor_payment_params)
-
-    respond_to do |format|
-      if @debtor_payment.save
-        format.html { redirect_to @debtor_payment, notice: 'Debtor payment was successfully created.' }
-        format.json { render :show, status: :created, location: @debtor_payment }
-      else
-        format.html { render :new }
-        format.json { render json: @debtor_payment.errors, status: :unprocessable_entity }
-      end
-    end
+    create_boilerplate(@debtor_payment)
   end
 
   # PATCH/PUT /debtor_payments/1
@@ -76,13 +65,6 @@ class DebtorPaymentsController < ApplicationController
     end
   end
 
-  def cancel
-    id = params[:id]
-    @debtor_payment = DebtorPayment.find_by(id: id)
-    respond_to do |format|
-      format.js
-    end
-  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

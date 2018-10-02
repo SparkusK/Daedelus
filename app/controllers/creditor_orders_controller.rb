@@ -1,12 +1,10 @@
-class CreditorOrdersController < ApplicationController
+class CreditorOrdersController < AdministrativeController
   before_action :set_creditor_order, only: [:show, :edit, :update, :destroy]
 
   # GET /creditor_orders
   # GET /creditor_orders.json
   def index
-    @creditor_orders = params[:keywords].present? ?
-      CreditorOrder.search(params[:keywords]).includes(:supplier, job: :section).paginate(page: params[:page]) :
-      CreditorOrder.includes(:supplier, job: :section).paginate(page: params[:page])
+    @creditor_orders = CreditorOrder.search(params[:keywords], @start_date, @end_date, params[:page])
     respond_to do |format|
       format.html {}
       format.js {}
@@ -35,16 +33,7 @@ class CreditorOrdersController < ApplicationController
   # POST /creditor_orders.json
   def create
     @creditor_order = CreditorOrder.new(creditor_order_params)
-
-    respond_to do |format|
-      if @creditor_order.save
-        format.html { redirect_to @creditor_order, notice: 'Creditor order was successfully created.' }
-        format.json { render :show, status: :created, location: @creditor_order }
-      else
-        format.html { render :new }
-        format.json { render json: @creditor_order.errors, status: :unprocessable_entity }
-      end
-    end
+    create_boilerplate(@creditor_order)
   end
 
   # PATCH/PUT /creditor_orders/1
@@ -76,13 +65,6 @@ class CreditorOrdersController < ApplicationController
     end
   end
 
-  def cancel
-    id = params[:id]
-    @creditor_order = CreditorOrder.find_by(id: id)
-    respond_to do |format|
-      format.js
-    end
-  end
 
   # GET /debtor_orders/1/amounts.json
   def ajax_amounts

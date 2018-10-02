@@ -6,6 +6,8 @@
 
 <%= render partial: 'top_pager' %>
 
+<%= render partial: 'shared/dates', locals: { path: "/debtor_orders" } %>
+
 <section class="debtor-order-panels">
   <% @debtor_orders.each do |debtor_order| %>
       <%= render debtor_order %>

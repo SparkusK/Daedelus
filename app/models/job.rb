@@ -23,17 +23,30 @@ class Job < ApplicationRecord
   #   jobs.work_description (if " ".count > 1)
   #   quotations.code
   #   jobs.jce_number
-  def self.search(keywords)
-
-    search_term = '%' + keywords.downcase + '%'
-
+  def self.search(keywords, start_date, end_date, page)
+    if keywords.nil?
+      where_term = "receive_date > ? AND receive_date < ?"
+      order_term = "jobs.receive_date desc"
+      Job.where(
+        where_term,
+        start_date,
+        end_date
+      ).order(
+        order_term
+      ).paginate(
+        page: page
+      ).includes(
+        :section
+      )
     # If there are numbers, we only search:
     #   JCE number, responsible_person, quotation code
-    if keywords =~ /\d/
+    elsif keywords =~ /\d/
+      search_term = '%' + keywords.downcase + '%'
       where_term = %{
         lower(jobs.jce_number) LIKE ?
         OR lower(jobs.responsible_person) LIKE ?
         OR lower(quotation_reference) LIKE ?
+        AND receive_date > ? AND receive_date < ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "jobs.receive_date desc"
@@ -42,10 +55,19 @@ class Job < ApplicationRecord
         where_term,
         search_term,
         search_term,
-        search_term
-      ).order(order_term)
+        search_term,
+        start_date,
+        end_date
+      ).order(
+        order_term
+      ).paginate(
+        page: page
+      ).includes(
+        :section
+      )
     else
       # search everything
+      search_term = '%' + keywords.downcase + '%'
       where_term = %{
         lower(sections.name) LIKE ?
         OR lower(jobs.contact_person) LIKE ?
@@ -53,20 +75,30 @@ class Job < ApplicationRecord
         OR lower(jobs.work_description) LIKE ?
         OR lower(quotation_reference) LIKE ?
         OR lower(jobs.jce_number) LIKE ?
+        AND receive_date > ? AND receive_date < ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "jobs.receive_date desc"
 
-      Job.joins(:section)
-      .where(
+      Job.joins(
+        :section
+      ).where(
         where_term,
         search_term,
         search_term,
         search_term,
         search_term,
         search_term,
-        search_term
-      ).order(order_term)
+        search_term,
+        start_date,
+        end_date
+      ).order(
+        order_term
+      ).paginate(
+        page: page
+      ).includes(
+        :section
+      )
     end
   end
 end

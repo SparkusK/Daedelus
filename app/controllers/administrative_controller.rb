@@ -1,12 +1,5 @@
 class AdministrativeController < ApplicationController
-
-  def set_index(entity, included)
-    if params[:keywords].present?
-      entity.search(params[:keywords]).includes(included).paginate(page: params[:page])
-    else
-      entity.includes(included).paginate(page: params[:page])
-    end
-  end
+  before_action :set_dates, only: :index
 
   def cancel(instance, entity)
     instance = entity.find_by(id: params[:id])
@@ -14,17 +7,30 @@ class AdministrativeController < ApplicationController
   end
 
   private
-
-  def create_boilerplate(entity)
-    respond_to do |format|
-      if entity.save
-        format.html { redirect_to entity, notice: "#{entity} was successfully created." }
-        format.json { render :show, status: :created, location: entity }
+    def set_dates
+      params[:start_date] = 1.month.ago if params[:start_date].nil?
+      params[:end_date] = 0.months.ago if params[:end_date].nil?
+      date1 = params[:start_date]
+      date2 = params[:end_date]
+      if date1 < date2
+        @start_date = date1
+        @end_date = date2
       else
-        format.html { render :new }
-        format.json { render json: entity.errors, status: :unprocessable_entity }
+        @start_date = date2
+        @end_date = date1
       end
     end
-  end
+
+    def create_boilerplate(entity)
+      respond_to do |format|
+        if entity.save
+          format.html { redirect_to entity, notice: "#{entity} was successfully created." }
+          format.json { render :show, status: :created, location: entity }
+        else
+          format.html { render :new }
+          format.json { render json: entity.errors, status: :unprocessable_entity }
+        end
+      end
+    end
 
 end

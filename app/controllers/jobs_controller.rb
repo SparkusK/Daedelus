@@ -4,7 +4,7 @@ class JobsController < AdministrativeController
   # GET /jobs
   # GET /jobs.json
   def index
-    @jobs = set_index(Job, :section)
+    @jobs = Job.search(params[:keywords], @start_date, @end_date, params[:page])
     respond_to do |format|
       format.html {}
       format.js {}
@@ -34,7 +34,6 @@ class JobsController < AdministrativeController
   def create
     @job = Job.new(job_params)
     create_boilerplate(@job)
-
   end
 
   # PATCH/PUT /jobs/1

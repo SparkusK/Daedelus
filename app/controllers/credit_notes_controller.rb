@@ -1,12 +1,10 @@
-class CreditNotesController < ApplicationController
+class CreditNotesController < AdministrativeController
   before_action :set_credit_note, only: [:show, :edit, :update, :destroy]
 
   # GET /credit_notes
   # GET /credit_notes.json
   def index
-    @credit_notes = params[:keywords].present? ?
-      CreditNote.search(params[:keywords]).includes(creditor_order: [:supplier, :job]).paginate(page: params[:page]) :
-      CreditNote.includes(creditor_order: [:supplier, :job]).paginate(page: params[:page])
+    @credit_notes = CreditNote.search(params[:keywords], @start_date, @end_date, params[:page])
     respond_to do |format|
       format.html {}
       format.js {}
@@ -35,16 +33,7 @@ class CreditNotesController < ApplicationController
   # POST /credit_notes.json
   def create
     @credit_note = CreditNote.new(credit_note_params)
-
-    respond_to do |format|
-      if @credit_note.save
-        format.html { redirect_to @credit_note, notice: 'Credit note was successfully created.' }
-        format.json { render :show, status: :created, location: @credit_note }
-      else
-        format.html { render :new }
-        format.json { render json: @credit_note.errors, status: :unprocessable_entity }
-      end
-    end
+    create_boilerplate(@credit_note)
   end
 
   # PATCH/PUT /credit_notes/1
@@ -73,14 +62,6 @@ class CreditNotesController < ApplicationController
     respond_to do |format|
       format.html { redirect_to credit_notes_url, notice: 'Credit note was successfully destroyed.' }
       format.json { head :no_content }
-    end
-  end
-
-  def cancel
-    id = params[:id]
-    @credit_note = CreditorPayment.find_by(id: id)
-    respond_to do |format|
-      format.js
     end
   end
 
