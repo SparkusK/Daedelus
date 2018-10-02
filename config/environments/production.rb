@@ -75,10 +75,10 @@ Rails.application.configure do
   config.action_mailer.perform_deliveries = true
   config.action_mailer.default_url_options = { host: 'daedelus.herokuapp.com' }
   config.action_mailer.smtp_settings = {
-    :user_name => ENV['SENDGRID_USERNAME'],
-    :password => ENV['SENDGRID_PASSWORD'],
+    :user_name => ENV['SPARKPOST_SMTP_USERNAME'],
+    :password => ENV['SPARKPOST_SMTP_PASSWORD'],
     :domain => 'daedelus@no-reply.com',
-    :address => 'smtp.sendgrid.net',
+    :address => ENV['SPARKPOST_SMTP_HOST'],
     :port => 587,
     :authentication => :plain,
     :enable_starttls_auto => true
