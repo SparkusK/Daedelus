@@ -1,12 +1,10 @@
 class LaborRecordsController < ApplicationController
   before_action :set_labor_record, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_dates, only: :index
   # GET /labor_records
   # GET /labor_records.json
   def index
-    @labor_records = params[:keywords].present? ?
-      LaborRecord.search(params[:keywords]).includes(:employee, :job).paginate(page: params[:page]) :
-      LaborRecord.includes(:employee, :job).paginate(page: params[:page])
+    @labor_records = LaborRecord.search(params[:keywords], @start_date, @end_date, params[:page])
     respond_to do |format|
       format.html {}
       format.js {}
@@ -90,8 +88,26 @@ class LaborRecordsController < ApplicationController
       @labor_record = LaborRecord.find(params[:id])
     end
 
+    def set_dates
+
+      params[:start_date] = 1.month.ago if params[:start_date].nil?
+      params[:end_date] = 0.months.ago if params[:end_date].nil?
+      date1 = params[:start_date]
+      date2 = params[:end_date]
+
+      if date1 < date2
+        @start_date = date1
+        @end_date = date2
+      else
+        @start_date = date2
+        @end_date = date1
+      end
+
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def labor_record_params
-      params.require(:labor_record).permit(:employee_id, :labor_date, :hours, :total_before, :total_after, :section_id, :job_id)
+      params.require(:labor_record).permit(:employee_id, :labor_date, :hours, :total_before, :total_after, :section_id, :job_id, :start_date, :end_date, :page)
     end
+
 end

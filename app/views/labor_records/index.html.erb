@@ -17,6 +17,8 @@
 
 <%= render partial: 'top_pager' %>
 
+<%= render partial: 'shared/dates', locals: { path: "/labor_records" } %>
+
 <section class="labor-record-panels">
   <%= render partial: 'labor_record', collection: @labor_records %>
 </section>

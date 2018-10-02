@@ -6,6 +6,8 @@
 
 <%= render partial: 'top_pager' %>
 
+<%= render partial: 'shared/dates', locals: { path: "/credit_notes" } %>
+
 <section class="credit-note-panels">
   <% @credit_notes.each do |credit_note| %>
       <%= render credit_note %>

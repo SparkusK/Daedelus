@@ -6,6 +6,8 @@
 
 <%= render partial: 'top_pager' %>
 
+<%= render partial: 'shared/dates', locals: { path: "/creditor_orders" } %>
+
 <section class="creditor-order-panels">
   <% @creditor_orders.each do |creditor_order| %>
       <%= render creditor_order %>
