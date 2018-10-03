@@ -10,15 +10,6 @@
   <%= @debtor_order.job %>
 </p>
 
-<p>
-  <strong>Invoice:</strong>
-  <%= @debtor_order.invoice %>
-</p>
-
-<p>
-  <strong>Sa number:</strong>
-  <%= @debtor_order.SA_number %>
-</p>
 
 <p>
   <strong>Value including tax:</strong>
@@ -35,10 +26,7 @@
   <%= @debtor_order.value_excluding_tax %>
 </p>
 
-<p>
-  <strong>Still owed amount:</strong>
-  <%= @debtor_order.still_owed_amount %>
-</p>
+
 
 <%= link_to 'Edit', edit_debtor_order_path(@debtor_order) %> |
 <%= link_to 'Back', debtor_orders_path %>

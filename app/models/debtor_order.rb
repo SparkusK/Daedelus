@@ -3,7 +3,7 @@ class DebtorOrder < ApplicationRecord
   belongs_to :job, optional: true
 
   def debtor_order_name
-    "#{order_number.upcase} \t(#{customer.name})"
+    "#{customer.name}"
   end
 
   def get_still_owed_amount

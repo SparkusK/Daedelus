@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  $('#debtor_order_value_including_tax').change(function() {
+  $('#creditor_order_value_including_tax').change(function() {
     var input = parseFloat($("#debtor_order_value_including_tax").val());
     console.log(input);
     var val_excl = input / 1.15;
@@ -9,7 +9,7 @@ $(document).ready(function() {
     $('#debtor_order_value_excluding_tax').val(val_excl.toFixed(2));
   });
 
-  $('#debtor_order_tax_amount').change(function() {
+  $('#creditor_order_tax_amount').change(function() {
     var input = parseFloat($("#debtor_order_tax_amount").val());
     console.log(input);
     var val_excl = input / 0.15;
@@ -18,7 +18,7 @@ $(document).ready(function() {
     $('#debtor_order_value_excluding_tax').val(val_excl.toFixed(2));
   });
 
-  $('#debtor_order_value_excluding_tax').change(function() {
+  $('#creditor_order_value_excluding_tax').change(function() {
     var input = parseFloat($('#debtor_order_value_excluding_tax').val());
     console.log(input);
     var tax_amount = input * 0.15;

@@ -1,7 +1,7 @@
 $(document).ready(function() {
   $('#employee_net_rate').change(function() {
     var net_rate = $('#employee_net_rate').val();
-    var inclusive_rate = parseFloat(net_rate) * 1.06;
+    var inclusive_rate = parseFloat(net_rate) * 1.2;
     $("#employee_inclusive_rate").val(inclusive_rate.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,'));
   });
 });
