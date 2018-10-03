@@ -1,31 +1,30 @@
 $(document).ready(function() {
 
   $('#creditor_order_value_including_tax').change(function() {
-    var input = parseFloat($("#debtor_order_value_including_tax").val());
+    var input = parseFloat($("#creditor_order_value_including_tax").val());
     console.log(input);
     var val_excl = input / 1.15;
     var tax_amount = val_excl * 0.15;
-    $('#debtor_order_tax_amount').val(tax_amount.toFixed(2));
-    $('#debtor_order_value_excluding_tax').val(val_excl.toFixed(2));
+    $('#creditor_order_tax_amount').val(tax_amount.toFixed(2));
+    $('#creditor_order_value_excluding_tax').val(val_excl.toFixed(2));
   });
 
   $('#creditor_order_tax_amount').change(function() {
-    var input = parseFloat($("#debtor_order_tax_amount").val());
+    var input = parseFloat($("#creditor_order_tax_amount").val());
     console.log(input);
     var val_excl = input / 0.15;
     var val_incl = val_excl + input;
-    $('#debtor_order_value_including_tax').val(val_incl.toFixed(2));
-    $('#debtor_order_value_excluding_tax').val(val_excl.toFixed(2));
+    $('#creditor_order_value_including_tax').val(val_incl.toFixed(2));
+    $('#creditor_order_value_excluding_tax').val(val_excl.toFixed(2));
   });
 
   $('#creditor_order_value_excluding_tax').change(function() {
-    var input = parseFloat($('#debtor_order_value_excluding_tax').val());
+    var input = parseFloat($('#creditor_order_value_excluding_tax').val());
     console.log(input);
     var tax_amount = input * 0.15;
     var val_incl = input + tax_amount;
-    $('#debtor_order_value_including_tax').val(val_incl.toFixed(2));
-    $('#debtor_order_tax_amount').val(tax_amount.toFixed(2));
+    $('#creditor_order_value_including_tax').val(val_incl.toFixed(2));
+    $('#creditor_order_tax_amount').val(tax_amount.toFixed(2));
   });
-
 
 });
