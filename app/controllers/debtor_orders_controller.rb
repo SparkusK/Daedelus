@@ -86,6 +86,6 @@ class DebtorOrdersController < AdministrativeController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def debtor_order_params
-      params.require(:debtor_order).permit(:customer_id, :job_id, :SA_number, :value_including_tax, :tax_amount, :value_excluding_tax, :still_owed_amount)
+      params.require(:debtor_order).permit(:customer_id, :job_id, :order_number, :value_including_tax, :tax_amount, :value_excluding_tax)
     end
 end
