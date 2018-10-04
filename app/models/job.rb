@@ -25,8 +25,8 @@ class Job < ApplicationRecord
   #   jobs.jce_number
   def self.search(keywords, start_date, end_date, page)
     if keywords.nil?
-      where_term = "receive_date > ? AND receive_date < ?"
-      order_term = "jobs.receive_date desc"
+      where_term = "target_date >= ? AND target_date <= ?"
+      order_term = "jobs.target_date desc"
       Job.where(
         where_term,
         start_date,
@@ -46,7 +46,7 @@ class Job < ApplicationRecord
         lower(jobs.jce_number) LIKE ?
         OR lower(jobs.responsible_person) LIKE ?
         OR lower(quotation_reference) LIKE ?
-        AND receive_date > ? AND receive_date < ?
+        AND target_date >= ? AND target_date <= ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "jobs.receive_date desc"
@@ -75,7 +75,7 @@ class Job < ApplicationRecord
         OR lower(jobs.work_description) LIKE ?
         OR lower(quotation_reference) LIKE ?
         OR lower(jobs.jce_number) LIKE ?
-        AND receive_date > ? AND receive_date < ?
+        AND target_date >= ? AND target_date <= ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "jobs.receive_date desc"

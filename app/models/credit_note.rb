@@ -9,7 +9,7 @@ class CreditNote < ApplicationRecord
 
     if keywords.nil?
 
-      where_term = "credit_notes.updated_at > ? AND credit_notes.updated_at < ?"
+      where_term = "credit_notes.updated_at >= ? AND credit_notes.updated_at <= ?"
 
       order_term = "credit_notes.amount_paid desc"
 
@@ -36,7 +36,7 @@ class CreditNote < ApplicationRecord
         OR lower(credit_notes.payment_type) LIKE ?
         OR lower(credit_notes.note) LIKE ?
         OR lower(jobs.jce_number) LIKE ?
-        AND credit_notes.updated_at > ? AND credit_notes.updated_at < ?
+        AND credit_notes.updated_at >= ? AND credit_notes.updated_at <= ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "credit_notes.updated_at desc"

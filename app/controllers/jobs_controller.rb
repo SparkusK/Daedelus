@@ -73,6 +73,6 @@ class JobsController < AdministrativeController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_params
-      params.require(:job).permit(:receive_date, :section_id, :contact_person, :responsible_person, :total, :work_description, :jce_number, :targeted_amount, :quotation_reference)
+      params.require(:job).permit(:receive_date, :section_id, :contact_person, :responsible_person, :total, :work_description, :jce_number, :targeted_amount, :quotation_reference, :target_date)
     end
 end

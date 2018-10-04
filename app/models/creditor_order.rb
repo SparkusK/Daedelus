@@ -29,7 +29,7 @@ class CreditorOrder < ApplicationRecord
     if keywords.nil?
 
       where_term = %{
-        date_issued > ? AND date_issued < ?
+        date_issued >= ? AND date_issued <= ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "creditor_orders.value_including_tax desc"
@@ -57,7 +57,7 @@ class CreditorOrder < ApplicationRecord
       if is_email
         where_term = %{
           lower(suppliers.email) LIKE ?
-          AND date_issued > ? AND date_issued < ?
+          AND date_issued >= ? AND date_issued <= ?
         }.gsub(/\s+/, " ").strip
 
         order_term = "suppliers.email asc"
@@ -82,7 +82,7 @@ class CreditorOrder < ApplicationRecord
           lower(suppliers.email) LIKE ?
           OR suppliers.phone LIKE ?
           OR lower(jobs.jce_number) LIKE ?
-          AND date_issued > ? AND date_issued < ?
+          AND date_issued >= ? AND date_issued <= ?
         }.gsub(/\s+/, " ").strip
 
         order_term = "creditor_orders.value_including_tax desc"
@@ -110,7 +110,7 @@ class CreditorOrder < ApplicationRecord
           OR lower(jobs.jce_number) LIKE ?
           OR lower(jobs.contact_person) LIKE ?
           OR lower(jobs.responsible_person) LIKE ?
-          AND date_issued > ? AND date_issued < ?
+          AND date_issued >= ? AND date_issued <= ?
         }.gsub(/\s+/, " ").strip
 
         order_term = "suppliers.name asc, creditor_orders.value_including_tax desc"

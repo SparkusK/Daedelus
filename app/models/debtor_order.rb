@@ -27,7 +27,7 @@ class DebtorOrder < ApplicationRecord
   def self.search(keywords, start_date, end_date, page)
 
     if keywords.nil?
-      where_term = "debtor_orders.updated_at > ? AND debtor_orders.updated_at < ?"
+      where_term = "debtor_orders.updated_at >= ? AND debtor_orders.updated_at <= ?"
       order_term = "customers.name asc, debtor_orders.value_excluding_tax desc"
       DebtorOrder.left_outer_joins(
         :customer, :job
@@ -51,7 +51,7 @@ class DebtorOrder < ApplicationRecord
       if is_email
         where_term = %{
           lower(customers.email) LIKE ?
-          AND debtor_orders.updated_at > ? AND debtor_orders.updated_at < ?
+          AND debtor_orders.updated_at >= ? AND debtor_orders.updated_at <= ?
         }.gsub(/\s+/, " ").strip
 
         order_term = "customers.email asc"
@@ -76,7 +76,7 @@ class DebtorOrder < ApplicationRecord
           lower(customers.email) LIKE ?
           OR customers.phone LIKE ?
           OR lower(jobs.jce_number) LIKE ?
-          AND debtor_orders.updated_at > ? AND debtor_orders.updated_at < ?
+          AND debtor_orders.updated_at >= ? AND debtor_orders.updated_at <= ?
         }.gsub(/\s+/, " ").strip
 
         order_term = "debtor_orders.value_excluding_tax desc"
@@ -104,7 +104,7 @@ class DebtorOrder < ApplicationRecord
           OR lower(jobs.jce_number) LIKE ?
           OR lower(jobs.contact_person) LIKE ?
           OR lower(jobs.responsible_person) LIKE ?
-          AND debtor_orders.updated_at > ? AND debtor_orders.updated_at < ?
+          AND debtor_orders.updated_at >= ? AND debtor_orders.updated_at <= ?
         }.gsub(/\s+/, " ").strip
 
         order_term = "customers.name asc, debtor_orders.value_excluding_tax desc"

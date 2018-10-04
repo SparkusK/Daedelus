@@ -24,19 +24,28 @@
       </span>
     </div>
     <div class="form-group col-md-6">
-      <%= form.label :section_id %>
-      <%= collection_select(:job, :section_id, Section.all, :id, :section_name, {prompt: true}, {class: "custom-select"}) %>
+      <%= form.label :target_date %> </br>
+      <span>
+        <%= form.text_field :target_date,
+                             autocomplete: :off,
+                             class: "form-control datepicker",
+                             placeholder: "yyyy-mm-dd" %>
+      </span>
     </div>
   </div>
 
   <div class="form-row">
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-4">
       <%= form.label :contact_person %>
       <%= form.text_field :contact_person, id: :job_contact_person, class: "form-control" %>
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-4">
       <%= form.label :responsible_person %>
       <%= form.text_field :responsible_person, id: :job_responsible_person, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :section_id %>
+      <%= collection_select(:job, :section_id, Section.all, :id, :section_name, {prompt: true}, {class: "custom-select"}) %>
     </div>
   </div>
 

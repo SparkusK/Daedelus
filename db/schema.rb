@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181002180310) do
+ActiveRecord::Schema.define(version: 20181004134654) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -100,6 +100,7 @@ ActiveRecord::Schema.define(version: 20181002180310) do
     t.datetime "updated_at", null: false
     t.string "quotation_reference"
     t.decimal "targeted_amount", precision: 15, scale: 2, default: "0.0", null: false
+    t.date "target_date"
     t.index ["section_id"], name: "index_jobs_on_section_id"
   end
 
