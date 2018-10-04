@@ -6,14 +6,16 @@
       <%= text_field_tag( :start_date,
                           "#{params[:start_date]}",
                           {autocomplete: :off,
-                          class: "form-control datepicker"}) %>
+                          class: "form-control datepicker",
+                          placeholder: "yyyy-mm-dd"}) %>
     </div>
     <div class="form-group col-md-5">
       <%= label_tag :end_date %> </br>
       <%= text_field_tag :end_date,
                           "#{params[:end_date]}",
                           {autocomplete: :off,
-                          class: "form-control datepicker"} %>
+                          class: "form-control datepicker",
+                          placeholder: "yyyy-mm-dd"} %>
     </div>
     <div class="form-group col-md-2">
       </br>

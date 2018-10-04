@@ -71,6 +71,23 @@ class JobsController < AdministrativeController
       @job = Job.find(params[:id])
     end
 
+    def set_dates
+      if params[:start_date].nil? || params[:end_date].nil?
+        @start_date = nil
+        @end_date = nil
+      else
+        date1 = params[:start_date]
+        date2 = params[:end_date]
+        if date1 < date2
+          @start_date = date1
+          @end_date = date2
+        else
+          @start_date = date2
+          @end_date = date1
+        end
+      end
+    end
+
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_params
       params.require(:job).permit(:receive_date, :section_id, :contact_person, :responsible_person, :total, :work_description, :jce_number, :targeted_amount, :quotation_reference, :target_date)
