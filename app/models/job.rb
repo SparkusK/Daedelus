@@ -12,6 +12,10 @@ class Job < ApplicationRecord
     "#{jce_number}"
   end
 
+  def get_receive_date_string
+    self.receive_date.nil? ? "" : self.receive_date.strftime("%a, %d %b %Y")
+  end
+
   def still_available_amount
     self.total - self.targeted_amount
   end
