@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181004134654) do
+ActiveRecord::Schema.define(version: 20181102142539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -171,11 +171,11 @@ ActiveRecord::Schema.define(version: 20181004134654) do
   add_foreign_key "debtor_orders", "customers"
   add_foreign_key "debtor_orders", "jobs"
   add_foreign_key "debtor_payments", "debtor_orders"
-  add_foreign_key "employees", "sections"
-  add_foreign_key "jobs", "sections"
-  add_foreign_key "labor_records", "employees"
+  add_foreign_key "employees", "sections", on_delete: :cascade
+  add_foreign_key "jobs", "sections", on_delete: :cascade
+  add_foreign_key "labor_records", "employees", on_delete: :cascade
   add_foreign_key "labor_records", "jobs"
-  add_foreign_key "labor_records", "sections"
-  add_foreign_key "managers", "employees"
-  add_foreign_key "managers", "sections"
+  add_foreign_key "labor_records", "sections", on_delete: :cascade
+  add_foreign_key "managers", "employees", on_delete: :cascade
+  add_foreign_key "managers", "sections", on_delete: :cascade
 end

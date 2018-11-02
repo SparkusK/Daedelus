@@ -4,6 +4,17 @@ class Employee < ApplicationRecord
   has_one :supervisor
   has_one :manager
 
+  def get_removal_confirmation
+    confirmation = "Performing this removal will also delete: \n"
+    if !self.labor_records.nil?
+      confirmation << "* #{self.labor_records.count} Labor Records \n"
+    end
+    if !self.manager.nil?
+      confirmation << "* 1 Manager records \n"
+    end
+    confirmation << "Are you sure?"
+  end
+
   def employee_name
     "#{first_name} #{last_name}"
   end
