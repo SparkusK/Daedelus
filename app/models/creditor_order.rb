@@ -2,6 +2,8 @@ class CreditorOrder < ApplicationRecord
   belongs_to :supplier
   belongs_to :job
 
+  has_many :credit_notes
+
   def get_still_owed_amount
     value = self.value_excluding_tax
     # Sum all payment amounts of debtor payments with debtor_order_id = self.id

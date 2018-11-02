@@ -2,6 +2,8 @@ class DebtorOrder < ApplicationRecord
   belongs_to :customer
   belongs_to :job, optional: true
 
+  has_many :debtor_payments
+
   def debtor_order_name
     "#{customer.name}"
   end

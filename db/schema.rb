@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20181102142539) do
+ActiveRecord::Schema.define(version: 20181102152923) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -165,16 +165,16 @@ ActiveRecord::Schema.define(version: 20181102142539) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
-  add_foreign_key "credit_notes", "creditor_orders"
-  add_foreign_key "creditor_orders", "jobs"
+  add_foreign_key "credit_notes", "creditor_orders", on_delete: :cascade
+  add_foreign_key "creditor_orders", "jobs", on_delete: :cascade
   add_foreign_key "creditor_orders", "suppliers"
   add_foreign_key "debtor_orders", "customers"
-  add_foreign_key "debtor_orders", "jobs"
-  add_foreign_key "debtor_payments", "debtor_orders"
+  add_foreign_key "debtor_orders", "jobs", on_delete: :cascade
+  add_foreign_key "debtor_payments", "debtor_orders", on_delete: :cascade
   add_foreign_key "employees", "sections", on_delete: :cascade
   add_foreign_key "jobs", "sections", on_delete: :cascade
   add_foreign_key "labor_records", "employees", on_delete: :cascade
-  add_foreign_key "labor_records", "jobs"
+  add_foreign_key "labor_records", "jobs", on_delete: :cascade
   add_foreign_key "labor_records", "sections", on_delete: :cascade
   add_foreign_key "managers", "employees", on_delete: :cascade
   add_foreign_key "managers", "sections", on_delete: :cascade
