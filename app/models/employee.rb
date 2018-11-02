@@ -1,17 +1,12 @@
 class Employee < ApplicationRecord
   belongs_to :section
   has_many :labor_records
-  has_one :supervisor
   has_one :manager
 
   def get_removal_confirmation
     confirmation = "Performing this removal will also delete: \n"
-    if !self.labor_records.nil?
-      confirmation << "* #{self.labor_records.count} Labor Records \n"
-    end
-    if !self.manager.nil?
-      confirmation << "* 1 Manager records \n"
-    end
+    confirmation << "* #{self.labor_records.count} Labor Records \n" unless self.labor_records.nil?
+    confirmation << "* 1 Manager records \n" unless self.manager.nil?
     confirmation << "Are you sure?"
   end
 

@@ -4,6 +4,12 @@ class CreditorOrder < ApplicationRecord
 
   has_many :credit_notes
 
+  def get_removal_confirmation
+    confirmation = "Performing this removal will also delete: \n"
+    confirmation << "* #{self.credit_notes.count} Creditor Payment records. \n" unless self.credit_notes.nil?
+    confirmation << "Are you sure?"
+  end
+
   def get_still_owed_amount
     value = self.value_excluding_tax
     # Sum all payment amounts of debtor payments with debtor_order_id = self.id

@@ -4,6 +4,12 @@ class DebtorOrder < ApplicationRecord
 
   has_many :debtor_payments
 
+  def get_removal_confirmation
+    confirmation = "Performing this removal will also delete: \n"
+    confirmation << "* #{self.debtor_payments.count} Debtor Payment records. \n" unless self.debtor_payments.nil?
+    confirmation << "Are you sure?"
+  end
+
   def debtor_order_name
     "#{customer.name}"
   end

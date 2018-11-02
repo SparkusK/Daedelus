@@ -8,7 +8,7 @@ class Section < ApplicationRecord
   def get_removal_confirmation
     confirmation = "Performing this removal will also delete: \n"
 
-    if !(self.jobs.nil?)
+    unless self.jobs.nil?
       confirmation << "* #{self.jobs.count} Job records, including: \n"
       job_labor_records = 0
       job_creditor_orders = 0
@@ -41,7 +41,7 @@ class Section < ApplicationRecord
       confirmation << "    * #{job_debtor_orders_payments} Debtor Payment records from Debtor Orders \n"
 
     end
-    if !(self.employees.nil?)
+    unless self.employees.nil?
       confirmation << "* #{self.employees.count} Employee records, including: \n"
       employee_labor_records_count_total = 0
       employee_managers_count_total = 0
@@ -53,6 +53,7 @@ class Section < ApplicationRecord
     confirmation << "* 1 Manager record \n" unless self.manager.nil?
     confirmation << "* #{self.labor_records.count} Other Labor Records \n" unless self.labor_records.nil?
     confirmation << "Are you sure?"
+    
   end
 
   def section_name

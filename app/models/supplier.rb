@@ -1,7 +1,23 @@
 class Supplier < ApplicationRecord
+
+  has_many :creditor_orders
+
+
   def supplier_name
     "#{name}"
   end
+
+  def get_removal_confirmation
+    confirmation = "Performing this removal will also delete: \n"
+    confirmation << "* #{self.creditor_orders.count} Creditor Order records, including: \n" unless self.creditor_orders.nil?
+    creditor_orders_payments_total = 0
+    self.creditor_orders.each do |creditor_order|
+      creditor_orders_payments_total += creditor_order.credit_notes.count unless creditor_order.credit_notes.nil?
+    end
+    confirmation << "  * #{creditor_orders_payments_total} Creditor Payments from Creditor Orders \n"
+    confirmation << "Are you sure?"
+  end
+
 
   def self.search(keywords)
 
