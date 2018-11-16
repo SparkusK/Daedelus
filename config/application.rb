@@ -27,5 +27,8 @@ module Daedelus
 
     # Don't generate system test files.
     config.generators.system_tests = nil
+
+    # Store the schema as SQL so we can take advantage of Postgresql features
+    config.active_record.schema_format = :sql
   end
 end

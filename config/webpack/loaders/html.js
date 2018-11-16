@@ -1,8 +1,4 @@
-const { environment } = require('@rails/webpacker')
-const typescript =  require('./loaders/typescript')
-
-environment.loaders.append('typescript', typescript)
-environment.loaders.append('html', {
+module.exports = {
   test: /\.html$/,
   use: [{
     loader: 'html-loader',
@@ -14,5 +10,4 @@ environment.loaders.append('html', {
       customAttrAssign: [ /\)?\]?=/ ]
     }
   }]
-})
-module.exports = environment
+}

@@ -93,6 +93,6 @@ class ManagersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def manager_params
-      params.require([:employee, :section])
+      params.require(:manager).permit(:employee_id, :section_id)
     end
 end

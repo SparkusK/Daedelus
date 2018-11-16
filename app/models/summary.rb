@@ -96,7 +96,10 @@ class Summary
     @summaries = []
     @summaries << build_aggregate(start_date, end_date)
     Section.all.each do |section|
-      @summaries << build_summary(section, start_date, end_date)
+      summary = build_summary(section, start_date, end_date)
+      unless summary.labor == 0 && summary.orders == 0 && summary.target_jobs == 0
+        @summaries << summary
+      end
     end
     @summaries
   end

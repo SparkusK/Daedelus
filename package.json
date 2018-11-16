@@ -2,8 +2,21 @@
   "name": "daedelus",
   "private": true,
   "dependencies": {
+    "@angular/common": "^7.0.4",
+    "@angular/compiler": "^7.0.4",
+    "@angular/core": "^7.0.4",
+    "@angular/forms": "^7.0.2",
+    "@angular/http": "^7.0.2",
+    "@angular/platform-browser": "^7.0.4",
+    "@angular/platform-browser-dynamic": "^7.0.4",
     "@rails/webpacker": "3.4",
-    "bootstrap": "4.0"
+    "bootstrap": "4.0",
+    "core-js": "^2.5.7",
+    "html-loader": "^0.5.5",
+    "rxjs": "^6.3.3",
+    "ts-loader": "3.5.0",
+    "typescript": "^3.1.6",
+    "zone.js": "^0.8.26"
   },
   "devDependencies": {
     "webpack-dev-server": "2.11.2"

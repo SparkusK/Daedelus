@@ -4,20 +4,42 @@
     <section class="search-form col-md-8">
       <%= form_for :labor_records, method: :get do |f| %>
         <div class="input-group input-group-lg">
-          <%= label_tag :keywords, nil, class: "sr-only" %>
-          <%= text_field_tag :keywords, nil,
+          <%= f.label :keywords, nil, class: "sr-only" %>
+          <%= f.text_field "keywords",
                 placeholder: "Search labor records",
                 class: "form-control input-lg" %>
           </span>
         </div>
-      <% end %>
     </section>
   </div>
 </section>
 
-<%= render partial: 'top_pager' %>
+<div class="row">
+  <div class="form-group col-md-5">
+    <%= f.label :start_date %> </br>
+    <%= f.text_field_tag( :start_date,
+                        "#{params[:start_date]}",
+                        {autocomplete: :off,
+                        class: "form-control datepicker",
+                        placeholder: "yyyy-mm-dd"}) %>
+  </div>
+  <div class="form-group col-md-5">
+    <%= f.label_tag :end_date %> </br>
+    <%= f.text_field :end_date,
+                        "#{params[:end_date]}",
+                        {autocomplete: :off,
+                        class: "form-control datepicker",
+                        placeholder: "yyyy-mm-dd"} %>
+  </div>
+  <div class="form-group col-md-2">
+    </br>
+    <%= f.submit("Refresh dates", class: "btn btn-lg btn-primary") %>
+  </div>
+</div>
+<% end %>
+<br>
 
-<%= render partial: 'shared/dates', locals: { path: "/labor_records" } %>
+<%= render partial: 'top_pager' %>
 
 <section class="labor-record-panels">
   <%= render partial: 'labor_record', collection: @labor_records %>

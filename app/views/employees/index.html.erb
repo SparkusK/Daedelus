@@ -4,8 +4,19 @@
     entity: :employees,
     placeholder_text: "Search Employees" } %>
 
+
 <%= render partial: 'top_pager' %>
 
+<div class="d-flex justify-content-between">
+  <div>
+    Results:
+  </div>
+  <div>
+    <%= button_to 'New Employee', new_employee_path, class: "btn", method: :get %>
+  </div>
+</div>
+<hr>
+</br>
 <section class="employee-panels">
   <% @employees.each do |employee| %>
       <%= render employee %>

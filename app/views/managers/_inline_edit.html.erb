@@ -15,7 +15,7 @@
     <div class="form-row">
       <div class="form-group col-md-6">
         <%= form.label :employee_id %>
-        <%= collection_select(:employee,
+        <%= collection_select(:manager,
                               :employee_id,
                               non_manager_employees(),
                               :id,
@@ -25,7 +25,7 @@
       </div>
       <div class="form-group col-md-6">
         <%= form.label :section_id %>
-        <%= collection_select(:section,
+        <%= collection_select(:manager,
                               :section_id,
                               unmanaged_sections(),
                               :id,

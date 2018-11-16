@@ -1,6 +1,6 @@
 class JobsController < AdministrativeController
   before_action :set_job, only: [:show, :edit, :update, :destroy]
-
+  before_action :set_dates, only: :index
   # GET /jobs
   # GET /jobs.json
   def index
@@ -72,24 +72,24 @@ class JobsController < AdministrativeController
     end
 
     def set_dates
-      if params[:start_date].nil? || params[:end_date].nil?
-        @start_date = nil
-        @end_date = nil
+
+      params[:start_date] = 1.month.ago if params[:start_date].nil?
+      params[:end_date] = 0.months.ago if params[:end_date].nil?
+      date1 = params[:start_date]
+      date2 = params[:end_date]
+
+      if date1 < date2
+        @start_date = date1
+        @end_date = date2
       else
-        date1 = params[:start_date]
-        date2 = params[:end_date]
-        if date1 < date2
-          @start_date = date1
-          @end_date = date2
-        else
-          @start_date = date2
-          @end_date = date1
-        end
+        @start_date = date2
+        @end_date = date1
       end
+
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_params
-      params.require(:job).permit(:receive_date, :section_id, :contact_person, :responsible_person, :total, :work_description, :jce_number, :targeted_amount, :quotation_reference, :target_date)
+      params.require(:job).permit(:receive_date, :section_id, :contact_person, :responsible_person, :total, :work_description, :jce_number, :targeted_amount, :quotation_reference, :target_date, :start_date, :end_date, :page)
     end
 end
