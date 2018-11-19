@@ -1,8 +1,19 @@
-<%= render partial: "shared/subpage_header",
-  locals: {
-    header_text: "Debtor Payments",
-    entity: :debtor_payments,
-    placeholder_text: "Search debtor payments" } %>
+<section class="header">
+  <h1>Debtor Payments</h1>
+</section>
+<section class="search-form">
+  <%= form_for :debtor_payments, method: :get do |f| %>
+    <%= label_tag :keywords, nil, class: "sr-only" %>
+      <div class="input-group input-group-lg">
+        <%= text_field_tag :keywords, nil,
+            placeholder: "Search debtor payments",
+            class: "form-control input-lg" %>
+        <%= image_tag("loading.gif", class: "img-thumbnail loading_gif") %>
+        <%= image_tag("typing.gif", class: "img-thumbnail typing_gif") %>
+    </div>
+  <% end %>
+</section>
+
 
 <%= render partial: 'top_pager' %>
 

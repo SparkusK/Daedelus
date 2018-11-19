@@ -271,7 +271,8 @@ CREATE TABLE public.jobs (
     updated_at timestamp without time zone NOT NULL,
     quotation_reference character varying,
     targeted_amount numeric(15,2) DEFAULT 0.0 NOT NULL,
-    target_date date
+    target_date date,
+    is_finished boolean DEFAULT false
 );
 
 
@@ -965,6 +966,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181102145106'),
 ('20181102152923'),
 ('20181102154157'),
-('20181102154206');
+('20181102154206'),
+('20181116054556');
 
 

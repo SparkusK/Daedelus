@@ -28,11 +28,22 @@ class Job < ApplicationRecord
   #   jobs.work_description (if " ".count > 1)
   #   quotations.code
   #   jobs.jce_number
-  def self.search(keywords, start_date, end_date, page)
+  def self.search(keywords, start_date, end_date, page, show_finished)
+    if show_finished.nil?
+      show_finished = false
+    elsif show_finished == "1" || show_finished == true || show_finished == 1
+      show_finished = true
+    else
+      show_finished = false
+    end
+
+
     if start_date.nil? || end_date.nil?
       if keywords.nil?
         order_term = "jobs.receive_date desc"
-        Job.all.order(
+        Job.where(
+          "jobs.is_finished = ?", show_finished
+        ).order(
           order_term
         ).paginate(
           page: page
@@ -45,6 +56,7 @@ class Job < ApplicationRecord
           lower(jobs.jce_number) LIKE ?
           OR lower(jobs.responsible_person) LIKE ?
           OR lower(quotation_reference) LIKE ?
+          AND jobs.is_finished = ?
         }.gsub(/\s+/, " ").strip
 
         order_term = "jobs.receive_date desc"
@@ -53,7 +65,8 @@ class Job < ApplicationRecord
           where_term,
           search_term,
           search_term,
-          search_term
+          search_term,
+          show_finished
         ).order(
           order_term
         ).paginate(
@@ -71,6 +84,7 @@ class Job < ApplicationRecord
           OR lower(jobs.work_description) LIKE ?
           OR lower(quotation_reference) LIKE ?
           OR lower(jobs.jce_number) LIKE ?
+          AND jobs.is_finished = ?
         }.gsub(/\s+/, " ").strip
 
         order_term = "jobs.receive_date desc"
@@ -84,7 +98,8 @@ class Job < ApplicationRecord
           search_term,
           search_term,
           search_term,
-          search_term
+          search_term,
+          show_finished
         ).order(
           order_term
         ).paginate(
@@ -95,12 +110,13 @@ class Job < ApplicationRecord
       end
     else
       if keywords.nil?
-        where_term = "target_date >= ? AND target_date <= ?"
+        where_term = "target_date >= ? AND target_date <= ? AND jobs.is_finished = ?"
         order_term = "jobs.target_date desc"
         Job.where(
           where_term,
           start_date,
-          end_date
+          end_date,
+          show_finished
         ).order(
           order_term
         ).paginate(
@@ -117,6 +133,7 @@ class Job < ApplicationRecord
           OR lower(jobs.responsible_person) LIKE ?
           OR lower(quotation_reference) LIKE ?
           AND target_date >= ? AND target_date <= ?
+          AND jobs.is_finished = ?
         }.gsub(/\s+/, " ").strip
 
         order_term = "jobs.receive_date desc"
@@ -127,7 +144,8 @@ class Job < ApplicationRecord
           search_term,
           search_term,
           start_date,
-          end_date
+          end_date,
+          show_finished
         ).order(
           order_term
         ).paginate(
@@ -139,13 +157,14 @@ class Job < ApplicationRecord
         # search everything
         search_term = '%' + keywords.downcase + '%'
         where_term = %{
-          lower(sections.name) LIKE ?
+          (lower(sections.name) LIKE ?
           OR lower(jobs.contact_person) LIKE ?
           OR lower(jobs.responsible_person) LIKE ?
           OR lower(jobs.work_description) LIKE ?
           OR lower(quotation_reference) LIKE ?
-          OR lower(jobs.jce_number) LIKE ?
+          OR lower(jobs.jce_number) LIKE ?)
           AND target_date >= ? AND target_date <= ?
+          AND jobs.is_finished = ?
         }.gsub(/\s+/, " ").strip
 
         order_term = "jobs.receive_date desc"
@@ -161,7 +180,8 @@ class Job < ApplicationRecord
           search_term,
           search_term,
           start_date,
-          end_date
+          end_date,
+          show_finished
         ).order(
           order_term
         ).paginate(

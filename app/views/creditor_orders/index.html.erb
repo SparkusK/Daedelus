@@ -1,12 +1,23 @@
-<%= render partial: "shared/subpage_header",
-  locals: {
-    header_text: "Creditor Orders",
-    entity: :creditor_orders,
-    placeholder_text: "Search creditor orders" } %>
+<section class="header">
+  <h1>Creditor Orders</h1>
+</section>
+<section class="search-form">
+  <%= form_for :creditor_orders, method: :get do |f| %>
+  <%= label_tag :keywords, nil, class: "sr-only" %>
+  <div class="input-group input-group-lg">
+    <%= text_field_tag :keywords, nil,
+          placeholder: "Search creditor orders",
+          class: "form-control input-lg" %>
+    <%= image_tag("loading.gif", class: "img-thumbnail loading_gif") %>
+    <%= image_tag("typing.gif", class: "img-thumbnail typing_gif") %>
+  </div>
+  <% end %>
+</section>
+
+<%= render partial: 'shared/dates', locals: { path: "/creditor_orders" } %>
 
 <%= render partial: 'top_pager' %>
 
-<%= render partial: 'shared/dates', locals: { path: "/creditor_orders" } %>
 
 <section class="creditor-order-panels">
   <% @creditor_orders.each do |creditor_order| %>

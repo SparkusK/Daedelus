@@ -4,7 +4,7 @@ class JobsController < AdministrativeController
   # GET /jobs
   # GET /jobs.json
   def index
-    @jobs = Job.search(params[:keywords], @start_date, @end_date, params[:page])
+    @jobs = Job.search(params[:keywords], @start_date, @end_date, params[:page], params[:show_finished])
     respond_to do |format|
       format.html {}
       format.js {}
@@ -90,6 +90,6 @@ class JobsController < AdministrativeController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_params
-      params.require(:job).permit(:receive_date, :section_id, :contact_person, :responsible_person, :total, :work_description, :jce_number, :targeted_amount, :quotation_reference, :target_date, :start_date, :end_date, :page)
+      params.require(:job).permit(:receive_date, :section_id, :contact_person, :responsible_person, :total, :work_description, :jce_number, :targeted_amount, :quotation_reference, :target_date, :start_date, :end_date, :page, :show_finished, :is_finished)
     end
 end

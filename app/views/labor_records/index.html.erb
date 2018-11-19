@@ -1,42 +1,43 @@
 <section class="header">
-  <div class="d-flex justify-content-between">
     <h1 class="col-md-4">Labor Records</h1>
+    <div class="d-flex justify-content-between">
     <section class="search-form col-md-8">
-      <%= form_for :labor_records, method: :get do |f| %>
+      <%= form_tag "/labor_records", method: :get %>
+      <div class="row col-md-12">
         <div class="input-group input-group-lg">
-          <%= f.label :keywords, nil, class: "sr-only" %>
-          <%= f.text_field "keywords",
+          <%= label_tag :keywords, nil, class: "sr-only" %>
+          <%= text_field_tag :keywords, nil,
                 placeholder: "Search labor records",
                 class: "form-control input-lg" %>
           </span>
         </div>
+      </div>
+        <div class="row">
+          <div class="form-group col-md-5">
+            <%= label_tag :start_date %> </br>
+            <%= text_field_tag( :start_date,
+              "#{params[:start_date]}",
+              {autocomplete: :off,
+                class: "form-control datepicker",
+                  placeholder: "yyyy-mm-dd"}) %>
+                </div>
+                <div class="form-group col-md-5">
+                  <%= label_tag :end_date %> </br>
+                  <%= text_field_tag :end_date,
+                  "#{params[:end_date]}",
+                  {autocomplete: :off,
+                    class: "form-control datepicker",
+                      placeholder: "yyyy-mm-dd"} %>
+                    </div>
+                    <div class="form-group col-md-2">
+                    </br>
+                    <%= submit_tag("Refresh dates", class: "btn btn-lg btn-primary") %>
+                  </div>
+                </div>
     </section>
   </div>
 </section>
-
-<div class="row">
-  <div class="form-group col-md-5">
-    <%= f.label :start_date %> </br>
-    <%= f.text_field_tag( :start_date,
-                        "#{params[:start_date]}",
-                        {autocomplete: :off,
-                        class: "form-control datepicker",
-                        placeholder: "yyyy-mm-dd"}) %>
-  </div>
-  <div class="form-group col-md-5">
-    <%= f.label_tag :end_date %> </br>
-    <%= f.text_field :end_date,
-                        "#{params[:end_date]}",
-                        {autocomplete: :off,
-                        class: "form-control datepicker",
-                        placeholder: "yyyy-mm-dd"} %>
-  </div>
-  <div class="form-group col-md-2">
-    </br>
-    <%= f.submit("Refresh dates", class: "btn btn-lg btn-primary") %>
-  </div>
-</div>
-<% end %>
+</form>
 <br>
 
 <%= render partial: 'top_pager' %>

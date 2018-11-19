@@ -117,8 +117,10 @@ class DebtorOrder < ApplicationRecord
 
         order_term = "customers.name asc, debtor_orders.value_excluding_tax desc"
 
-        DebtorOrder.left_outer_joins(
-          :customer, :job
+        DebtorOrder.joins(
+          :customer
+        ).left_outer_joins(
+           :job
         ).where(
           where_term,
           search_term,
