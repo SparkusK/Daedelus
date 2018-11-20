@@ -72,18 +72,19 @@ class JobsController < AdministrativeController
     end
 
     def set_dates
-
+      # TODO: Differentiate between "not set" and "don't include in search"
       params[:start_date] = 1.month.ago if params[:start_date].nil?
       params[:end_date] = 0.months.ago if params[:end_date].nil?
+
       date1 = params[:start_date]
       date2 = params[:end_date]
 
       if date1 < date2
         @start_date = date1
-        @end_date = date2
+        @end_date   = date2
       else
         @start_date = date2
-        @end_date = date1
+        @end_date   = date1
       end
 
     end
