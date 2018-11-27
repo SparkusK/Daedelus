@@ -7,9 +7,7 @@
 <%= render partial: 'top_pager' %>
 
 <section class="section-panels">
-  <% @sections.each do |section| %>
-      <%= render section %>
-  <% end %>
+  <%= render partial: 'section', collection: @sections %>
 </section>
 
 <%= render partial: 'bottom_pager' %>

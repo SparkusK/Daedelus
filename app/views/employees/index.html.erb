@@ -18,9 +18,7 @@
 <hr>
 </br>
 <section class="employee-panels">
-  <% @employees.each do |employee| %>
-      <%= render employee %>
-  <% end %>
+  <%= render partial: 'employee', collection: @employees %>
 </section>
 
 <%= render partial: 'bottom_pager' %>
