@@ -19,51 +19,51 @@ class Section < ApplicationRecord
   # 	-> labor_records
 
 
-  def get_jobs(section_id)
+  def self.get_jobs(section_id)
     Job.where(section_id: section_id)
   end
 
-  def get_creditor_orders(job_ids)
+  def self.get_creditor_orders(job_ids)
     CreditorOrder.where("creditor_orders.job_id IN (?)", job_ids)
   end
 
-  def get_credit_notes(creditor_order_ids)
+  def self.get_credit_notes(creditor_order_ids)
     CreditNote.where("creditor_order_id IN (?)", creditor_order_ids)
   end
 
-  def get_debtor_orders(job_ids)
+  def self.get_debtor_orders(job_ids)
     DebtorOrder.where("job_id IN (?)", job_ids)
   end
 
-  def get_debtor_payments(debtor_order_ids)
+  def self.get_debtor_payments(debtor_order_ids)
     DebtorPayment.where("debtor_order_id IN (?)", debtor_order_ids)
   end
 
-  def get_job_labor_records(job_ids)
+  def self.get_job_labor_records(job_ids)
     LaborRecord.where("job_id IN (?)", job_ids)
   end
 
-  def get_employees(section_id)
+  def self.get_employees(section_id)
     Employee.where(section_id: section_id)
   end
 
-  def get_employee_managers(employee_ids)
+  def self.get_employee_managers(employee_ids)
     Manager.where("employee_id IN (?)", employee_ids)
   end
 
-  def get_employee_labor_records(employee_ids)
+  def self.get_employee_labor_records(employee_ids)
     LaborRecord.where("employee_id IN (?)", employee_ids)
   end
 
-  def get_manager(section_id)
+  def self.get_manager(section_id)
     Section.find_by(id: section_id).manager
   end
 
-  def get_section_labor_records(section_id)
+  def self.get_section_labor_records(section_id)
     LaborRecord.where(section_id: section_id)
   end
 
-  def get_entities(section_id)
+  def self.get_entities(section_id)
     jobs                    = get_jobs(                   section_id          )
     creditor_orders         = get_creditor_orders(        jobs.ids            )
     credit_notes            = get_credit_notes(           creditor_orders.ids )
@@ -93,10 +93,10 @@ class Section < ApplicationRecord
 
   end
 
-  def get_removal_confirmation(section_id)
+  def self.get_removal_confirmation(section_id)
     entities = get_entities(section_id)
-
     confirmation = "Performing this removal will also delete: \n"
+
     confirmation << "* #{entities[:jobs].count} Job records \n"
     confirmation << "    * #{entities[:creditor_orders].count} Creditor Order records \n"
     confirmation << "        * #{entities[:credit_notes].count} Creditor Payment records \n"
@@ -108,6 +108,8 @@ class Section < ApplicationRecord
     confirmation << "    * #{entities[:employee_labor_records].count} Labor Records related to Employees \n"
     confirmation << "* #{entities[:manager_count]} Manager records \n"
     confirmation << "* #{entities[:section_labor_records].count} Labor Records related to the Section \n"
+
+    confirmation << "Are you sure?"
   end
 
   def section_name

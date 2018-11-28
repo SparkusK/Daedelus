@@ -2,18 +2,38 @@ class Customer < ApplicationRecord
 
   has_many :debtor_orders
 
+  # Customer
+  #   -> Debtor Order
+  #       -> Debtor Payment
+
   def customer_name
     "#{name}"
   end
 
-  def get_removal_confirmation
+  def self.get_debtor_payments(debtor_order_ids)
+    DebtorPayment.where("debtor_order_id IN (?)", debtor_order_ids)
+  end
+
+  def self.get_debtor_orders(customer_id)
+    DebtorOrder.where("customer_id = ?", customer_id)
+  end
+
+  def self.get_entities(customer_id)
+    debtor_orders   = get_debtor_orders(   customer_id       )
+    debtor_payments = get_debtor_payments( debtor_orders.ids )
+    {
+      debtor_orders: debtor_orders,
+      debtor_payments: debtor_payments
+    }
+  end
+
+  def self.get_removal_confirmation(customer_id)
+    entities = get_entities(customer_id)
     confirmation = "Performing this removal will also delete: \n"
-    confirmation << "* #{self.debtor_orders.count} Debtor Order records, including: \n" unless self.debtor_orders.nil?
-    debtor_orders_payments_total = 0
-    self.debtor_orders.each do |debtor_order|
-      debtor_orders_payments_total += debtor_order.debtor_payments.count unless debtor_order.debtor_payments.nil?
-    end
-    confirmation << "  * #{debtor_orders_payments_total} Debtor Payments from Debtor Orders \n" 
+
+    confirmation << "* #{entities[:debtor_orders].count} Debtor Order records \n"
+    confirmation << "    * #{entities[:debtor_payments].count} Debtor Payment records \n"
+
     confirmation << "Are you sure?"
   end
 

@@ -4,9 +4,18 @@ class CreditorOrder < ApplicationRecord
 
   has_many :credit_notes
 
-  def get_removal_confirmation
+  # Creditor Order -> Creditor Payment (creditnote)
+
+  def self.get_creditor_payments_count(creditor_order_id)
+    CreditNote.where("creditor_order_id = ?", creditor_order_id).count(:all)
+  end
+
+  def self.get_removal_confirmation(creditor_order_id)
+    count = get_creditor_payments_count(creditor_order_id)
     confirmation = "Performing this removal will also delete: \n"
-    confirmation << "* #{self.credit_notes.count} Creditor Payment records. \n" unless self.credit_notes.nil?
+
+    confirmation << "* #{count} Creditor Payment records \n"
+
     confirmation << "Are you sure?"
   end
 

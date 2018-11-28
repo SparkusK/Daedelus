@@ -2,6 +2,36 @@ class Supplier < ApplicationRecord
 
   has_many :creditor_orders
 
+  # Supplier
+  #   -> creditor_order
+  #       -> creditor_payment
+
+  def self.get_credit_notes(creditor_order_ids)
+    CreditNote.where("creditor_order_id IN (?)", creditor_order_ids)
+  end
+
+  def self.get_creditor_orders(supplier_id)
+    CreditorOrder.where("supplier_id = ?", supplier_id)
+  end
+
+  def self.get_entities(supplier_id)
+    creditor_orders = get_creditor_orders( supplier_id         )
+    credit_notes    = get_credit_notes(    creditor_orders.ids )
+    {
+      creditor_orders: creditor_orders,
+      credit_notes: credit_notes
+    }
+  end
+
+  def self.get_removal_confirmation(supplier_id)
+    entities = get_entities(supplier_id)
+    confirmation = "Performing this removal will also delete: \n"
+
+    confirmation << "* #{entities[:creditor_orders].count} Creditor Order records \n"
+    confirmation << "    * #{entities[:credit_notes].count} Creditor Payment records \n"
+
+    confirmation << "Are you sure?"
+  end
 
   def supplier_name
     "#{name}"
