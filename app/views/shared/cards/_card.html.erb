@@ -15,7 +15,8 @@
       <div class="col-md-10"></div>
       <div class="d-flex col-md-2">
         <%= button_to 'Edit', path, remote: true, method: :get, class: "btn btn-primary" %>
-        <%= button_to 'Remove', entity, method: :delete, data: { confirm: 'Are you sure?' }, class: "btn btn-danger" %>
+        <% defined?(confirm) == "local-variable" ? confirm = confirm : confirm = "Are you sure?" %>
+        <%= button_to 'Remove', entity, method: :delete, data: { confirm: confirm }, class: "btn btn-danger" %>
       </div>
     </div>
   </div>

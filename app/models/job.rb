@@ -21,6 +21,60 @@ class Job < ApplicationRecord
     self.total - self.targeted_amount
   end
 
+  def self.get_creditor_orders(job_id)
+    CreditorOrder.where("job_id = ?", job_id)
+  end
+
+  def self.get_credit_notes(creditor_order_ids)
+    CreditNote.where("creditor_order_id IN (?)", creditor_order_ids)
+  end
+
+  def self.get_debtor_orders(job_id)
+    DebtorOrder.where("job_id = ?", job_id)
+  end
+
+  def self.get_debtor_payments(debtor_order_ids)
+    DebtorPayment.where("debtor_order_id IN (?)", debtor_order_ids)
+  end
+
+  def self.get_job_labor_records(job_id)
+    LaborRecord.where("job_id = ?", job_id)
+  end
+
+  def self.get_entities(job_id)
+    creditor_orders  = get_creditor_orders(   job_id              )
+    credit_notes     = get_credit_notes(      creditor_orders.ids )
+    debtor_orders    = get_debtor_orders(     job_id              )
+    debtor_payments  = get_debtor_payments(   debtor_orders.ids   )
+    labor_records    = get_job_labor_records( job_id              )
+    {
+      creditor_orders: creditor_orders,
+      credit_notes: credit_notes,
+      debtor_orders: debtor_orders,
+      debtor_payments: debtor_payments,
+      labor_records: labor_records
+    }
+  end
+
+  # Job
+  #   -> Creditor Order
+  #       -> Credit Note
+  #   -> Debtor Order
+  #       -> Debtor Payment
+  #   -> Labor Record
+  def self.get_removal_confirmation(job_id)
+    entities = get_entities(job_id)
+    confirmation = "Performing this removal will also delete: \n"
+
+    confirmation << "* #{entities[:creditor_orders].count} Creditor Order records \n"
+    confirmation << "    * #{entities[:credit_notes].count} Creditor Payment records \n"
+    confirmation << "* #{entities[:debtor_orders].count} Debtor Order records \n"
+    confirmation << "    * #{entities[:debtor_payments].count} Debtor Payment records \n"
+    confirmation << "* #{entities[:labor_records].count} Labor Records \n"
+
+    confirmation << "Are you sure?"
+  end
+
   # Search by:
   #   sections.name,
   #   jobs.contact_person,
@@ -28,6 +82,9 @@ class Job < ApplicationRecord
   #   jobs.work_description (if " ".count > 1)
   #   quotations.code
   #   jobs.jce_number
+
+  # This search function is really bad. I should rework this thing to make it
+  # better somehow, but meh, there's really no incentive at this point
   def self.search(keywords, start_date, end_date, page, show_finished)
     if show_finished.nil?
       show_finished = false
