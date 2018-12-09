@@ -13,17 +13,35 @@
   </div>
   <div class="row">
     <div class="form-group col-md-6">
-      <%= label_tag :start_date %> </br>
-      <%= text_field_tag( :start_date,
-            "#{params[:start_date]}",
+      <%= label_tag :target_start_date %> </br>
+      <%= text_field_tag( :target_start_date,
+            "#{params[:target_start_date]}",
             {autocomplete: :off,
               class: "form-control datepicker",
                 placeholder: "yyyy-mm-dd"}) %>
     </div>
     <div class="form-group col-md-6">
-        <%= label_tag :end_date %> </br>
-        <%= text_field_tag :end_date,
-            "#{params[:end_date]}",
+        <%= label_tag :target_end_date %> </br>
+        <%= text_field_tag :target_end_date,
+            "#{params[:target_end_date]}",
+            {autocomplete: :off,
+              class: "form-control datepicker",
+                placeholder: "yyyy-mm-dd"} %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <%= label_tag :receive_start_date %> </br>
+      <%= text_field_tag( :receive_start_date,
+            "#{params[:receive_start_date]}",
+            {autocomplete: :off,
+              class: "form-control datepicker",
+                placeholder: "yyyy-mm-dd"}) %>
+    </div>
+    <div class="form-group col-md-6">
+        <%= label_tag :receive_end_date %> </br>
+        <%= text_field_tag :receive_end_date,
+            "#{params[:receive_end_date]}",
             {autocomplete: :off,
               class: "form-control datepicker",
                 placeholder: "yyyy-mm-dd"} %>
@@ -36,7 +54,7 @@
     </div>
     <div class="form-group col-md-6">
       <%= label_tag :completion_status_filter %> <br>
-      <%= select_tag "completes", options_for_select(["All", "Not completed", "Completed"], "All"), {class: "custom-select"} %>
+      <%= select_tag "completes", options_for_select(["All", "Not finished", "Finished"], "All"), {class: "custom-select"} %>
     </div>
   </div>
   <div class="row">

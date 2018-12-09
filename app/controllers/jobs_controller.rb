@@ -4,7 +4,12 @@ class JobsController < AdministrativeController
   # GET /jobs
   # GET /jobs.json
   def index
-    @jobs = Job.search(params[:keywords], @start_date, @end_date, params[:page], params[:show_finished])
+    @jobs = Job.search(
+      params[:keywords],
+      @target_start_date, @target_end_date,
+      @receive_start_date, @receive_end_date,
+      params[:page], params[:targets], params[:completes]
+    )
     respond_to do |format|
       format.html {}
       format.js {}
@@ -72,25 +77,60 @@ class JobsController < AdministrativeController
     end
 
     def set_dates
-      # TODO: Differentiate between "not set" and "don't include in search"
-      params[:start_date] = 1.month.ago if params[:start_date].nil?
-      params[:end_date] = 0.months.ago if params[:end_date].nil?
+      target_start_date_valid = !params[:target_start_date].nil? && !params[:target_start_date].empty?
+      target_end_date_valid = !params[:target_end_date].nil? && !params[:target_end_date].empty?
+      receive_start_date_valid = !params[:receive_start_date].nil? && !params[:receive_start_date].empty?
+      receive_end_date_valid = !params[:receive_end_date].nil? && !params[:receive_end_date].empty?
 
-      date1 = params[:start_date]
-      date2 = params[:end_date]
-
-      if date1 < date2
-        @start_date = date1
-        @end_date   = date2
+      # Initialize the dates
+      if target_start_date_valid
+        @target_start_date = params[:target_start_date]
       else
-        @start_date = date2
-        @end_date   = date1
+        @target_start_date = nil
+      end
+      if target_end_date_valid
+        @target_end_date = params[:target_end_date]
+      else
+        @target_end_date = nil
+      end
+      if receive_start_date_valid
+        @receive_start_date = params[:receive_start_date]
+      else
+        @receive_start_date = nil
+      end
+      if receive_end_date_valid
+        @receive_end_date = params[:receive_end_date]
+      else
+        @receive_end_date = nil
       end
 
+      # Swap the two dates if start_date is_after end_date
+      unless !target_start_date_valid || !target_end_date_valid
+        date1 = params[:target_start_date]
+        date2 = params[:target_end_date]
+        if date1 < date2
+          @target_start_date = date1
+          @target_end_date   = date2
+        else
+          @target_start_date = date2
+          @target_end_date   = date1
+        end
+      end
+      unless !receive_start_date_valid || !receive_end_date_valid
+        date1 = params[:receive_start_date]
+        date2 = params[:receive_end_date]
+        if date1 < date2
+          @receive_start_date = date1
+          @receive_end_date   = date2
+        else
+          @receive_start_date = date2
+          @receive_end_date   = date1
+        end
+      end
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_params
-      params.require(:job).permit(:receive_date, :section_id, :contact_person, :responsible_person, :total, :work_description, :jce_number, :targeted_amount, :quotation_reference, :target_date, :start_date, :end_date, :page, :show_finished, :is_finished)
+      params.require(:job).permit(:receive_date, :section_id, :contact_person, :responsible_person, :total, :work_description, :jce_number, :targeted_amount, :quotation_reference, :target_date, :target_start_date, :target_end_date, :receive_start_date, :receive_end_date, :page, :targets, :completes, :is_finished)
     end
 end
