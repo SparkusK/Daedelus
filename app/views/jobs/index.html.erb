@@ -12,7 +12,7 @@
     <%= image_tag("typing.gif", class: "img-thumbnail typing_gif") %>
   </div>
   <div class="row">
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-6">
       <%= label_tag :start_date %> </br>
       <%= text_field_tag( :start_date,
             "#{params[:start_date]}",
@@ -20,7 +20,7 @@
               class: "form-control datepicker",
                 placeholder: "yyyy-mm-dd"}) %>
     </div>
-    <div class="form-group col-md-4">
+    <div class="form-group col-md-6">
         <%= label_tag :end_date %> </br>
         <%= text_field_tag :end_date,
             "#{params[:end_date]}",
@@ -28,15 +28,21 @@
               class: "form-control datepicker",
                 placeholder: "yyyy-mm-dd"} %>
     </div>
-    <div class="form-group col-md-2">
-      <label>
-        Show finished jobs?
-      </label>
-      <%= check_box_tag :show_finished %>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <%= label_tag :target_status_filter %> <br>
+      <%= select_tag "targets", options_for_select(["All", "Not targeted", "Partially targeted", "Fully targeted"], "All"), {class: "custom-select"} %>
     </div>
+    <div class="form-group col-md-6">
+      <%= label_tag :completion_status_filter %> <br>
+      <%= select_tag "completes", options_for_select(["All", "Not completed", "Completed"], "All"), {class: "custom-select"} %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-10"></div>
     <div class="form-group col-md-2">
-      <br>
-      <%= submit_tag("Refresh values", class: "btn btn-lg btn-primary") %>
+      <%= submit_tag("Refresh values", class: "btn btn-primary") %>
     </div>
   </div>
 </section>
