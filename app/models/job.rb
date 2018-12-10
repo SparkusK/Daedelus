@@ -147,7 +147,6 @@ class Job < ApplicationRecord
     @jobs = @jobs.joins(:section)
 
     # Then reduce the result set by filtering jobs by dates, filters, etc
-
     if has_target_start
       @jobs = @jobs.where("jobs.target_date >= ?", target_start_date)
     end
@@ -187,7 +186,6 @@ class Job < ApplicationRecord
     end
 
     # Finally, do the ordering and pagination and such
-
     order_term = "jobs.receive_date desc"
     @jobs = @jobs.order(
       order_term
@@ -196,133 +194,5 @@ class Job < ApplicationRecord
     ).includes(
       :section
     )
-
-
-    #
-    #
-    # if omit_dates
-    #   if omit_keywords
-    #
-    #     order_term = "jobs.receive_date desc"
-    #
-    #     Job.where(
-    #
-    #     ).order(
-    #       order_term
-    #     ).paginate(
-    #       page: page
-    #     ).includes(
-    #       :section
-    #     )
-    #
-    #   elsif keywords_have_numbers
-    #
-    #     search_term = '%' + keywords.downcase + '%'
-    #
-    #     where_term = %{
-    #       lower(jobs.jce_number) LIKE ?
-    #       OR lower(jobs.responsible_person) LIKE ?
-    #       OR lower(quotation_reference) LIKE ?
-    #       AND jobs.is_finished = ?
-    #     }.gsub(/\s+/, " ").strip
-    #
-    #     order_term = "jobs.receive_date desc"
-    #
-    #     Job.where(
-    #       where_term,
-    #       search_term,
-    #       search_term,
-    #       search_term,
-    #
-    #     ).order(
-    #       order_term
-    #     ).paginate(
-    #       page: page
-    #     ).includes(
-    #       :section
-    #     )
-    #
-    #   else
-    #     # search everything
-    #     search_term = '%' + keywords.downcase + '%'
-    #     where_term = %{
-    #       lower(sections.name) LIKE ?
-    #       OR lower(jobs.contact_person) LIKE ?
-    #       OR lower(jobs.responsible_person) LIKE ?
-    #       OR lower(jobs.work_description) LIKE ?
-    #       OR lower(quotation_reference) LIKE ?
-    #       OR lower(jobs.jce_number) LIKE ?
-    #       AND jobs.is_finished = ?
-    #     }.gsub(/\s+/, " ").strip
-    #
-    #     order_term = "jobs.receive_date desc"
-    #
-    #     Job.joins(
-    #       :section
-    #     ).where(
-    #       where_term,
-    #       search_term,
-    #       search_term,
-    #       search_term,
-    #       search_term,
-    #       search_term,
-    #       search_term,
-    #
-    #     ).order(
-    #       order_term
-    #     ).paginate(
-    #       page: page
-    #     ).includes(
-    #       :section
-    #     )
-    #   end
-    # else # include dates in search
-    #   if omit_keywords
-    #     where_term = "target_date >= ? AND target_date <= ? AND jobs.is_finished = ?"
-    #     order_term = "jobs.target_date desc"
-    #     Job.where(
-    #       where_term,
-    #       start_date,
-    #       end_date,
-    #
-    #     ).order(
-    #       order_term
-    #     ).paginate(
-    #       page: page
-    #     ).includes(
-    #       :section
-    #     )
-    #   # If there are numbers, we only search:
-    #   #   JCE number, responsible_person, quotation code
-    #   elsif keywords_have_numbers
-    #     search_term = '%' + keywords.downcase + '%'
-    #     where_term = %{
-    #       lower(jobs.jce_number) LIKE ?
-    #       OR lower(jobs.responsible_person) LIKE ?
-    #       OR lower(quotation_reference) LIKE ?
-    #       AND target_date >= ? AND target_date <= ?
-    #       AND jobs.is_finished = ?
-    #     }.gsub(/\s+/, " ").strip
-    #
-    #     order_term = "jobs.receive_date desc"
-    #
-    #     Job.where(
-    #       where_term,
-    #       search_term,
-    #       search_term,
-    #       search_term,
-    #       start_date,
-    #       end_date
-    #     ).order(
-    #       order_term
-    #     ).paginate(
-    #       page: page
-    #     ).includes(
-    #       :section
-    #     )
-    #   else
-    #
-    #   end
-    # end
   end
 end
