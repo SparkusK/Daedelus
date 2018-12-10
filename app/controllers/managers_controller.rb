@@ -44,6 +44,7 @@ class ManagersController < ApplicationController
       else
         format.html { render :new }
         format.json { render json: @manager.errors, status: :unprocessable_entity }
+        format.js { render 'edit' }
       end
     end
   end

@@ -48,6 +48,7 @@ class DebtorPaymentsController < AdministrativeController
         else
           format.html { render :edit }
           format.json { render json: @debtor_payment.errors, status: :unprocessable_entity }
+          format.js { render 'edit' }
         end
       else
         format.js { render action: "cancel" }

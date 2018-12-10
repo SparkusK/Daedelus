@@ -59,6 +59,7 @@ class CustomersController < ApplicationController
         else
           format.html { render :edit }
           format.json { render json: @customer.errors, status: :unprocessable_entity }
+          format.js { render 'edit' }
         end
       else
         format.js { render action: "cancel" }

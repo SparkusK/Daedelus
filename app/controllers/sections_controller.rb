@@ -43,6 +43,7 @@ class SectionsController < ApplicationController
       else
         format.html { render :new }
         format.json { render json: @section.errors, status: :unprocessable_entity }
+        format.js { render 'edit' }
       end
     end
   end
