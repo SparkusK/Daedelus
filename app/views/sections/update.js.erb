@@ -1,1 +1,2 @@
-$('#<%= @section.id %>').html("<%= j render @section %>");
+var newContent = $("<%= j render @section %>").html();
+$('#<%= @section.id %>').html(newContent);

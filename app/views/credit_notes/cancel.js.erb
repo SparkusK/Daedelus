@@ -1,1 +1,2 @@
-$('#<%= @credit_note.id %>').html("<%= j render @credit_note %>");
+var newContent = $("<%= j render @credit_note %>").html();
+$('#<%= @credit_note.id %>').html(newContent);

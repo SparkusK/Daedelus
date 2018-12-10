@@ -2,7 +2,7 @@
 <section class="top-pager">
   <div class="d-flex justify-content-between">
     <%= will_paginate @creditor_orders, renderer: WillPaginate::ActionView::Bootstrap4LinkRenderer %>
-    <%= link_to 'New Creditor Order', new_creditor_order_path, class: "btn", method: :get %>
+    <%= button_to 'New Creditor Order', new_creditor_order_path, class: "btn", method: :get %>
   </div>
 </section>
 <br>

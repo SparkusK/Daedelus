@@ -1,1 +1,2 @@
-$('#<%= @supplier.id %>').html("<%= j render @supplier %>");
+var newContent = $("<%= j render @supplier %>").html();
+$('#<%= @supplier.id %>').html(newContent);

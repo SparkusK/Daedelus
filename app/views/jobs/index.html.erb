@@ -2,7 +2,7 @@
   <h1>Jobs</h1>
 </section>
 <section class="search-form">
-  <%= form_tag "/jobs", method: :get %>
+  <%= form_tag "/jobs", method: :get do %>
   <%= label_tag :keywords, nil, class: "sr-only" %>
   <div class="input-group input-group-lg">
     <%= text_field_tag :keywords, nil,
@@ -60,9 +60,12 @@
   <div class="row">
     <div class="form-group col-md-10"></div>
     <div class="form-group col-md-2">
-      <%= submit_tag("Refresh values", class: "btn btn-primary") %>
+      <div class="actions">
+        <%= submit_tag("Refresh values", class: "btn btn-primary") %>
+      </div>
     </div>
   </div>
+  <% end %>
 </section>
 
 <%= render partial: 'top_pager' %>

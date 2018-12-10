@@ -1,1 +1,2 @@
-$('#<%= @employee.id %>').html("<%= j render @employee %>");
+var newContent = $("<%= j render @employee %>").html();
+$('#<%= @employee.id %>').html(newContent);

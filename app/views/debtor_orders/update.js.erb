@@ -1,1 +1,2 @@
-$('#<%= @debtor_order.id %>').html("<%= j render @debtor_order %>");
+var newContent = $("<%= j render @debtor_order %>").html();
+$('#<%= @debtor_order.id %>').html(newContent);
