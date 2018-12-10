@@ -118,7 +118,7 @@ class Section < ApplicationRecord
 
   def self.search(keywords)
 
-    search_term = keywords.downcase + '%'
+    search_term = '%' + keywords.downcase + '%'
 
     where_term = %{
       lower(name) LIKE ?

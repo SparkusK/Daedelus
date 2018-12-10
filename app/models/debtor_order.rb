@@ -93,6 +93,7 @@ class DebtorOrder < ApplicationRecord
           lower(customers.email) LIKE ?
           OR customers.phone LIKE ?
           OR lower(jobs.jce_number) LIKE ?
+          OR lower(debtor_orders.order_number) LIKE ?
           AND debtor_orders.updated_at >= ? AND debtor_orders.updated_at <= ?
         }.gsub(/\s+/, " ").strip
 
@@ -102,6 +103,7 @@ class DebtorOrder < ApplicationRecord
           :customer, :job
         ).where(
           where_term,
+          search_term,
           search_term,
           search_term,
           search_term,
@@ -121,6 +123,7 @@ class DebtorOrder < ApplicationRecord
           OR lower(jobs.jce_number) LIKE ?
           OR lower(jobs.contact_person) LIKE ?
           OR lower(jobs.responsible_person) LIKE ?
+          OR lower(debtor_orders.order_number) LIKE ?
           AND debtor_orders.updated_at >= ? AND debtor_orders.updated_at <= ?
         }.gsub(/\s+/, " ").strip
 
@@ -132,6 +135,7 @@ class DebtorOrder < ApplicationRecord
            :job
         ).where(
           where_term,
+          search_term,
           search_term,
           search_term,
           search_term,

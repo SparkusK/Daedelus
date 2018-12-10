@@ -65,11 +65,9 @@ class LaborRecord < ApplicationRecord
       )
     else
       # search everything
-
-      search_term =  keywords.downcase + '%'      
+      search_term =  keywords.downcase + '%'
       where_term = %{
-        lower(employees.first_name) LIKE ?
-        OR lower(employees.last_name) LIKE ?
+        (lower(employees.first_name) || ' ' || lower(employees.last_name)) LIKE ?
         OR lower(jobs.jce_number) LIKE ?
         AND labor_records.labor_date >= ? AND labor_records.labor_date <= ?
       }.gsub(/\s+/, " ").strip
@@ -80,7 +78,6 @@ class LaborRecord < ApplicationRecord
         :employee, :job
       ).where(
         where_term,
-        search_term,
         search_term,
         search_term,
         start_date,

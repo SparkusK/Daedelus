@@ -96,7 +96,8 @@ class CreditorOrder < ApplicationRecord
 
       elsif has_numbers
         where_term = %{
-          lower(suppliers.email) LIKE ?
+          lower(creditor_orders.reference_number) LIKE ?
+          OR lower(suppliers.email) LIKE ?
           OR suppliers.phone LIKE ?
           OR lower(jobs.jce_number) LIKE ?
           AND date_issued >= ? AND date_issued <= ?
@@ -108,6 +109,7 @@ class CreditorOrder < ApplicationRecord
           :supplier, :job
         ).where(
           where_term,
+          search_term,
           search_term,
           search_term,
           search_term,
@@ -127,6 +129,8 @@ class CreditorOrder < ApplicationRecord
           OR lower(jobs.jce_number) LIKE ?
           OR lower(jobs.contact_person) LIKE ?
           OR lower(jobs.responsible_person) LIKE ?
+          OR lower(creditor_orders.delivery_note) LIKE ?
+          OR lower(creditor_orders.reference_number) LIKE ?
           AND date_issued >= ? AND date_issued <= ?
         }.gsub(/\s+/, " ").strip
 
@@ -136,6 +140,8 @@ class CreditorOrder < ApplicationRecord
           :supplier, :job
         ).where(
           where_term,
+          search_term,
+          search_term,
           search_term,
           search_term,
           search_term,
