@@ -1,4 +1,5 @@
 class ManagersController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_manager, only: [:show, :edit, :update, :destroy]
 
   # GET /managers

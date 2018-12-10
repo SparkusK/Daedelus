@@ -1,4 +1,5 @@
 class JobsController < AdministrativeController
+  before_action :authenticate_user!
   before_action :set_job, only: [:show, :edit, :update, :destroy]
   before_action :set_dates, only: :index
   # GET /jobs

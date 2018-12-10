@@ -1,4 +1,5 @@
 class CreditorOrdersController < AdministrativeController
+  before_action :authenticate_user!
   before_action :set_creditor_order, only: [:show, :edit, :update, :destroy]
 
   # GET /creditor_orders

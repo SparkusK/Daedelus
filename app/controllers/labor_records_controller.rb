@@ -1,4 +1,5 @@
 class LaborRecordsController < ApplicationController
+  before_action :authenticate_user!
   before_action :set_labor_record, only: [:show, :edit, :update, :destroy]
   before_action :set_dates, only: :index
   # GET /labor_records

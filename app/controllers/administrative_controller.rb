@@ -1,4 +1,5 @@
 class AdministrativeController < ApplicationController
+  #before_action :authenticate_user!
   before_action :set_dates, only: :index
 
   def cancel(instance, entity)

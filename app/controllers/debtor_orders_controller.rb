@@ -1,4 +1,5 @@
 class DebtorOrdersController < AdministrativeController
+  before_action :authenticate_user!
   before_action :set_debtor_order, only: [:show, :edit, :update, :destroy]
 
   # GET /debtor_orders

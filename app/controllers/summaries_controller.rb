@@ -1,4 +1,5 @@
 class SummariesController < ApplicationController
+  before_action :authenticate_user!
 
   # GET /summaries
   def index
