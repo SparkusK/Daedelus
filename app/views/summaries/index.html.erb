@@ -2,6 +2,9 @@
 
 <h1>Summaries</h1>
 
+<% normal_time_hours = normal_time_hours(params[:start_date], params[:end_date]) %>
+<h3>Normal time hours: <%= normal_time_hours %></h3>
+
 <%= render partial: 'shared/dates', locals: { path: "/summaries" } %>
 
 <%= render partial: 'summary', collection: @summaries %>

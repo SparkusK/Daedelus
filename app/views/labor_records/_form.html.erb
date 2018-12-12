@@ -27,10 +27,32 @@
         <%= form.text_field :labor_date,
                              autocomplete: :off,
                              class: "form-control datepicker",
-                             placeholder: "yyyy-mm-dd" %>
+                             placeholder: "yyyy-mm-dd",
+                             id: "labor_record_date" %>
       </span>
     </div>
   </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-6">
+      <%= form.label :section %>
+      <%= collection_select(:labor_record,
+        :section_id,
+        Section.all,
+        :id,
+        :name,
+        {prompt: true}, {class: "custom-select"}) %>
+      </div>
+      <div class="form-group col-md-6">
+        <%= form.label :job_id %>
+        <%= collection_select(:labor_record,
+          :job_id,
+          get_all_jobs,
+          :id,
+          :job_name,
+          {prompt: true}, {class: "custom-select"}) %>
+        </div>
+      </div>
 
   <div class="form-row">
     <div class="form-group col-md-4">
@@ -47,28 +69,35 @@
     </div>
   </div>
 
-
-
   <div class="form-row">
-    <div class="form-group col-md-6">
-      <%= form.label :section %>
-      <%= collection_select(:labor_record,
-                          :section_id,
-                          Section.all,
-                          :id,
-                          :name,
-                          {prompt: true}, {class: "custom-select"}) %>
+    <div class="form-group col-md-4">
+      <%= form.label "Overtime hours for [Month]" %>
+      <%= form.text_field :overtime_hours, id: :overtime_hours, class: "form-control", readonly: true %>
     </div>
-    <div class="form-group col-md-6">
-      <%= form.label :job_id %>
-      <%= collection_select(:labor_record,
-                          :job_id,
-                          get_all_jobs,
-                          :id,
-                          :job_name,
-                          {prompt: true}, {class: "custom-select"}) %>
+    <div class="form-group col-md-4">
+      <%= form.label "Hours for [Employee] before" %>
+      <%= form.text_field :overtime_hours, id: :overtime_hours, class: "form-control", readonly: true %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label "Hours for [Employee] after" %>
+      <%= form.text_field :overtime_hours, id: :overtime_hours, class: "form-control", readonly: true %>
     </div>
   </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-4">
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label "Total Before with Overtime" %>
+      <%= form.text_field :overtime_hours, id: :overtime_hours, class: "form-control", readonly: true %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label "Total After with Overtime" %>
+      <%= form.text_field :overtime_hours, id: :overtime_hours, class: "form-control", readonly: true %>
+    </div>
+  </div>
+
+
 
   <div class="actions">
     <%= form.submit "Submit Labor Record", class: "btn btn-primary btn-lg" %>
