@@ -12,7 +12,7 @@
   <% end %>
 
   <div class="form-row">
-    <div class="col-md-6">
+    <div class="form-group col-md-4">
       <%= form.label :employee_id %>
       <%= collection_select(:labor_record,
                           :employee_id,
@@ -21,7 +21,7 @@
                           :employee_name,
                           {prompt: true}, {class: "custom-select"}) %>
     </div>
-    <div class="form-group col-md-6">
+    <div class="form-group col-md-4">
       <%= form.label :labor_date %> </br>
       <span>
         <%= form.text_field :labor_date,
@@ -30,6 +30,10 @@
                              placeholder: "yyyy-mm-dd",
                              id: "labor_record_date" %>
       </span>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :hours %>
+      <%= form.text_field :hours, id: :labor_record_hours, class: "form-control" %>
     </div>
   </div>
 
@@ -51,51 +55,65 @@
           :id,
           :job_name,
           {prompt: true}, {class: "custom-select"}) %>
-        </div>
       </div>
+    </div>
 
-  <div class="form-row">
-    <div class="form-group col-md-4">
-      <%= form.label :hours %>
-      <%= form.text_field :hours, id: :labor_record_hours, class: "form-control" %>
+    <div class="form-row">
+      <div class="form-group col-md-2">
+        <%= form.label "Normal time hours" %>
+        <%= form.text_field :normal_time_hours, id: :normal_time_hours, class: "form-control", readonly: true %>
+      </div>
+      <div class="form-group col-md-5">
+        <%= form.label "Normal time amount before tax" %>
+        <%= form.text_field :normal_time_amount_before_tax, id: :normal_time_amount_before_tax, class: "form-control", readonly: true %>
+      </div>
+      <div class="form-group col-md-5">
+        <%= form.label "Normal time amount after tax" %>
+        <%= form.text_field :normal_time_amount_after_tax, id: :normal_time_amount_after_tax, class: "form-control", readonly: true %>
+      </div>
     </div>
-    <div class="form-group col-md-4">
-      <%= form.label :total_before %>
-      <%= form.text_field :total_before, id: :labor_record_total_before, class: "form-control" %>
-    </div>
-    <div class="form-group col-md-4">
-      <%= form.label :total_after %>
-      <%= form.text_field :total_after, id: :labor_record_total_after, class: "form-control" %>
-    </div>
-  </div>
 
-  <div class="form-row">
-    <div class="form-group col-md-4">
-      <%= form.label "Overtime hours for [Month]" %>
-      <%= form.text_field :overtime_hours, id: :overtime_hours, class: "form-control", readonly: true %>
+    <div class="form-row">
+      <div class="form-group col-md-2">
+        <%= form.label "Overtime hours" %>
+        <%= form.text_field :overtime_hours, id: :overtime_hours, class: "form-control", readonly: true %>
+      </div>
+      <div class="form-group col-md-5">
+        <%= form.label "Overtime amount before tax" %>
+        <%= form.text_field :overtime_amount_before_tax, id: :overtime_amount_before_tax, class: "form-control", readonly: true %>
+      </div>
+      <div class="form-group col-md-5">
+        <%= form.label "Overtime amount after tax" %>
+        <%= form.text_field :overtime_amount_after_tax, id: :overtime_amount_after_tax, class: "form-control", readonly: true %>
+      </div>
     </div>
-    <div class="form-group col-md-4">
-      <%= form.label "Hours for [Employee] before" %>
-      <%= form.text_field :overtime_hours, id: :overtime_hours, class: "form-control", readonly: true %>
-    </div>
-    <div class="form-group col-md-4">
-      <%= form.label "Hours for [Employee] after" %>
-      <%= form.text_field :overtime_hours, id: :overtime_hours, class: "form-control", readonly: true %>
-    </div>
-  </div>
 
-  <div class="form-row">
-    <div class="form-group col-md-4">
+    <div class="form-row">
+      <div class="form-group col-md-2">
+        <%= form.label "Sunday time hours" %>
+        <%= form.text_field :sunday_time_hours, id: :sunday_time_hours, class: "form-control", readonly: true %>
+      </div>
+      <div class="form-group col-md-5">
+        <%= form.label "Sunday time amount before tax" %>
+        <%= form.text_field :sunday_time_amount_before_tax, id: :sunday_time_amount_before_tax, class: "form-control", readonly: true %>
+      </div>
+      <div class="form-group col-md-5">
+        <%= form.label "Sunday time amount after tax" %>
+        <%= form.text_field :sunday_time_amount_after_tax, id: :sunday_time_amount_after_tax, class: "form-control", readonly: true %>
+      </div>
     </div>
-    <div class="form-group col-md-4">
-      <%= form.label "Total Before with Overtime" %>
-      <%= form.text_field :overtime_hours, id: :overtime_hours, class: "form-control", readonly: true %>
+    <hr>
+    <div class="form-row">
+      <div class="form-group col-md-2"></div>
+      <div class="form-group col-md-5">
+        <%= form.label "Total amount before tax" %>
+        <%= form.text_field :total_amount_before_tax, id: :total_amount_before_tax, class: "form-control", readonly: true %>
+      </div>
+      <div class="form-group col-md-5">
+        <%= form.label "Total amount after tax" %>
+        <%= form.text_field :total_amount_after_tax, id: :total_amount_after_tax, class: "form-control", readonly: true %>
+      </div>
     </div>
-    <div class="form-group col-md-4">
-      <%= form.label "Total After with Overtime" %>
-      <%= form.text_field :overtime_hours, id: :overtime_hours, class: "form-control", readonly: true %>
-    </div>
-  </div>
 
 
 

@@ -1,14 +1,81 @@
 function EmployeeAmounts(employee_id) {
   this.employee_id = employee_id;
 
-  this.getRates = function(hours) {
+  this.getRates = function(id, date, hours) {
     $.get("/employees/" + this.employee_id + "/rates", function( response ) {
-      // put employee current hours for the month
-      // ohwait but we need to tell it which month lmoa
-      var before = response.exclusive_rate * hours;
-      var after = response.inclusive_rate * hours;
-      $("#labor_record_total_before").val(before.toFixed(2));
-      $("#labor_record_total_after").val(after.toFixed(2));
+      // response.exclusive_rate
+      // response.inclusive_rate
+
+      var day_of_the_week = date.getDay();
+
+      var allowed_hours_before_overtime = 0.0;
+      var rate_after_overtime = 1.5;
+      var normal_time_hours = 0.0;
+      var overtime_hours = 0.0;
+      var sunday_time_hours = 0.0;
+
+      var day_hours = parseFloat(hours);
+
+      switch (day_of_the_week) {
+        case 0: // sunday
+          rate_after_overtime = 2.0;
+          sunday_time_hours = day_hours;
+          break;
+        case 5: // friday
+          allowed_hours_before_overtime = 5.0;
+          if (day_hours > allowed_hours_before_overtime) {
+            normal_time_hours = allowed_hours_before_overtime;
+            overtime_hours = day_hours - allowed_hours_before_overtime;
+          } else {
+            normal_time_hours = day_hours;
+          }
+          break;
+        case 6: // saturday
+          normal_time_hours = 0;
+          overtime_hours = 0;
+          break;
+        case 1: // monday
+        case 2: // tuesday
+        case 3: // wednesday
+        case 4: // thursday
+          allowed_hours_before_overtime = 8.75;
+          if (day_hours > allowed_hours_before_overtime) {
+            normal_time_hours = allowed_hours_before_overtime;
+            overtime_hours = day_hours - allowed_hours_before_overtime;
+          } else {
+            normal_time_hours = day_hours;
+          }
+          break;
+      }
+      const normal_time_amount_before_tax = normal_time_hours * response.exclusive_rate;
+      const normal_time_amount_after_tax = normal_time_hours * response.inclusive_rate;
+
+      const overtime_amount_before_tax = overtime_hours * response.exclusive_rate * rate_after_overtime;
+      const overtime_amount_after_tax = overtime_hours * response.inclusive_rate * rate_after_overtime;
+
+      const sunday_time_amount_before_tax = sunday_time_hours * response.exclusive_rate * rate_after_overtime;
+      const sunday_time_amount_after_tax = sunday_time_hours * response.inclusive_rate * rate_after_overtime;
+
+      const total_amount_before_tax = normal_time_amount_before_tax + overtime_amount_before_tax + sunday_time_amount_before_tax;
+      const total_amount_after_tax = normal_time_amount_after_tax + overtime_amount_after_tax + sunday_time_amount_after_tax;
+
+
+      $("#normal_time_hours").val(normal_time_hours.toFixed(2));
+      $("#overtime_hours").val(overtime_hours.toFixed(2));
+      $("#sunday_time_hours").val(sunday_time_hours.toFixed(2));
+
+      $("#normal_time_amount_before_tax").val(normal_time_amount_before_tax.toFixed(2));
+      $("#normal_time_amount_after_tax").val(normal_time_amount_after_tax.toFixed(2));
+
+      $("#overtime_amount_before_tax").val(overtime_amount_before_tax.toFixed(2));
+      $("#overtime_amount_after_tax").val(overtime_amount_after_tax.toFixed(2));
+
+      $("#sunday_time_amount_before_tax").val(sunday_time_amount_before_tax.toFixed(2));
+      $("#sunday_time_amount_after_tax").val(sunday_time_amount_after_tax.toFixed(2));
+
+      $("#total_amount_before_tax").val(total_amount_before_tax.toFixed(2));
+      $("#total_amount_after_tax").val(total_amount_after_tax.toFixed(2));
+
     });
   }
 }
@@ -16,33 +83,59 @@ function EmployeeAmounts(employee_id) {
 function update_fields() {
   var id = $("#labor_record_employee_id").val();
   var hrs = $("#labor_record_hours").val();
+  var date_input = $("#labor_record_date").val();
 
-  var date = $("#labor_record_date").val();
-  if (/^\d{4}\-\d{2}-\d{2}$/g.test(date) == true ) {
-    // We only do a simple test on the date format so that we don't completely
-    // waste the server's time. However, this date is going to be sent to the
-    // server to first check if it's an actual correct date, and then
-    // to determine what its overtime hours for the month is.
-    // We could do the overtime hours calculation in Javascript, but
-    // then we'd have to install Moment.js or something similar to make sure
-    // that the date is correct.
-    // to be honest, though, I don't really know how to check if a date is correct
-    // with Ruby either xD rip
-
+  // validate the date input
+  var date_format_correct = (/^\d{4}\-\d{2}-\d{2}$/g.test(date_input) == true);
+  var date = null;
+  var date_correct = false;
+  if (date_format_correct) {
+    var date = new Date(date_input);
+    // let's hope this works nicely!
+    if (date != "Invalid Date") {
+      date_correct = true;
+    }
   }
 
-  if (Number.isInteger(parseInt(id)) && !(isNaN(parseFloat(hrs)))) {
+  // validate the employee input
+  var employee_selected = Number.isInteger(parseInt(id));
+
+  // validate the hours input
+  var hours_format_valid = !(isNaN(parseFloat(hrs)));
+  var hours_valid = false;
+  if (hours_format_valid) {
+    var hours = parseFloat(hrs);
+    if (hours >= 0.0 && hours <= 24.0) {
+      hours_valid = true;
+    }
+  }
+
+  if (date_correct && employee_selected && hours_valid) {
     var empAmts = new EmployeeAmounts(id, parseFloat(hrs));
-    empAmts.getRates(hrs);
+    empAmts.getRates(id, date, hrs);
   }
 }
 
 $(document).ready(function() {
 
   $('#labor_record_hours').change(function() {
-    var inputHours = $('#labor_record_hours').val();
-    if ( !(isNaN(inputHours))) {
+
+    var hrs = $("#labor_record_hours").val();
+    // validate the hours input
+    var hours_format_valid = !(isNaN(parseFloat(hrs)));
+    var hours_valid = false;
+    if (hours_format_valid) {
+      var hours = parseFloat(hrs);
+      if (hours >= 0.0 && hours <= 24.0) {
+        hours_valid = true;
+      }
+    }
+
+    if ( hours_valid ) {
       update_fields();
+    } else {
+      alert("Hours needs to be between 0 and 24.");
+      $('#labor_record_hours').val("");
     }
 
   });
@@ -51,6 +144,33 @@ $(document).ready(function() {
     var inputId = $('#labor_record_employee_id').val();
     if(Number.isInteger(parseInt(inputId))) {
       update_fields();
+    } else {
+      alert("You need to select a valid Employee.");
+      $('#labor_record_employee_id').val("");
     }
+  });
+
+  $('#labor_record_date').change(function() {
+    var date_input = $("#labor_record_date").val();
+
+    // validate the date input
+    var date_format_correct = (/^\d{4}\-\d{2}-\d{2}$/g.test(date_input) == true);
+    var date = null;
+    var date_correct = false;
+    if (date_format_correct) {
+      var date = new Date(date_input);
+      // let's hope this works nicely!
+      if (date != "Invalid Date") {
+        date_correct = true;
+      }
+    }
+
+    if(date_correct) {
+      update_fields();
+    } else {
+      alert("You need to select a valid Date.");
+      $('#labor_record_date').val("");
+    }
+
   });
 });

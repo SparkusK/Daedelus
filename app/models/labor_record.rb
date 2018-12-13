@@ -1,8 +1,11 @@
 class LaborRecord < ApplicationRecord
-
   belongs_to :employee
   belongs_to :section
   belongs_to :job
+
+  ALLOWED_HOURS = 24
+
+  validates :hours, numericality: { less_than_or_equal_to: ALLOWED_HOURS }
 
   def day_of_the_week
     Date::DAYNAMES[self.labor_date.wday]
