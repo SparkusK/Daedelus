@@ -1,75 +1,117 @@
 <%= form_with(model: @labor_record) do |form| %>
-  <% if @labor_record.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(@labor_record.errors.count, "error") %> prohibited this labor_record from being saved:</h2>
+<% if @labor_record.errors.any? %>
+  <div id="error_explanation">
+    <h2><%= pluralize(@labor_record.errors.count, "error") %> prohibited this labor record from being saved:</h2>
 
-      <ul>
-      <% @labor_record.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
-    </div>
-  <% end %>
-
-  <div class="form-row">
-    <div class="col-md-6">
-      <%= form.label :employee_id %>
-      <%= collection_select(:labor_record,
-                          :employee_id,
-                          Employee.valid,
-                          :id,
-                          :employee_name,
-                          {prompt: true},
-                          {class: "custom-select",
-                            id: "labor_record_employee_id_#{@labor_record.id}"}) %>
-    </div>
-    <div class="form-group col-md-6">
-      <%= form.label :labor_date %> </br>
-      <span>
-        <%= form.text_field :labor_date,
-                             autocomplete: :off,
-                             class: "form-control datepicker",
-                             placeholder: "yyyy-mm-dd" %>
-      </span>
-    </div>
+    <ul>
+    <% @labor_record.errors.full_messages.each do |message| %>
+      <li><%= message %></li>
+    <% end %>
+    </ul>
   </div>
+<% end %>
 
-
-  <div class="form-row">
-    <div class="form-group col-md-4">
-      <%= form.label :hours %>
-      <%= form.text_field :hours, id: "labor_record_hours_#{@labor_record.id}", class: "form-control" %>
-    </div>
-    <div class="form-group col-md-4">
-      <%= form.label :total_before %>
-      <%= form.text_field :total_before, id: "labor_record_total_before_#{@labor_record.id}", class: "form-control" %>
-    </div>
-    <div class="form-group col-md-4">
-      <%= form.label :total_after %>
-      <%= form.text_field :total_after, id: "labor_record_total_after_#{@labor_record.id}", class: "form-control" %>
-    </div>
+<div class="form-row">
+  <div class="form-group col-md-4">
+    <%= form.label :employee_id %>
+    <%= collection_select(:labor_record,
+                        :employee_id,
+                        Employee.valid,
+                        :id,
+                        :employee_name,
+                        {prompt: true}, {class: "custom-select", id: "labor_record_employee_id_#{@labor_record.id}"}) %>
   </div>
+  <div class="form-group col-md-4">
+    <%= form.label :labor_date %> </br>
+    <span>
+      <%= form.text_field :labor_date,
+                           autocomplete: :off,
+                           class: "form-control datepicker",
+                           placeholder: "yyyy-mm-dd",
+                           id: "labor_record_date_#{@labor_record.id}" %>
+    </span>
+  </div>
+  <div class="form-group col-md-4">
+    <%= form.label :hours %>
+    <%= form.text_field :hours, id: "labor_record_hours_#{@labor_record.id}", class: "form-control" %>
+  </div>
+</div>
 
-
-
-  <div class="form-row">
-    <div class="form-group col-md-6">
-      <%= form.label :section %>
-      <%= collection_select(:labor_record,
-                          :section_id,
-                          Section.all,
-                          :id,
-                          :name,
-                          {prompt: true}, {class: "custom-select"}) %>
+<div class="form-row">
+  <div class="form-group col-md-6">
+    <%= form.label :section %>
+    <%= collection_select(:labor_record,
+      :section_id,
+      Section.all,
+      :id,
+      :name,
+      {prompt: true}, {class: "custom-select", id: "labor_record_section_id_#{@labor_record.id}"}) %>
     </div>
     <div class="form-group col-md-6">
       <%= form.label :job_id %>
       <%= collection_select(:labor_record,
-                          :job_id,
-                          get_all_jobs,
-                          :id,
-                          :job_name,
-                          {prompt: true}, {class: "custom-select"}) %>
+        :job_id,
+        get_all_jobs,
+        :id,
+        :job_name,
+        {prompt: true}, {class: "custom-select", id: "labor_record_job_id_#{@labor_record.id}"}) %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-2">
+      <%= form.label "Normal time hours" %>
+      <%= form.text_field :normal_time_hours, id: "normal_time_hours_#{@labor_record.id}", class: "form-control", readonly: true %>
+    </div>
+    <div class="form-group col-md-5">
+      <%= form.label "Normal time amount before tax" %>
+      <%= form.text_field :normal_time_amount_before_tax, id: "normal_time_amount_before_tax_#{@labor_record.id}", class: "form-control" %>
+    </div>
+    <div class="form-group col-md-5">
+      <%= form.label "Normal time amount after tax" %>
+      <%= form.text_field :normal_time_amount_after_tax, id: "normal_time_amount_after_tax_#{@labor_record.id}", class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-2">
+      <%= form.label "Overtime hours" %>
+      <%= form.text_field :overtime_hours, id: "overtime_hours_#{@labor_record.id}", class: "form-control", readonly: true %>
+    </div>
+    <div class="form-group col-md-5">
+      <%= form.label "Overtime amount before tax" %>
+      <%= form.text_field :overtime_amount_before_tax, id: "overtime_amount_before_tax_#{@labor_record.id}", class: "form-control" %>
+    </div>
+    <div class="form-group col-md-5">
+      <%= form.label "Overtime amount after tax" %>
+      <%= form.text_field :overtime_amount_after_tax, id: "overtime_amount_after_tax_#{@labor_record.id}", class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-2">
+      <%= form.label "Sunday time hours" %>
+      <%= form.text_field :sunday_time_hours, id: "sunday_time_hours_#{@labor_record.id}", class: "form-control", readonly: true %>
+    </div>
+    <div class="form-group col-md-5">
+      <%= form.label "Sunday time amount before tax" %>
+      <%= form.text_field :sunday_time_amount_before_tax, id: "sunday_time_amount_before_tax_#{@labor_record.id}", class: "form-control" %>
+    </div>
+    <div class="form-group col-md-5">
+      <%= form.label "Sunday time amount after tax" %>
+      <%= form.text_field :sunday_time_amount_after_tax, id: "sunday_time_amount_after_tax_#{@labor_record.id}", class: "form-control" %>
+    </div>
+  </div>
+  <hr>
+  <div class="form-row">
+    <div class="form-group col-md-2"></div>
+    <div class="form-group col-md-5">
+      <%= form.label "Total amount before tax" %>
+      <%= form.text_field :total_amount_before_tax, id: "total_amount_before_tax_#{@labor_record.id}", class: "form-control", readonly: true %>
+    </div>
+    <div class="form-group col-md-5">
+      <%= form.label "Total amount after tax" %>
+      <%= form.text_field :total_amount_after_tax, id: "total_amount_after_tax_#{@labor_record.id}", class: "form-control", readonly: true %>
     </div>
   </div>
 

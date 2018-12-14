@@ -304,16 +304,16 @@ CREATE TABLE public.labor_records (
     employee_id bigint,
     labor_date date NOT NULL,
     hours numeric(6,4) DEFAULT 0.0,
-    total_before numeric(15,2) DEFAULT 0.0,
-    total_after numeric(15,2) DEFAULT 0.0,
+    normal_time_amount_before_tax numeric(15,2) DEFAULT 0.0,
+    normal_time_amount_after_tax numeric(15,2) DEFAULT 0.0,
     job_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     section_id bigint,
-    overtime_before numeric(15,2) DEFAULT 0 NOT NULL,
-    overtime_after numeric(15,2) DEFAULT 0 NOT NULL,
-    sunday_time_before numeric(15,2) DEFAULT 0 NOT NULL,
-    sunday_time_after numeric(15,2) DEFAULT 0 NOT NULL
+    overtime_amount_before_tax numeric(15,2) DEFAULT 0 NOT NULL,
+    overtime_amount_after_tax numeric(15,2) DEFAULT 0 NOT NULL,
+    sunday_time_amount_before_tax numeric(15,2) DEFAULT 0 NOT NULL,
+    sunday_time_amount_after_tax numeric(15,2) DEFAULT 0 NOT NULL
 );
 
 
@@ -972,6 +972,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181102154157'),
 ('20181102154206'),
 ('20181116054556'),
-('20181212072435');
+('20181212072435'),
+('20181214074645');
 
 

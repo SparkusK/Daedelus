@@ -1,19 +1,33 @@
+<% total_before_tax = labor_record.normal_time_amount_before_tax + labor_record.overtime_amount_before_tax + labor_record.sunday_time_amount_before_tax %>
+<% total_after_tax = labor_record.normal_time_amount_after_tax + labor_record.overtime_amount_after_tax + labor_record.sunday_time_amount_after_tax %>
 <%= render partial: "shared/cards/card", locals: {
   entity: labor_record,
   card_header_text: labor_record.employee.employee_name,
   card_subheader_text: labor_record.labor_date.strftime("%a, %d %b %Y"),
   rows: [
     {
+      header1: "HOURS: ",        text1: labor_record.hours ,
+      header2: "SECTION:", text2: labor_record.get_section_name,
+    },
+    {
       header1: "NET RATE: ", text1: number_to_currency(labor_record.employee.net_rate, unit: "R"),
       header2: "INCLUSIVE RATE:", text2: number_to_currency(labor_record.employee.inclusive_rate, unit: "R"),
     },
     {
-      header1: "NET RATE TOTAL: ", text1: number_to_currency(labor_record.total_before, unit: "R"),
-      header2: "INCLUSIVE RATE TOTAL: ", text2: number_to_currency(labor_record.total_after, unit: "R")
+      header1: "NORMAL TIME AMOUNT BEFORE TAX: ", text1: number_to_currency(labor_record.normal_time_amount_before_tax, unit: "R"),
+      header2: "NORMAL TIME AMOUNT AFTER TAX: ", text2: number_to_currency(labor_record.normal_time_amount_after_tax, unit: "R")
     },
     {
-      header1: "HOURS: ",        text1: labor_record.hours ,
-      header2: "SECTION:", text2: labor_record.get_section_name,
+      header1: "OVER TIME AMOUNT BEFORE TAX: ", text1: number_to_currency(labor_record.overtime_amount_before_tax, unit: "R"),
+      header2: "OVER TIME AMOUNT AFTER TAX: ", text2: number_to_currency(labor_record.overtime_amount_after_tax, unit: "R")
+    },
+    {
+      header1: "SUNDAY TIME AMOUNT BEFORE TAX: ", text1: number_to_currency(labor_record.sunday_time_amount_before_tax, unit: "R"),
+      header2: "SUNDAY TIME AMOUNT AFTER TAX: ", text2: number_to_currency(labor_record.sunday_time_amount_after_tax, unit: "R")
+    },
+    {
+      header1: "TOTAL AMOUNT BEFORE TAX: ", text1: number_to_currency(total_before_tax, unit: "R"),
+      header2: "TOTAL AMOUNT AFTER TAX: ", text2: number_to_currency(total_after_tax, unit: "R")
     },
     {
       header1: "JOB NUMBER:",  text1: labor_record.job.jce_number,
