@@ -47,17 +47,17 @@ function EmployeeAmounts(employee_id) {
           }
           break;
       }
-      const normal_time_amount_before_tax = normal_time_hours * response.exclusive_rate;
-      const normal_time_amount_after_tax = normal_time_hours * response.inclusive_rate;
+      var normal_time_amount_before_tax = normal_time_hours * response.exclusive_rate;
+      var normal_time_amount_after_tax = normal_time_hours * response.inclusive_rate;
 
-      const overtime_amount_before_tax = overtime_hours * response.exclusive_rate * rate_after_overtime;
-      const overtime_amount_after_tax = overtime_hours * response.inclusive_rate * rate_after_overtime;
+      var overtime_amount_before_tax = overtime_hours * response.exclusive_rate * rate_after_overtime;
+      var overtime_amount_after_tax = overtime_hours * response.inclusive_rate * rate_after_overtime;
 
-      const sunday_time_amount_before_tax = sunday_time_hours * response.exclusive_rate * rate_after_overtime;
-      const sunday_time_amount_after_tax = sunday_time_hours * response.inclusive_rate * rate_after_overtime;
+      var sunday_time_amount_before_tax = sunday_time_hours * response.exclusive_rate * rate_after_overtime;
+      var sunday_time_amount_after_tax = sunday_time_hours * response.inclusive_rate * rate_after_overtime;
 
-      const total_amount_before_tax = normal_time_amount_before_tax + overtime_amount_before_tax + sunday_time_amount_before_tax;
-      const total_amount_after_tax = normal_time_amount_after_tax + overtime_amount_after_tax + sunday_time_amount_after_tax;
+      var total_amount_before_tax = normal_time_amount_before_tax + overtime_amount_before_tax + sunday_time_amount_before_tax;
+      var total_amount_after_tax = normal_time_amount_after_tax + overtime_amount_after_tax + sunday_time_amount_after_tax;
 
 
       $("#normal_time_hours").val(normal_time_hours.toFixed(2));
