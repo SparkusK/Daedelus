@@ -2,6 +2,7 @@ class Supplier < ApplicationRecord
 
   has_many :creditor_orders
 
+  validates :name, presence: true
   # Supplier
   #   -> creditor_order
   #       -> creditor_payment

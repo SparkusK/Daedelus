@@ -5,6 +5,8 @@ class CreditNote < ApplicationRecord
       value > record.creditor_order.get_still_owed_amount
     end
 
+  validates :invoice_code, :amount_paid, :payment_type, :note, presence: true
+
   def self.search(keywords, start_date, end_date, page)
 
     if keywords.nil?

@@ -3,6 +3,7 @@ class Employee < ApplicationRecord
   has_many :labor_records
   has_one :manager
 
+  validates :first_name, :last_name, :occupation, :company_number, presence: true
 
   # Employee
   #   -> Manager (1)

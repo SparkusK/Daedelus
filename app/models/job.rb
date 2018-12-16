@@ -5,6 +5,11 @@ class Job < ApplicationRecord
   has_many :debtor_orders
   has_many :labor_records
 
+  validates :receive_date, :target_date,
+    :contact_person, :responsible_person, :work_description, :jce_number,
+    :quotation_reference, :total, :targeted_amount,
+    presence: true
+
   def get_supervisor
     Supervisor.find_by(section_id: section.id)
   end

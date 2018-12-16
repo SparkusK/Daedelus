@@ -5,6 +5,9 @@ class DebtorPayment < ApplicationRecord
       value > record.debtor_order.get_still_owed_amount
     end
 
+  validates :payment_date, :payment_amount, :payment_type, :note, :invoice_code,
+    presence: true
+
   def get_payment_date
     if payment_date.nil?
       ""

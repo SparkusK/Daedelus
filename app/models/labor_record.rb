@@ -4,8 +4,12 @@ class LaborRecord < ApplicationRecord
   belongs_to :job
 
   ALLOWED_HOURS = 24
-
   validates :hours, numericality: { less_than_or_equal_to: ALLOWED_HOURS }
+
+  validates :labor_date, :hours, :normal_time_amount_before_tax,
+    :normal_time_amount_after_tax, :overtime_amount_before_tax,
+    :overtime_amount_after_tax, :sunday_time_amount_before_tax,
+    :sunday_time_amount_after_tax, presence: true
 
   def day_of_the_week
     Date::DAYNAMES[self.labor_date.wday]

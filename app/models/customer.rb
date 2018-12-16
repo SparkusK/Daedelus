@@ -2,6 +2,7 @@ class Customer < ApplicationRecord
 
   has_many :debtor_orders
 
+  validates :name, presence: true
   # Customer
   #   -> Debtor Order
   #       -> Debtor Payment

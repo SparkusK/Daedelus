@@ -5,6 +5,8 @@ class Section < ApplicationRecord
   has_many :labor_records
   has_one :manager
 
+  validates :name, :overheads, presence: true
+
   # sections
   # 	-> jobs
   # 		-> creditor_orders

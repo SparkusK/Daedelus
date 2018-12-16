@@ -4,6 +4,8 @@ class CreditorOrder < ApplicationRecord
 
   has_many :credit_notes
 
+  validates :date_issued, :value_excluding_tax, :tax_amount,
+    :value_including_tax, :delivery_note, :reference_number, presence: true
   # Creditor Order -> Creditor Payment (creditnote)
 
   def self.get_creditor_payments_count(creditor_order_id)

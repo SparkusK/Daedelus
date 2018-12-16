@@ -4,6 +4,9 @@ class DebtorOrder < ApplicationRecord
 
   has_many :debtor_payments
 
+  validates :order_number, :value_excluding_tax, :tax_amount,
+    :value_excluding_tax, presence: true
+
   # Debtor Order -> Debtor Payment
 
   def self.get_debtor_payments_count(debtor_order_id)
