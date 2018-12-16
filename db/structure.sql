@@ -45,12 +45,13 @@ CREATE TABLE public.ar_internal_metadata (
 CREATE TABLE public.credit_notes (
     id bigint NOT NULL,
     creditor_order_id bigint,
-    payment_type character varying,
-    amount_paid numeric(15,2) DEFAULT 0.0,
+    payment_type character varying NOT NULL,
+    amount_paid numeric(15,2) DEFAULT 0.0 NOT NULL,
     note character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    invoice_code character varying
+    invoice_code character varying NOT NULL,
+    CONSTRAINT amount_paid_positive CHECK ((amount_paid >= 0.0))
 );
 
 
@@ -82,13 +83,18 @@ CREATE TABLE public.creditor_orders (
     supplier_id bigint,
     job_id bigint,
     delivery_note character varying,
-    date_issued timestamp without time zone,
-    value_excluding_tax numeric(15,2) DEFAULT 0.0,
-    tax_amount numeric(15,2) DEFAULT 0.0,
-    value_including_tax numeric(15,2) DEFAULT 0.0,
+    date_issued timestamp without time zone NOT NULL,
+    value_excluding_tax numeric(15,2) DEFAULT 0.0 NOT NULL,
+    tax_amount numeric(15,2) DEFAULT 0.0 NOT NULL,
+    value_including_tax numeric(15,2) DEFAULT 0.0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    reference_number character varying
+    reference_number character varying NOT NULL,
+    CONSTRAINT tax_amount_lt_value_incl CHECK ((tax_amount < value_including_tax)),
+    CONSTRAINT tax_amount_positive CHECK ((tax_amount >= 0.0)),
+    CONSTRAINT value_excl_lt_value_incl CHECK ((value_excluding_tax < value_including_tax)),
+    CONSTRAINT value_excluding_tax_positive CHECK ((value_excluding_tax >= 0.0)),
+    CONSTRAINT value_including_tax_positive CHECK ((value_including_tax >= 0.0))
 );
 
 
@@ -117,7 +123,7 @@ ALTER SEQUENCE public.creditor_orders_id_seq OWNED BY public.creditor_orders.id;
 
 CREATE TABLE public.customers (
     id bigint NOT NULL,
-    name character varying,
+    name character varying NOT NULL,
     email character varying,
     phone character varying,
     created_at timestamp without time zone NOT NULL,
@@ -152,12 +158,17 @@ CREATE TABLE public.debtor_orders (
     id bigint NOT NULL,
     customer_id bigint,
     job_id bigint,
-    order_number character varying,
-    value_including_tax numeric(15,2) DEFAULT 0.0,
-    tax_amount numeric(15,2) DEFAULT 0.0,
-    value_excluding_tax numeric(15,2) DEFAULT 0.0,
+    order_number character varying NOT NULL,
+    value_including_tax numeric(15,2) DEFAULT 0.0 NOT NULL,
+    tax_amount numeric(15,2) DEFAULT 0.0 NOT NULL,
+    value_excluding_tax numeric(15,2) DEFAULT 0.0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    CONSTRAINT tax_amount_lt_value_incl CHECK ((tax_amount < value_including_tax)),
+    CONSTRAINT tax_amount_positive CHECK ((tax_amount >= 0.0)),
+    CONSTRAINT value_excl_lt_value_incl CHECK ((value_excluding_tax < value_including_tax)),
+    CONSTRAINT value_excluding_tax_positive CHECK ((value_excluding_tax >= 0.0)),
+    CONSTRAINT value_including_tax_positive CHECK ((value_including_tax >= 0.0))
 );
 
 
@@ -187,13 +198,14 @@ ALTER SEQUENCE public.debtor_orders_id_seq OWNED BY public.debtor_orders.id;
 CREATE TABLE public.debtor_payments (
     id bigint NOT NULL,
     debtor_order_id bigint,
-    payment_amount numeric(15,2) DEFAULT 0.0,
-    payment_type character varying,
+    payment_amount numeric(15,2) DEFAULT 0.0 NOT NULL,
+    payment_type character varying NOT NULL,
     note character varying,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    payment_date timestamp without time zone,
-    invoice_code character varying
+    payment_date timestamp without time zone NOT NULL,
+    invoice_code character varying NOT NULL,
+    CONSTRAINT payment_amount_positive CHECK ((payment_amount >= 0.0))
 );
 
 
@@ -222,16 +234,19 @@ ALTER SEQUENCE public.debtor_payments_id_seq OWNED BY public.debtor_payments.id;
 
 CREATE TABLE public.employees (
     id bigint NOT NULL,
-    first_name character varying,
-    last_name character varying,
-    occupation character varying,
+    first_name character varying NOT NULL,
+    last_name character varying NOT NULL,
+    occupation character varying NOT NULL,
     section_id bigint,
-    company_number character varying,
-    net_rate numeric(15,2) DEFAULT 0.0,
-    inclusive_rate numeric(15,2) DEFAULT 0.0,
+    company_number character varying NOT NULL,
+    net_rate numeric(15,2) DEFAULT 0.0 NOT NULL,
+    inclusive_rate numeric(15,2) DEFAULT 0.0 NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    eoc boolean
+    eoc boolean DEFAULT false NOT NULL,
+    CONSTRAINT inclusive_rate_positive CHECK ((inclusive_rate >= 0.0)),
+    CONSTRAINT net_rate_less_than_inclusive_rate CHECK ((net_rate < inclusive_rate)),
+    CONSTRAINT net_rate_positive CHECK ((net_rate >= 0.0))
 );
 
 
@@ -260,19 +275,22 @@ ALTER SEQUENCE public.employees_id_seq OWNED BY public.employees.id;
 
 CREATE TABLE public.jobs (
     id bigint NOT NULL,
-    receive_date date,
+    receive_date date NOT NULL,
     section_id bigint,
-    contact_person character varying,
-    responsible_person character varying,
+    contact_person character varying NOT NULL,
+    responsible_person character varying NOT NULL,
     total numeric(15,2) DEFAULT 0.0 NOT NULL,
-    work_description character varying,
-    jce_number character varying,
+    work_description character varying NOT NULL,
+    jce_number character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    quotation_reference character varying,
+    quotation_reference character varying NOT NULL,
     targeted_amount numeric(15,2) DEFAULT 0.0 NOT NULL,
-    target_date date,
-    is_finished boolean DEFAULT false
+    target_date date NOT NULL,
+    is_finished boolean DEFAULT false,
+    CONSTRAINT targeted_amount_lte_total CHECK ((targeted_amount <= total)),
+    CONSTRAINT targeted_amount_positive CHECK ((targeted_amount >= 0.0)),
+    CONSTRAINT total_positive CHECK ((total > 0.0))
 );
 
 
@@ -303,9 +321,9 @@ CREATE TABLE public.labor_records (
     id bigint NOT NULL,
     employee_id bigint,
     labor_date date NOT NULL,
-    hours numeric(6,4) DEFAULT 0.0,
-    normal_time_amount_before_tax numeric(15,2) DEFAULT 0.0,
-    normal_time_amount_after_tax numeric(15,2) DEFAULT 0.0,
+    hours numeric(6,4) DEFAULT 0.0 NOT NULL,
+    normal_time_amount_before_tax numeric(15,2) DEFAULT 0.0 NOT NULL,
+    normal_time_amount_after_tax numeric(15,2) DEFAULT 0.0 NOT NULL,
     job_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
@@ -313,7 +331,14 @@ CREATE TABLE public.labor_records (
     overtime_amount_before_tax numeric(15,2) DEFAULT 0 NOT NULL,
     overtime_amount_after_tax numeric(15,2) DEFAULT 0 NOT NULL,
     sunday_time_amount_before_tax numeric(15,2) DEFAULT 0 NOT NULL,
-    sunday_time_amount_after_tax numeric(15,2) DEFAULT 0 NOT NULL
+    sunday_time_amount_after_tax numeric(15,2) DEFAULT 0 NOT NULL,
+    CONSTRAINT hours_between_0_and_24 CHECK (((hours >= 0.0) AND (hours <= 24.0))),
+    CONSTRAINT normal_time_amount_after_tax_positive CHECK ((normal_time_amount_after_tax >= 0.0)),
+    CONSTRAINT normal_time_amount_before_tax_positive CHECK ((normal_time_amount_before_tax >= 0.0)),
+    CONSTRAINT overtime_amount_after_tax_positive CHECK ((overtime_amount_after_tax >= 0.0)),
+    CONSTRAINT overtime_amount_before_tax_positive CHECK ((overtime_amount_before_tax >= 0.0)),
+    CONSTRAINT sunday_time_amount_after_tax_positive CHECK ((sunday_time_amount_after_tax >= 0.0)),
+    CONSTRAINT sunday_time_amount_before_tax_positive CHECK ((sunday_time_amount_before_tax >= 0.0))
 );
 
 
@@ -383,10 +408,11 @@ CREATE TABLE public.schema_migrations (
 
 CREATE TABLE public.sections (
     id bigint NOT NULL,
-    name character varying,
+    name character varying NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    overheads numeric(12,2) DEFAULT 0.0
+    overheads numeric(12,2) DEFAULT 0.0 NOT NULL,
+    CONSTRAINT overheads_positive CHECK ((overheads >= 0.0))
 );
 
 
@@ -415,7 +441,7 @@ ALTER SEQUENCE public.sections_id_seq OWNED BY public.sections.id;
 
 CREATE TABLE public.suppliers (
     id bigint NOT NULL,
-    name character varying,
+    name character varying NOT NULL,
     email character varying,
     phone character varying,
     created_at timestamp without time zone NOT NULL,
@@ -973,6 +999,9 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181102154206'),
 ('20181116054556'),
 ('20181212072435'),
-('20181214074645');
+('20181214074645'),
+('20181214090630'),
+('20181215111652'),
+('20181216114822');
 
 
