@@ -6,7 +6,7 @@ class Section < ApplicationRecord
   has_one :manager
 
   validates :name, :overheads, presence: true
-
+  validates :overheads, numericality: { greater_than_or_equal_to: 0.0 }
   # sections
   # 	-> jobs
   # 		-> creditor_orders

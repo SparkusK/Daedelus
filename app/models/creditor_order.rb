@@ -6,6 +6,13 @@ class CreditorOrder < ApplicationRecord
 
   validates :date_issued, :value_excluding_tax, :tax_amount,
     :value_including_tax, :delivery_note, :reference_number, presence: true
+
+  validates :value_excluding_tax, :tax_amount, :value_including_tax,
+    numericality: { greater_than_or_equal_to: 0.0 }
+
+  validates :value_excluding_tax, numericality: { less_than: :value_including_tax}
+  validates :tax_amount, numericality: { less_than: :value_excluding_tax}
+
   # Creditor Order -> Creditor Payment (creditnote)
 
   def self.get_creditor_payments_count(creditor_order_id)

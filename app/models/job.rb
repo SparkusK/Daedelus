@@ -10,6 +10,10 @@ class Job < ApplicationRecord
     :quotation_reference, :total, :targeted_amount,
     presence: true
 
+  validates :total, numericality: { greater_than: 0.0 }
+  validates :targeted_amount, numericality: { greater_than_or_equal_to: 0.0 }
+  validates :targeted_amount, numericality: { less_than_or_equal_to: :total }
+
   def get_supervisor
     Supervisor.find_by(section_id: section.id)
   end

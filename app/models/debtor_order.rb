@@ -7,6 +7,12 @@ class DebtorOrder < ApplicationRecord
   validates :order_number, :value_excluding_tax, :tax_amount,
     :value_excluding_tax, presence: true
 
+  validates :value_excluding_tax, :tax_amount, :value_including_tax,
+    numericality: { greater_than_or_equal_to: 0.0 }
+
+  validates :value_excluding_tax, numericality: { less_than: :value_including_tax}
+  validates :tax_amount, numericality: { less_than: :value_excluding_tax}
+
   # Debtor Order -> Debtor Payment
 
   def self.get_debtor_payments_count(debtor_order_id)

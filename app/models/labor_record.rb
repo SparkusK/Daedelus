@@ -11,6 +11,14 @@ class LaborRecord < ApplicationRecord
     :overtime_amount_after_tax, :sunday_time_amount_before_tax,
     :sunday_time_amount_after_tax, presence: true
 
+  validates :hours, numericality: { greater_than_or_equal_to: 0.0 }
+  validates :hours, numericality: { less_than_or_equal_to: 24.0 }
+  validates :normal_time_amount_before_tax,
+    :normal_time_amount_after_tax, :overtime_amount_before_tax,
+    :overtime_amount_after_tax, :sunday_time_amount_before_tax,
+    :sunday_time_amount_after_tax, numericality: { greater_than_or_equal_to: 0.0 }
+
+
   def day_of_the_week
     Date::DAYNAMES[self.labor_date.wday]
   end

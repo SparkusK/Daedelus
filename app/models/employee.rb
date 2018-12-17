@@ -4,7 +4,8 @@ class Employee < ApplicationRecord
   has_one :manager
 
   validates :first_name, :last_name, :occupation, :company_number, presence: true
-
+  validates :net_rate, :inclusive_rate, numericality: { greater_than_or_equal_to: 0.0 }
+  validates :net_rate, numericality: { less_than: :inclusive_rate }
   # Employee
   #   -> Manager (1)
   #   -> Labor Record
