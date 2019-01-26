@@ -10,7 +10,7 @@ class CreditorOrder < ApplicationRecord
   validates :value_excluding_tax, :tax_amount, :value_including_tax,
     numericality: { greater_than_or_equal_to: 0.0 }
 
-  validates :value_excluding_tax, numericality: { less_than: :value_including_tax}
+  validates :value_excluding_tax, numericality: { less_than: :value_including_tax }
   validates :tax_amount, numericality: { less_than: :value_excluding_tax}
 
   # Creditor Order -> Creditor Payment (creditnote)
