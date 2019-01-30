@@ -32,12 +32,13 @@ class CreditorOrder < ApplicationRecord
     value = self.value_excluding_tax
     # Sum all payment amounts of debtor payments with debtor_order_id = self.id
     paid = CreditNote.where(creditor_order_id: self.id).sum(:amount_paid)
-    still_owed = value - paid
+    value - paid
   end
 
   def creditor_order_name
     "Supplier #{supplier.name}, job #{job.jce_number}"
   end
+
   # Search by:
   #   supplier:
   #     * name

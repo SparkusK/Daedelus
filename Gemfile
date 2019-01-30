@@ -1,5 +1,5 @@
 source 'https://rubygems.org'
-ruby "2.4.1"
+ruby '2.4.1'
 
 git_source(:github) do |repo_name|
   repo_name = "#{repo_name}/#{repo_name}" unless repo_name.include?("/")
@@ -29,15 +29,15 @@ gem 'jbuilder', '~> 2.5'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt', '~> 3.1.7'
 
+gem 'bootstrap-will_paginate'
 gem 'webpacker'
-gem 'foreman'
 gem 'devise'
 gem 'faker'
-gem 'will_paginate'
-gem 'bootstrap-will_paginate'
+gem 'foreman'
+gem 'jquery-datetimepicker-rails'
 gem 'jquery-rails'
 gem 'jquery-ui-rails'
-gem 'jquery-datetimepicker-rails'
+gem 'will_paginate'
 
 gem 'octicons'
 gem 'octicons_helper'
