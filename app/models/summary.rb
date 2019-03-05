@@ -58,13 +58,13 @@ class Summary
     @summary.header = section.name
     @summary.subheader = @summary.get_manager_name(section)
     @summary.labor = LaborRecord.where(
-        "labor_date > ? AND labor_date < ? AND section_id = ?", start_date, end_date, section.id
+        "labor_date >= ? AND labor_date <= ? AND section_id = ?", start_date, end_date, section.id
     ).sum(
         "normal_time_amount_after_tax + overtime_amount_after_tax + sunday_time_amount_after_tax"
     )
     @summary.overheads = Section.find_by(id: section.id).overheads
-    @summary.orders = Job.joins(:creditor_orders).where("receive_date > ? AND receive_date < ? AND section_id = ?", start_date, end_date, section.id).sum(:value_excluding_tax)
-    @summary.target_jobs = Job.where("receive_date > ? AND receive_date < ? AND section_id = ?", start_date, end_date, section.id).sum(:targeted_amount)
+    @summary.orders = Job.joins(:creditor_orders).where("receive_date >= ? AND receive_date <= ? AND section_id = ?", start_date, end_date, section.id).sum(:value_excluding_tax)
+    @summary.target_jobs = Job.where("receive_date >= ? AND receive_date =< ? AND section_id = ?", start_date, end_date, section.id).sum(:targeted_amount)
     @summary
     # Get Labor for Section, Total After
     # Get Overheads for Section
@@ -79,14 +79,14 @@ class Summary
     @aggregate = Summary.new
     @aggregate.is_overall = true
     @aggregate.header = "Overall"
-    @aggregate.labor = LaborRecord.where("labor_date > ? AND labor_date < ?", start_date, end_date).sum("normal_time_amount_after_tax + overtime_amount_after_tax + sunday_time_amount_after_tax")
+    @aggregate.labor = LaborRecord.where("labor_date >= ? AND labor_date <= ?", start_date, end_date).sum("normal_time_amount_after_tax + overtime_amount_after_tax + sunday_time_amount_after_tax")
     @aggregate.overheads = Section.all.sum(:overheads)
-    @aggregate.orders = CreditorOrder.where("date_issued > ?
-                                            AND date_issued < ?",
+    @aggregate.orders = CreditorOrder.where("date_issued >= ?
+                                            AND date_issued <= ?",
                                             start_date,
                                             end_date)
                                      .sum(:value_excluding_tax)
-    @aggregate.target_jobs = Job.where("receive_date > ? AND receive_date < ?", start_date, end_date).sum(:targeted_amount)
+    @aggregate.target_jobs = Job.where("receive_date >= ? AND receive_date <= ?", start_date, end_date).sum(:targeted_amount)
     @aggregate
     # Get Total Labor
     # Get Total Overheads

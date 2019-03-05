@@ -72,7 +72,7 @@ class CreditorOrdersController < AdministrativeController
   def ajax_amounts
     order = CreditorOrder.find_by(id: params[:id])
     owed = order.get_still_owed_amount
-    @amounts = {value: order.value_excluding_tax, owed: owed }
+    @amounts = { value: order.value_excluding_tax, owed: owed }
 
     respond_to do |format|
       format.json {

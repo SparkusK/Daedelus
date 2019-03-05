@@ -14,19 +14,19 @@ puts "Creating Sections..."
 @sections = @departments.gsub(" & ", ", ").split(", ")
 
 # Iterate the results, create 10 Sections
-@sections.each { |sec| Section.create(name: "#{sec}")}
+@sections.each { |sec| Section.create(name: "#{sec}") }
 
 puts "Sections done."
 put_count(Section, "section")
 puts "================================"
 
 # 2.	Employees
-# 200 employees.
+# 20 employees.
 
 puts "Creating Employees..."
 
 @section_count = Section.count
-200.times {
+20.times {
   @net_rate = Faker::Number.decimal(2,2).to_f
   Employee.create(
     first_name: Faker::Name.first_name,
@@ -45,11 +45,11 @@ puts "================================"
 
 
 # 3.	Managers
-# 10 managers.
+# 2 managers.
 
 puts "Creating Managers..."
 
-10.times {
+2.times {
   Manager.create(
     employee_id: EmployeesController.helpers.leaf_employees().sample.id,
     section_id: SectionsController.helpers.unmanaged_sections().sample.id
@@ -57,40 +57,6 @@ puts "Creating Managers..."
 }
 puts "Managers done."
 put_count(Manager, "manager")
-puts "================================"
-
-
-# 4.	Supervisors
-# 20 supervisors.
-
-puts "Creating Supervisors..."
-leaves = EmployeesController.helpers.leaf_employees().to_a.shuffle
-sections = Section.all.to_a.shuffle
-sections = sections + sections
-20.times {
-  Supervisor.create(
-    employee_id: leaves.pop.id,
-    section_id: sections.pop.id
-  )
-}
-
-puts "Supervisors done."
-put_count(Supervisor, "supervisor")
-puts "================================"
-
-
-# 5.	Invoices
-# 500 invoices?
-
-puts "Creating Invoices..."
-
-500.times {
-  Invoice.create(
-    code: "#{('A'..'Z').to_a.sample}#{Faker::Number.unique.number(4)}"
-  )
-}
-puts "Invoices done."
-put_count(Invoice, "invoice")
 puts "================================"
 
 # 6.	Customers
@@ -111,20 +77,6 @@ put_count(Customer, "customer")
 puts "================================"
 
 # 7.	Debtor Orders
-# 550 debtor orders? No, 500. We cannot create more debtor_orders than there are Invoices.
-# We're gonna need Jobs for these things. Alternatively, we could remove the Jobs column
-# from this table, because the Jobs table already refers to this. In fact, a Job might
-# have many DebtorOrders? Possibly.
-# So, Jobs stays nil.
-# Now it's just Invoices. I'm assuming that the data structure for this stuff is correct:
-# A company Requests something to be done, the server responds with a Quotation. If
-# the requestor accepts the Quotation, an Invoice is written out, and a DebtorOrder is created.
-# Jobs may then be scheduled based on that DebtorOrder.
-# DebtorOrders then also have multiple Payments, and have different statuses based on whether they've
-# been fulfilled or not.
-# Essentially, though, we won't have Invoices without DebtorOrders, and
-# we won't have DebtorOrders without Invoices. They depend on each other, but
-# they're conceptually different things so we put them in different tables.
 
 puts "Creating Debtor Orders..."
 

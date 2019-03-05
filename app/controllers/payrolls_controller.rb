@@ -18,7 +18,7 @@ class PayrollsController < ApplicationController
       end_date = date1
     end
 
-    records = LaborRecord.where("labor_date > ? AND labor_date < ?", start_date, end_date)
+    records = LaborRecord.where("labor_date >= ? AND labor_date <= ?", start_date, end_date)
 
     @employee_details = Hash.new{ |hash, key| hash[key] = {normal_time: 0.0, sunday_time: 0.0}}
     records.each { |record|
