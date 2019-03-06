@@ -1,159 +1,18 @@
-# 1.	Sections
-# Let's create 10 sections.
 
-def put_count(table, string)
-  puts "#{string} count: #{table.count}"
+def seeds
+  create_customers(50)
+  create_suppliers(50)
+  create_sections(5)
+  create_jobs(50)
+  create_debtor_orders(300)
+  create_debtor_payments(400)
+  create_creditor_orders(250)
+  create_creditor_payments(400)
+  create_employees(20)
+  create_managers(4)
+  create_labor_records(200)
 end
 
-puts "Creating Sections..."
-
-# Get 10 random, unique Departments from Faker
-@departments = Faker::Commerce.department(10, true)
-
-# Sanitize the result a bit
-@sections = @departments.gsub(" & ", ", ").split(", ")
-
-# Iterate the results, create 10 Sections
-@sections.each { |sec| Section.create(name: "#{sec}") }
-
-puts "Sections done."
-put_count(Section, "section")
-puts "================================"
-
-# 2.	Employees
-# 20 employees.
-
-puts "Creating Employees..."
-
-@section_count = Section.count
-20.times {
-  @net_rate = Faker::Number.decimal(2,2).to_f
-  Employee.create(
-    first_name: Faker::Name.first_name,
-    last_name: Faker::Name.last_name,
-    occupation: Faker::Name.unique.title,
-    section_id: Section.offset(rand(@section_count)).first.id,
-    company_number: Faker::Code.unique.asin,
-    net_rate: @net_rate,
-    inclusive_rate: @net_rate*1.06
-  )
-}
-
-puts "Employees done."
-put_count(Employee, "employee")
-puts "================================"
-
-
-# 3.	Managers
-# 2 managers.
-
-puts "Creating Managers..."
-
-2.times {
-  Manager.create(
-    employee_id: EmployeesController.helpers.leaf_employees().sample.id,
-    section_id: SectionsController.helpers.unmanaged_sections().sample.id
-  )
-}
-puts "Managers done."
-put_count(Manager, "manager")
-puts "================================"
-
-# 6.	Customers
-# 40 customers.
-
-puts "Creating Customers..."
-
-40.times {
-  Customer.create(
-    name: "#{Faker::Company.unique.name}#{Faker::Company.suffix}",
-    email: "#{Faker::Internet.unique.email}",
-    phone: "0#{Faker::Number.unique.number(9)}"
-  )
-}
-
-puts "Customers done."
-put_count(Customer, "customer")
-puts "================================"
-
-# 7.	Debtor Orders
-
-puts "Creating Debtor Orders..."
-
-@invoices = Invoice.all.to_a.shuffle
-Invoice.count.times {
-
-  order_value_excluding = Faker::Number.decimal(5, 2).to_f
-  order_tax_amount = order_value_excluding*0.15
-  order_value_including = order_value_excluding + order_tax_amount
-
-  DebtorOrder.create(
-    customer_id: Customer.all.sample.id,
-    job_id: nil,
-    invoice_id: @invoices.pop.id,
-    SA_number: Faker::Lorem.characters(6),
-    value_including_tax: order_value_including,
-    value_excluding_tax: order_value_excluding,
-    tax_amount: order_tax_amount,
-    still_owed_amount: order_value_including
-  )
-}
-
-puts "Debtor Orders done."
-put_count(DebtorOrder, "debtor order")
-puts "================================"
-
-# 8.	Quotations
-# 440 quotations?
-
-puts "Creating Quotations..."
-
-Invoice.count.times {
-  Quotation.create(
-    code: "#{('A'..'Z').to_a.sample}#{Faker::Number.unique.number(4)}"
-  )
-}
-puts "Quotations done."
-put_count(Quotation, "quotation")
-puts "================================"
-
-# 9.	Jobs
-# 440 jobs? No, amount of jobs = the amount of invoices we have
-
-puts "Creating Jobs..."
-
-@debtor_orders_base = DebtorOrder.all.to_a.shuffle
-@quotations = Quotation.all.to_a.shuffle
-
-@debtor_orders_jobs = DebtorOrder.all.to_a.shuffle
-
-Invoice.count.times {
-  debtor_order = @debtor_orders_jobs.pop
-    Job.create(
-      receive_date: Faker::Time.backward(730),
-      section_id: Section.all.sample.id,
-      contact_person: Faker::Name.first_name,
-      balow_section: Faker::Lorem.characters(6),
-      total: debtor_order.value_including_tax,
-      work_description: Faker::Lorem.sentence,
-      jce_number: Faker::Lorem.characters(8).upcase,
-      debtor_order_id: debtor_order.id,
-      quotation_id: @quotations.pop.id
-    )
-}
-
-puts "Jobs done."
-put_count(Job, "job")
-puts "================================"
-
-# 10.	Labor Records
-# Many labor records!
-# Labor records are important for payroll stuffs. We want enough data here for
-# large aggregations and analytics to make sense.
-# We want employees to have records between 1-24 months each.
-# Then there are Supervisors and Managers, for which things are not gonna make sense
-
-puts "Creating Labor Records..."
 
 def rng_percentage_check(perc)
   Faker::Number.decimal(0,2).to_f < perc
@@ -173,18 +32,6 @@ def create_labor_record(emp, date, total_perc, supervisor_id, job_id)
     supervisor_id: supervisor_id,
     job_id: job_id
   )
-end
-
-def get_supervisor_id(emp)
-  manager_id = emp.section.manager.id
-  supervisor_ids = emp.section.supervisors.map { |sup| sup.id }
-  if emp.id == manager_id
-    nil
-  elsif supervisor_ids.include? emp.id
-    manager_id
-  else
-    supervisor_ids.sample
-  end
 end
 
 def gen_records_for_employee(loop_date, emp)
@@ -235,6 +82,173 @@ idx = 0
 puts "Labor Records done."
 put_count(LaborRecord, "labor record")
 puts "================================"
+
+def create_records(amount, entity)
+  puts "==============================="
+  puts "Creating #{amount} #{entity.pluralize}..."
+  yield
+  puts "Done."
+  puts "==============================="
+end
+
+def create_customers(amount)
+  create_records(amount, "Customer") do
+    amount.times {
+      Customer.create(
+        name: "#{Faker::Company.unique.name}#{Faker::Company.suffix}",
+        email: "#{Faker::Internet.unique.email}",
+        phone: "0#{Faker::Number.unique.number(9)}"
+      )
+    }
+  end
+end
+
+def create_suppliers(amount)
+  create_records(amount, "Supplier") do
+
+  end
+end
+
+def create_sections(amount)
+  create_records(amount, "Section") do
+    # Get #{amount} random, unique Departments from Faker
+    departments = Faker::Commerce.department(amount, true)
+
+    # Sanitize the result a bit
+    sections = departments.gsub(" & ", ", ").split(", ")
+
+    # Iterate the results, create #{amount} Sections
+    sections.each { |sec|
+      Section.create(
+        name: "#{sec}",
+        overheads: Faker::Number.within(10000..500000)
+      )
+    }
+  end
+end
+
+def create_jobs(amount)
+  create_records(amount, "Job") do
+
+    @debtor_orders_base = DebtorOrder.all.to_a.shuffle
+    @quotations = Quotation.all.to_a.shuffle
+
+    @debtor_orders_jobs = DebtorOrder.all.to_a.shuffle
+
+    Invoice.count.times {
+      debtor_order = @debtor_orders_jobs.pop
+        Job.create(
+          receive_date: Faker::Time.backward(730),
+          section_id: Section.all.sample.id,
+          contact_person: Faker::Name.first_name,
+          balow_section: Faker::Lorem.characters(6),
+          total: debtor_order.value_including_tax,
+          work_description: Faker::Lorem.sentence,
+          jce_number: Faker::Lorem.characters(8).upcase,
+          debtor_order_id: debtor_order.id,
+          quotation_id: @quotations.pop.id
+        )
+    }
+
+  end
+end
+
+def create_debtor_orders(amount)
+  create_records(amount, "Debtor Order") do
+
+    @invoices = Invoice.all.to_a.shuffle
+    Invoice.count.times {
+
+      order_value_excluding = Faker::Number.decimal(5, 2).to_f
+      order_tax_amount = order_value_excluding*0.15
+      order_value_including = order_value_excluding + order_tax_amount
+
+      DebtorOrder.create(
+        customer_id: Customer.all.sample.id,
+        job_id: nil,
+        invoice_id: @invoices.pop.id,
+        SA_number: Faker::Lorem.characters(6),
+        value_including_tax: order_value_including,
+        value_excluding_tax: order_value_excluding,
+        tax_amount: order_tax_amount,
+        still_owed_amount: order_value_including
+      )
+    }
+
+  end
+end
+
+def create_debtor_payments(amount)
+  create_records(amount, "Debtor Payment") do
+
+  end
+end
+
+def create_creditor_orders(amount)
+  create_records(amount, "Creditor Order") do
+
+  end
+end
+
+def create_creditor_payments(amount)
+  create_records(amount, "Creditor Payment") do
+
+  end
+end
+
+def create_employees(amount)
+  create_records(amount, "Employee") do
+
+    @section_count = Section.count
+
+    amount.times {
+      @net_rate = Faker::Number.decimal(2,2).to_f
+      Employee.create(
+        first_name: Faker::Name.first_name,
+        last_name: Faker::Name.last_name,
+        occupation: Faker::Name.unique.title,
+        section_id: Section.offset(rand(@section_count)).first.id,
+        company_number: Faker::Code.unique.asin,
+        net_rate: @net_rate,
+        inclusive_rate: @net_rate*1.06
+      )
+    }
+
+    2.times {
+      @net_rate = Faker::Number.decimal(2,2).to_f
+      Employee.create(
+        first_name: Faker::Name.first_name,
+        last_name: Faker::Name.last_name,
+        occupation: Faker::Name.unique.title,
+        section_id: Section.offset(rand(@section_count)).first.id,
+        company_number: Faker::Code.unique.asin,
+        net_rate: @net_rate,
+        inclusive_rate: @net_rate*1.06,
+        eoc: true
+      )
+    }
+  end
+end
+
+def create_managers(amount)
+  create_records(amount, "Manager") do
+    amount.times {
+      Manager.create(
+        employee_id: EmployeesController.helpers.leaf_employees().sample.id,
+        section_id: SectionsController.helpers.unmanaged_sections().sample.id
+      )
+    }
+  end
+end
+
+def create_labor_records(amount)
+  create_records(amount, "Labor Record") do
+
+  end
+end
+
+
+
 
 # 11.	Debtor Payments
 # Couple of different things to note:

@@ -6,21 +6,21 @@
 
   <div class="row">
     <div class="form-group col-md-5">
-      <%= label_tag :start_date %> </br>
+      <%= label_tag :start_date %> <br>
       <%= text_field_tag( :start_date,
                           "#{params[:start_date]}",
                           {autocomplete: :off,
                           class: "form-control datepicker"}) %>
     </div>
     <div class="form-group col-md-5">
-      <%= label_tag :end_date %> </br>
+      <%= label_tag :end_date %> <br>
       <%= text_field_tag :end_date,
                           "#{params[:end_date]}",
                           {autocomplete: :off,
                           class: "form-control datepicker"} %>
     </div>
     <div class="form-group col-md-2">
-      </br>
+      <br>
       <%= submit_tag("Refresh dates", class: "btn btn-lg btn-primary") %>
     </div>
   </div>
@@ -28,6 +28,9 @@
 </br>
 
 <ol class="list-group">
+
+  <% aggregate_net_total = 0.0 %>
+  <% aggregate_gross_total = 0.0 %>
 
   <% @employee_details.each do |key, emp| %>
     <% employee = Employee.find_by(id: key) %>
@@ -88,6 +91,7 @@
         </div>
         <div class="col-md-3">
           <% net_total = emp[:normal_time] * rate + rate * 1.5 * overtime + rate * 2.0 * emp[:sunday_time] %>
+          <% aggregate_net_total += net_total %>
           <h4> <%= number_to_currency(net_total, unit: "R") %> </h4>
         </div>
         <div class="col-md-3">
@@ -95,13 +99,41 @@
         </div>
         <div class="col-md-3">
           <h4><%= number_to_currency(net_total*1.2, unit: "R") %></h4>
+          <% aggregate_gross_total += net_total*1.2 %>
         </div>
       </div>
 
 
     </li>
-    </br>
+    <br>
   <% end %>
+
+  <li class="list-group-item list-group-item-info">
+    <div class="row">
+      <div class="d-flex w-100 justify-content-between">
+        <h4 class="mb-1">Totals for Selected Time Period</h4>
+        <small class="text-muted"><%= employee.occupation %></small>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-md-3">
+        <h4> Net Total: </h4>
+      </div>
+      <div class="col-md-3">
+        <h4> <%= number_to_currency(aggregate_net_total, unit: "R") %> </h4>
+      </div>
+      <div class="col-md-3">
+        <h4> Gross Total: </h4>
+      </div>
+      <div class="col-md-3">
+        <h4><%= number_to_currency(aggregate_gross_total, unit: "R") %></h4>
+      </div>
+    </div>
+
+
+  </li>
+  <br>
 </ol>
 
 <br>
