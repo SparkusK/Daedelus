@@ -19,6 +19,10 @@ class LaborRecord < ApplicationRecord
     :sunday_time_amount_after_tax, numericality: { greater_than_or_equal_to: 0.0 }
 
 
+  def self.calculate_amounts(employee, date)
+    
+  end
+
   def day_of_the_week
     Date::DAYNAMES[self.labor_date.wday]
   end
