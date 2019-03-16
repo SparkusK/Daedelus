@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :job_targets
   resources :managers
   resources :summaries, only: [:new, :show]
   resources :credit_notes

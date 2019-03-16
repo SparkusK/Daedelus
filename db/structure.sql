@@ -270,6 +270,43 @@ ALTER SEQUENCE public.employees_id_seq OWNED BY public.employees.id;
 
 
 --
+-- Name: job_targets; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.job_targets (
+    id bigint NOT NULL,
+    target_date date NOT NULL,
+    invoice_number character varying NOT NULL,
+    remarks character varying,
+    details character varying,
+    target_amount numeric(12,2) NOT NULL,
+    section_id bigint NOT NULL,
+    job_id bigint NOT NULL,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL
+);
+
+
+--
+-- Name: job_targets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.job_targets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: job_targets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.job_targets_id_seq OWNED BY public.job_targets.id;
+
+
+--
 -- Name: jobs; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -285,11 +322,10 @@ CREATE TABLE public.jobs (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     quotation_reference character varying NOT NULL,
-    targeted_amount numeric(15,2) DEFAULT 0.0 NOT NULL,
-    target_date date NOT NULL,
     is_finished boolean DEFAULT false,
-    CONSTRAINT targeted_amount_lte_total CHECK ((targeted_amount <= total)),
-    CONSTRAINT targeted_amount_positive CHECK ((targeted_amount >= 0.0)),
+    job_number character varying NOT NULL,
+    order_number character varying NOT NULL,
+    client_section character varying NOT NULL,
     CONSTRAINT total_positive CHECK ((total > 0.0))
 );
 
@@ -555,6 +591,13 @@ ALTER TABLE ONLY public.employees ALTER COLUMN id SET DEFAULT nextval('public.em
 
 
 --
+-- Name: job_targets id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_targets ALTER COLUMN id SET DEFAULT nextval('public.job_targets_id_seq'::regclass);
+
+
+--
 -- Name: jobs id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -650,6 +693,14 @@ ALTER TABLE ONLY public.debtor_payments
 
 ALTER TABLE ONLY public.employees
     ADD CONSTRAINT employees_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: job_targets job_targets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_targets
+    ADD CONSTRAINT job_targets_pkey PRIMARY KEY (id);
 
 
 --
@@ -758,6 +809,20 @@ CREATE INDEX index_employees_on_section_id ON public.employees USING btree (sect
 
 
 --
+-- Name: index_job_targets_on_job_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_job_targets_on_job_id ON public.job_targets USING btree (job_id);
+
+
+--
+-- Name: index_job_targets_on_section_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_job_targets_on_section_id ON public.job_targets USING btree (section_id);
+
+
+--
 -- Name: index_jobs_on_section_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -818,6 +883,14 @@ CREATE UNIQUE INDEX index_users_on_email ON public.users USING btree (email);
 --
 
 CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING btree (reset_password_token);
+
+
+--
+-- Name: job_targets fk_rails_05ec45ac2a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_targets
+    ADD CONSTRAINT fk_rails_05ec45ac2a FOREIGN KEY (section_id) REFERENCES public.sections(id);
 
 
 --
@@ -882,6 +955,14 @@ ALTER TABLE ONLY public.creditor_orders
 
 ALTER TABLE ONLY public.debtor_orders
     ADD CONSTRAINT fk_rails_a553e29ce2 FOREIGN KEY (job_id) REFERENCES public.jobs(id) ON DELETE CASCADE;
+
+
+--
+-- Name: job_targets fk_rails_a8e3ada8b3; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.job_targets
+    ADD CONSTRAINT fk_rails_a8e3ada8b3 FOREIGN KEY (job_id) REFERENCES public.jobs(id);
 
 
 --
@@ -1002,6 +1083,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181214074645'),
 ('20181214090630'),
 ('20181215111652'),
-('20181216114822');
+('20181216114822'),
+('20190308124624'),
+('20190314141233');
 
 

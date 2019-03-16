@@ -19,8 +19,55 @@ class LaborRecord < ApplicationRecord
     :sunday_time_amount_after_tax, numericality: { greater_than_or_equal_to: 0.0 }
 
 
-  def self.calculate_amounts(employee, date)
-    
+  def self.calculate_amounts(employee, date, hours)
+
+    allowed_hours_before_overtime = 0.0
+    rate_after_overtime = 1.5
+    normal_time_hours = 0.0
+    overtime_hours = 0.0
+    sunday_time_hours = 0.0
+
+    case date.wday
+    when 0 # Sunday
+      rate_after_overtime = 2.0
+      sunday_time_hours = hours
+    when 6 # Saturday
+      overtime_hours = hours
+    when 5 # Friday
+      allowed_hours_before_overtime = 5.0
+      if hours > allowed_hours_before_overtime
+        normal_time_hours = allowed_hours_before_overtime
+        overtime_hours = hours - allowed_hours_before_overtime
+      else
+        normal_time_hours = day_hours
+      end
+    when 1..4 # Monday to Thursday
+      allowed_hours_before_overtime = 8.75
+      if hours > allowed_hours_before_overtime
+        normal_time_hours = allowed_hours_before_overtime
+        overtime_hours = hours - allowed_hours_before_overtime
+      else
+        normal_time_hours = day_hours
+      end
+    end
+
+    # Check Amounts[] for abbreviation meanings
+    ntb = normal_time_hours * employee.exclusive_rate
+    nta = normal_time_hours * employee.inclusive_rate
+    otb = overtime_hours * employee.exclusive_rate
+    ota = overtime_hours * employee.inclusive_rate
+    stb = sunday_time_hours * employee.exclusive_rate
+    sta = sunday_time_hours * employee.inclusive_rate
+
+    amounts[
+      normal_time_amount_before_tax: ntb,
+      normal_time_amount_after_tax: nta,
+      overtime_amount_before_tax: otb,
+      overtime_amount_after_tax: ota,
+      sunday_time_amount_before_tax: stb,
+      sunday_time_amount_after_tax: sta
+    ]
+
   end
 
   def day_of_the_week

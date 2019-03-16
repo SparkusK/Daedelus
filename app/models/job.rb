@@ -30,6 +30,10 @@ class Job < ApplicationRecord
     self.total - self.targeted_amount
   end
 
+  def self.get_amount_remaining(job)
+    job.total - JobTarget.where(job_id: job.id).sum(target_amount)
+  end
+
   def self.get_creditor_orders(job_id)
     CreditorOrder.where("job_id = ?", job_id)
   end

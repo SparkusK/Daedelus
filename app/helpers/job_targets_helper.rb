@@ -1,0 +1,2 @@
+module JobTargetsHelper
+end
