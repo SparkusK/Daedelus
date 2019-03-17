@@ -39,7 +39,7 @@ class LaborRecord < ApplicationRecord
         normal_time_hours = allowed_hours_before_overtime
         overtime_hours = hours - allowed_hours_before_overtime
       else
-        normal_time_hours = day_hours
+        normal_time_hours = hours
       end
     when 1..4 # Monday to Thursday
       allowed_hours_before_overtime = 8.75
@@ -47,26 +47,27 @@ class LaborRecord < ApplicationRecord
         normal_time_hours = allowed_hours_before_overtime
         overtime_hours = hours - allowed_hours_before_overtime
       else
-        normal_time_hours = day_hours
+        normal_time_hours = hours
       end
     end
 
     # Check Amounts[] for abbreviation meanings
-    ntb = normal_time_hours * employee.exclusive_rate
+    ntb = normal_time_hours * employee.net_rate
     nta = normal_time_hours * employee.inclusive_rate
-    otb = overtime_hours * employee.exclusive_rate
+    otb = overtime_hours * employee.net_rate
     ota = overtime_hours * employee.inclusive_rate
-    stb = sunday_time_hours * employee.exclusive_rate
+    stb = sunday_time_hours * employee.net_rate
     sta = sunday_time_hours * employee.inclusive_rate
 
-    amounts[
-      normal_time_amount_before_tax: ntb,
-      normal_time_amount_after_tax: nta,
-      overtime_amount_before_tax: otb,
-      overtime_amount_after_tax: ota,
-      sunday_time_amount_before_tax: stb,
-      sunday_time_amount_after_tax: sta
-    ]
+    amounts = Hash.new(0)
+    amounts[:normal_time_amount_before_tax] = ntb
+    amounts[:normal_time_amount_after_tax] = nta
+    amounts[:overtime_amount_before_tax] = otb
+    amounts[:overtime_amount_after_tax] = ota
+    amounts[:sunday_time_amount_before_tax] = stb
+    amounts[:sunday_time_amount_after_tax] = sta
+
+    amounts
 
   end
 

@@ -1,18 +1,16 @@
 class Job < ApplicationRecord
-  validates :targeted_amount, numericality: { less_than_or_equal_to: :total, message: "must be less than or equal to Total" }
   belongs_to :section
   has_many :creditor_orders
   has_many :debtor_orders
   has_many :labor_records
 
-  validates :receive_date, :target_date,
+  validates :receive_date,
     :contact_person, :responsible_person, :work_description, :jce_number,
-    :quotation_reference, :total, :targeted_amount,
+    :quotation_reference, :total,
     presence: true
 
   validates :total, numericality: { greater_than: 0.0 }
-  validates :targeted_amount, numericality: { greater_than_or_equal_to: 0.0 }
-  validates :targeted_amount, numericality: { less_than_or_equal_to: :total }
+
 
   def get_supervisor
     Supervisor.find_by(section_id: section.id)

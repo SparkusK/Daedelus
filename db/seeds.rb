@@ -15,11 +15,6 @@ def seeds
   create_labor_records(150)
 end
 
-
-
-
-
-
 # ==== Helpers =================================================================
 # ==============================================================================
 
@@ -31,18 +26,17 @@ def create_labor_record(emp, date, hours, job, section, amounts)
     hours: hours,
     job_id: job.id,
     section_id: section.id,
-    normal_time_amount_before_tax: amounts[normal_time_amount_before_tax],
-    normal_time_amount_after_tax: amounts[normal_time_amount_after_tax],
-    overtime_amount_before_tax: amounts[overtime_amount_before_tax],
-    overtime_amount_after_tax: amounts[overtime_amount_after_tax],
-    sunday_time_amount_before_tax: amounts[sunday_time_amount_before_tax],
-    sunday_time_amount_after_tax: amounts[sunday_time_amount_after_tax]
+    normal_time_amount_before_tax: amounts[:normal_time_amount_before_tax],
+    normal_time_amount_after_tax: amounts[:normal_time_amount_after_tax],
+    overtime_amount_before_tax: amounts[:overtime_amount_before_tax],
+    overtime_amount_after_tax: amounts[:overtime_amount_after_tax],
+    sunday_time_amount_before_tax: amounts[:sunday_time_amount_before_tax],
+    sunday_time_amount_after_tax: amounts[:sunday_time_amount_after_tax]
   )
 end
 
 def check_and_roll_weekends(date)
-  !( date.wday == 0 && rng_percentage_check(0.7)
-  || date.wday == 6 && rng_percentage_check(0.4) )
+  !( (date.wday == 0 && rng_percentage_check(0.7)) || (date.wday == 6 && rng_percentage_check(0.4)) )
 end
 
 def check_and_create_record(loop_date, emp)
@@ -50,7 +44,7 @@ def check_and_create_record(loop_date, emp)
     random_job = Job.where("receive_date < ?", loop_date).sample
     if (!random_job.nil?)
       hours = rand(1..23)
-      amounts = LaborRecord.calculate_amounts(employee, date)
+      amounts = LaborRecord.calculate_amounts(emp, loop_date, hours)
       sec = random_job.section
       create_labor_record(emp, loop_date, hours, random_job, sec, amounts)
     end
@@ -58,16 +52,16 @@ def check_and_create_record(loop_date, emp)
 end
 
 def target_a_job(job)
-  total_targets = JobTarget.where(job_id: job.id).sum(target_amount)
+  total_targets = JobTarget.where(job_id: job.id).sum(:target_amount)
   amount_remaining = job.total*1.2 - total_targets
-  target_amount = rand(abs(amount_remaining))
+  target_amount = rand(amount_remaining.abs)
   total_targets += target_amount
   if total_targets > job.total*1.2
-    job.update_fields(is_finished: true)
+    job.update_attributes(is_finished: true)
   elsif total_targets > job.total && rng_percentage_check(0.7)
-    job.update_fields(is_finished: true)
+    job.update_attributes(is_finished: true)
   elsif total_targets > job.total*0.8 && rng_percentage_check(0.25)
-    job.update_fields(is_finished: true)
+    job.update_attributes(is_finished: true)
   end
   target_amount
 end
@@ -126,7 +120,7 @@ def create_sections(amount)
     section_names.each do |name|
       Section.create(
         name: "#{name}",
-        overheads: Faker::Number.within(10000..500000)
+        overheads: Faker::Number.between(10000, 500000)
       )
     end
   end
@@ -137,7 +131,6 @@ def create_jobs(amount)
   with_console_output(amount, "Job") do
     amount.times do
       total = rand(50000)
-      targeted_amount = rand(total)
       is_finished = false
       receive_date = Faker::Date.backward(60)
       receive_date_days_ago = (Date.today - receive_date).to_i.abs
@@ -151,7 +144,6 @@ def create_jobs(amount)
         work_description: Faker::Lorem.sentence,
         jce_number: Faker::Lorem.characters(8).upcase,
         quotation_reference: Faker::Lorem.characters(6),
-        target_date: target_date,
         is_finished: is_finished,
         job_number: Faker::Lorem.characters(10).upcase,
         order_number: Faker::Lorem.characters(12).upcase,
@@ -162,27 +154,29 @@ def create_jobs(amount)
 end
 
 # -- 5. Job Targets ------------------------------------------------------------
-def create_jobs(amount)
-  with_console_output(amount, "Job") do
+def create_job_targets(amount)
+  with_console_output(amount, "Job Targets") do
     amount.times do
       job = Job.where(is_finished: false).sample
-      job_days_ago = (Date.today - job_receive_date).to_i.abs
-      job_target_date = Faker::Date.backward(job_days_ago)
-      invoice_number = Faker::Lorem.characters(7).upcase
-      remarks = Faker::Lorem.sentence if rng_percentage_check(0.3)
-      details = Faker::Lorem.sentence if rng_percentage_check(0.7)
-      job_id = job.id
-      section_id = job.section.id
-      target_amount = target_a_job(job)
-      JobTarget.create(
-        target_date: job_target_date,
-        invoice_number: invoice_number,
-        remarks: remarks,
-        details: details,
-        target_amount: target_amount,
-        section_id: section_id,
-        job_id: job_id
-      )
+      if job != nil
+        job_days_ago = (Date.today - job.receive_date).to_i.abs
+        job_target_date = Faker::Date.backward(job_days_ago)
+        invoice_number = Faker::Lorem.characters(7).upcase
+        remarks = Faker::Lorem.sentence if rng_percentage_check(0.3)
+        details = Faker::Lorem.sentence if rng_percentage_check(0.7)
+        job_id = job.id
+        section_id = job.section.id
+        target_amount = target_a_job(job)
+        JobTarget.create(
+          target_date: job_target_date,
+          invoice_number: invoice_number,
+          remarks: remarks,
+          details: details,
+          target_amount: target_amount,
+          section_id: section_id,
+          job_id: job_id
+        )
+      end
     end
   end
 end
@@ -215,11 +209,11 @@ def create_debtor_payments(amount)
     # even if I could, if I were to check everytime with a SQL query, it would
     # anyway be really slow. Let's just do it manually! Yay!
 
-    orders = new Hash(nil)
+    orders = Hash.new(nil)
 
     DebtorOrder.select("id, value_excluding_tax").each do |db_order|
-      orders[db_order[:id]] = {
-        value_excluding_tax: db_order[value_excluding_tax],
+      orders[db_order.id] = {
+        value_excluding_tax: db_order.value_excluding_tax,
         amount_of_payments: 0,
         total_payments: 0.0
       }
@@ -227,30 +221,30 @@ def create_debtor_payments(amount)
     amount.times do
       id = orders.keys.sample
       random_order = orders[id]
-      if rng_percentage_check(0.05 * (random_order[amount_of_payments] + 1) )
-        amnt = random_order[value_excluding_tax] - random_order[total_payments]
+      if rng_percentage_check(0.05 * (random_order[:amount_of_payments] + 1) )
+        amnt = random_order[:value_excluding_tax] - random_order[:total_payments]
         DebtorPayment.create(
           debtor_order_id: id,
           payment_amount: amnt,
           payment_type: "cash",
           note: Faker::Lorem.sentence,
-          payment_date: Faker::Date.backwards(60),
+          payment_date: Faker::Date.backward(60),
           invoice_code: Faker::Lorem.word
         )
         orders.except!(id)
       else
-        max = random_order[value_excluding_tax] - random_order[total_payments]
+        max = random_order[:value_excluding_tax] - random_order[:total_payments]
         amnt = rand(max)
         DebtorPayment.create(
           debtor_order_id: id,
           payment_amount: amnt,
           payment_type: "cash",
           note: Faker::Lorem.sentence,
-          payment_date: Faker::Date.backwards(60),
+          payment_date: Faker::Date.backward(60),
           invoice_code: Faker::Lorem.word
         )
-        random_order[amount_of_payments] += 1
-        random_order[total_payments] += amnt
+        random_order[:amount_of_payments] += 1
+        random_order[:total_payments] += amnt
       end
     end
   end
@@ -267,8 +261,8 @@ def create_creditor_orders(amount)
         delivery_note: Faker::Lorem.sentence,
         date_issued: Faker::Time.backward(700),
         value_excluding_tax: amt_excl,
+        tax_amount: amt_excl * 0.15,
         value_including_tax: amt_excl*1.15,
-        still_owed_amount: amt_excl*1.15,
         reference_number: generate_reference_number()
       )
     end
@@ -281,11 +275,11 @@ def create_creditor_payments(amount)
     # I have to maintain the same type of list as in Debtor Payments creation.
     # See that one's notes why; they're the same
 
-    orders = new Hash(nil)
+    orders = Hash.new(nil)
 
     CreditorOrder.select("id, value_excluding_tax").each do |db_order|
-      orders[db_order[:id]] = {
-        value_excluding_tax: db_order[value_excluding_tax],
+      orders[db_order.id] = {
+        value_excluding_tax: db_order.value_excluding_tax,
         amount_of_payments: 0,
         total_payments: 0.0
       }
@@ -293,8 +287,8 @@ def create_creditor_payments(amount)
     amount.times do
       id = orders.keys.sample
       random_order = orders[id]
-      if rng_percentage_check(0.05 * (random_order[amount_of_payments] + 1) )
-        amnt = random_order[value_excluding_tax] - random_order[total_payments]
+      if rng_percentage_check(0.05 * (random_order[:amount_of_payments] + 1) )
+        amnt = random_order[:value_excluding_tax] - random_order[:total_payments]
         CreditNote.create(
           creditor_order_id: id,
           payment_type: "cash",
@@ -304,7 +298,7 @@ def create_creditor_payments(amount)
         )
         orders.except!(id)
       else
-        max = random_order[value_excluding_tax] - random_order[total_payments]
+        max = random_order[:value_excluding_tax] - random_order[:total_payments]
         amnt = rand(max)
         CreditNote.create(
           creditor_order_id: id,
@@ -313,8 +307,8 @@ def create_creditor_payments(amount)
           note: Faker::Lorem.sentence,
           invoice_code: Faker::Lorem.word
         )
-        random_order[amount_of_payments] += 1
-        random_order[total_payments] += amnt
+        random_order[:amount_of_payments] += 1
+        random_order[:total_payments] += amnt
       end
     end
   end
@@ -366,19 +360,23 @@ end
 
 # -- 12. Labor Records ---------------------------------------------------------
 def create_labor_records(days_backwards)
-  with_console_output(amount, "Labor Record") do
-    @employees = Employee.all.to_a.shuffle
-    count = @employees.count
-    @employees.each_with_index { |emp, ind|
-      starting_date = Faker::Date.backward(days_backwards)
-      today = Date.today
-      puts "\t Starting with employee #{ind} on  #{date.strftime("%B %-d, %Y")} ..."
-      while ((today - starting_date.to_date).to_i > 5)
-        check_and_create_record(starting_date, emp)
-        starting_date += 1.day
-      end
-      puts "\t employee #{ind} done."
-      puts "------------------------"
-    }
-  end
+  puts "==============================="
+  puts "Creating Labor Records for Employees backward until potentially #{days_backwards.days.ago.to_date.strftime("%B %-d, %Y")}..."
+  @employees = Employee.all.to_a.shuffle
+  count = @employees.count
+  @employees.each_with_index { |emp, ind|
+    starting_date = Faker::Date.backward(days_backwards)
+    today = Date.today
+    puts "\t Starting with employee #{ind} on  #{starting_date.strftime("%B %-d, %Y")} ..."
+    while ((today - starting_date.to_date).to_i > 5)
+      check_and_create_record(starting_date, emp)
+      starting_date += 1.day
+    end
+    puts "\t employee #{ind} done."
+    puts "------------------------"
+  }
+  puts "Done."
+  puts "==============================="
 end
+
+seeds()
