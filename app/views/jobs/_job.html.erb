@@ -1,15 +1,11 @@
 <%= render partial: "shared/cards/card", locals: {
   entity: job,
-  card_header_text: job.id,
+  card_header_text: job.job_number,
   card_subheader_text: job.get_receive_date_string,
   confirm: Job.get_removal_confirmation(job.id),
   rows: [
     {
       header1: "JOB TOTAL:", text1: number_to_currency(job.total, unit: "R"),
-      header2: "TARGETED AMOUNT: ", text2: number_to_currency(job.targeted_amount, unit: "R"),
-    },
-    {
-      header1: "STILL AVAILABLE AMOUNT:", text1: number_to_currency((job.total - job.targeted_amount), unit: "R"),
       header2: "JCE NUMBER: ", text2: job.jce_number
     },
     {
@@ -22,11 +18,7 @@
     },
     {
       header1: "JOB DESCRIPTION:", text1: job.work_description,
-      header2: "TARGET DATE:", text2: job.target_date
-    },
-    {
-      header1: "IS FINISHED?", text1: job.is_finished,
-      header2: "", text2: ""
+      header2: "IS FINISHED?", text2: job.is_finished
     }
   ],
   path: edit_job_path(job)
