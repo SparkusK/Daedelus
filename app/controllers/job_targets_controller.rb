@@ -4,7 +4,13 @@ class JobTargetsController < ApplicationController
   # GET /job_targets
   # GET /job_targets.json
   def index
-    @job_targets = JobTarget.all
+    @job_targets = params[:keywords].present? ?
+      JobTarget.search(params[:keywords]).includes(:job, :section).paginate(page: params[:page]) :
+      JobTarget.includes(:job, :section).paginate(page: params[:page])
+    respond_to do |format|
+      format.html {}
+      format.js {}
+    end
   end
 
   # GET /job_targets/1

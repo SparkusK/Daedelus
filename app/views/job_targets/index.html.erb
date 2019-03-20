@@ -1,39 +1,23 @@
-<p id="notice"><%= notice %></p>
+<%= render partial: "shared/subpage_header",
+  locals: {
+    header_text: "Job Targets",
+    entity: :job_targets,
+    placeholder_text: "Search Job Targets" } %>
 
-<h1>Job Targets</h1>
 
-<table>
-  <thead>
-    <tr>
-      <th>Target date</th>
-      <th>Invoice number</th>
-      <th>Remarks</th>
-      <th>Details</th>
-      <th>Target amount</th>
-      <th>Section</th>
-      <th>Job</th>
-      <th colspan="3"></th>
-    </tr>
-  </thead>
+<%= render partial: 'top_pager' %>
 
-  <tbody>
-    <% @job_targets.each do |job_target| %>
-      <tr>
-        <td><%= job_target.target_date %></td>
-        <td><%= job_target.invoice_number %></td>
-        <td><%= job_target.remarks %></td>
-        <td><%= job_target.details %></td>
-        <td><%= job_target.target_amount %></td>
-        <td><%= job_target.section %></td>
-        <td><%= job_target.job %></td>
-        <td><%= link_to 'Show', job_target %></td>
-        <td><%= link_to 'Edit', edit_job_target_path(job_target) %></td>
-        <td><%= link_to 'Destroy', job_target, method: :delete, data: { confirm: 'Are you sure?' } %></td>
-      </tr>
-    <% end %>
-  </tbody>
-</table>
-
+<div class="d-flex justify-content-between">
+  <div>
+  </div>
+  <div>
+    <%= button_to 'New Job Target', new_job_target_path, class: "btn", method: :get %>
+  </div>
+</div>
+<hr>
 <br>
+<section class="job-target-panels">
+  <%= render partial: 'job_target', collection: @job_targets %>
+</section>
 
-<%= link_to 'New Job Target', new_job_target_path %>
+<%= render partial: 'bottom_pager' %>

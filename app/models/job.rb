@@ -3,6 +3,7 @@ class Job < ApplicationRecord
   has_many :creditor_orders
   has_many :debtor_orders
   has_many :labor_records
+  has_many :job_targets
 
   validates :receive_date,
     :contact_person, :responsible_person, :work_description, :jce_number,
@@ -22,6 +23,10 @@ class Job < ApplicationRecord
 
   def get_receive_date_string
     self.receive_date.nil? ? "" : self.receive_date.strftime("%a, %d %b %Y")
+  end
+
+  def targeted_amount
+    JobTarget.where(job_id: self.id).sum(:target_amount)
   end
 
   def still_available_amount

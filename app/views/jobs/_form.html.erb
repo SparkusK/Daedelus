@@ -11,8 +11,6 @@
     </div>
   <% end %>
 
-
-
   <div class="form-row">
     <div class="form-group col-md-6">
       <%= form.label :receive_date %> </br>
@@ -24,34 +22,20 @@
       </span>
     </div>
     <div class="form-group col-md-6">
-      <%= form.label :target_date %> </br>
-      <span>
-        <%= form.text_field :target_date,
-                             autocomplete: :off,
-                             class: "form-control datepicker",
-                             placeholder: "yyyy-mm-dd" %>
-      </span>
-    </div>
-  </div>
-
-  <div class="form-row">
-    <div class="form-group col-md-4">
-      <%= form.label :contact_person %>
-      <%= form.text_field :contact_person, id: :job_contact_person, class: "form-control" %>
-    </div>
-    <div class="form-group col-md-4">
-      <%= form.label :responsible_person %>
-      <%= form.text_field :responsible_person, id: :job_responsible_person, class: "form-control" %>
-    </div>
-    <div class="form-group col-md-4">
       <%= form.label :section_id %>
       <%= collection_select(:job, :section_id, Section.all, :id, :section_name, {prompt: true}, {class: "custom-select"}) %>
     </div>
   </div>
 
   <div class="form-row">
-    <%= form.label :work_description %>
-    <%= form.text_field :work_description, id: :job_work_description, class: "form-control" %>
+    <div class="form-group col-md-6">
+      <%= form.label :contact_person %>
+      <%= form.text_field :contact_person, id: :job_contact_person, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-6">
+      <%= form.label :responsible_person %>
+      <%= form.text_field :responsible_person, id: :job_responsible_person, class: "form-control" %>
+    </div>
   </div>
 
   <div class="form-row">
@@ -66,17 +50,50 @@
   </div>
 
   <div class="form-row">
+    <div class="form-group col-md-12">
+      <%= form.label :work_description %>
+      <%= form.text_field :work_description, id: :job_work_description, class: "form-control" %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-4">
+      <%= form.label :job_number %>
+      <%= form.text_field :job_number, id: :job_job_number, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :order_number %>
+      <%= form.text_field :order_number, id: :job_order_number, class: "form-control" %>
+    </div>
+    <div class="form-group col-md-4">
+      <%= form.label :client_section %>
+      <%= form.text_field :client_section, id: :job_client_section, class: "form-control" %>
+    </div>
+
+  </div>
+
+  <div class="form-row">
     <div class="form-group col-md-4">
       <%= form.label :total %>
       <%= form.text_field :total, id: :job_total, class: "form-control" %>
     </div>
     <div class="form-group col-md-4">
       <%= form.label :targeted_amount %>
-      <%= form.text_field :targeted_amount, id: :job_targeted_amount, class: "form-control" %>
+      <%= form.text_field :targeted_amount, id: :job_targeted_amount, class: "form-control", readonly: true %>
     </div>
     <div class="form-group col-md-4">
       <%= form.label :still_available_amount %>
       <%= form.text_field :still_available_amount, id: :job_still_available_amount, class: "form-control", readonly: true %>
+    </div>
+  </div>
+
+  <div class="form-row">
+    <div class="form-group col-md-3">
+      <%= form.label :is_finished do "" end %>
+      <div class="custom-control custom-checkbox">
+        <%= form.check_box :is_finished, id: :job_is_finished, class:"custom-control-input" %>
+        <%= form.label "Job is Finished", class: "custom-control-label", for: "job_is_finished" %>
+      </div>
     </div>
   </div>
 

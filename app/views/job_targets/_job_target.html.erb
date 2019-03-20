@@ -1,0 +1,49 @@
+<div class="card" id="<%= job_target.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4 class="card-text"> <%= "#{job_target.job.job_number}" %> </h4>
+      <h5 class="card-text"> <%= number_to_currency(job_target.target_amount, unit: "R") %> </h5>
+    </div>
+  </div>
+  <div class="card-body">
+    <div class="row">
+      <div class="col-md-6">
+        <h6><small class="text-muted">TARGET DATE: </small><%= job_target.target_date.strftime("%B %-d, %Y") %></h6>
+      </div>
+      <div class="col-md-6">
+        <h6><small class="text-muted">INVOICE NUMBER: </small><%= job_target.invoice_number %></h6>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-6">
+        <h6><small class="text-muted">SECTION: </small><%= job_target.job.section.name %></h6>
+      </div>
+      <div class="col-md-6">
+        <h6><small class="text-muted">AVAILABLE AMOUNT: </small><%= number_to_currency(job_target.get_available_amount, unit: "R") %></h6>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-10">
+        <h6><small class="text-muted">REMARKS: </small><%= job_target.remarks %></h6>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-10">
+        <h6><small class="text-muted">DETAILS: </small><%= job_target.details %></h6>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-10">
+        <h6><small class="text-muted">WORK DESCRIPTION: </small><%= job_target.job.work_description %></h6>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-md-10"></div>
+      <div class="d-flex col-md-2">
+        <%= button_to 'Edit', edit_job_target_path(job_target), remote: true, method: :get, class: "btn btn-primary" %>
+        <%= button_to 'Remove', job_target, method: :delete, data: { confirm: job_target.get_removal_confirmation(job_target.id) }, class: "btn btn-danger" %>
+      </div>
+    </div>
+  </div>
+</div>
+<br>

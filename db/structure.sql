@@ -890,7 +890,7 @@ CREATE UNIQUE INDEX index_users_on_reset_password_token ON public.users USING bt
 --
 
 ALTER TABLE ONLY public.job_targets
-    ADD CONSTRAINT fk_rails_05ec45ac2a FOREIGN KEY (section_id) REFERENCES public.sections(id);
+    ADD CONSTRAINT fk_rails_05ec45ac2a FOREIGN KEY (section_id) REFERENCES public.sections(id) ON DELETE SET NULL;
 
 
 --
@@ -962,7 +962,7 @@ ALTER TABLE ONLY public.debtor_orders
 --
 
 ALTER TABLE ONLY public.job_targets
-    ADD CONSTRAINT fk_rails_a8e3ada8b3 FOREIGN KEY (job_id) REFERENCES public.jobs(id);
+    ADD CONSTRAINT fk_rails_a8e3ada8b3 FOREIGN KEY (job_id) REFERENCES public.jobs(id) ON DELETE CASCADE;
 
 
 --
@@ -1082,6 +1082,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20181215111652'),
 ('20181216114822'),
 ('20190308124624'),
-('20190314141233');
+('20190314141233'),
+('20190318153246');
 
 
