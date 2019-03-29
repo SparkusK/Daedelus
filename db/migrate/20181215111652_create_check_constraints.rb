@@ -280,7 +280,7 @@ class CreateCheckConstraints < ActiveRecord::Migration[5.1]
       ALTER TABLE
         debtor_orders
       DROP CONSTRAINT
-        value_incl_lt_value_excl;
+        value_excl_lt_value_incl;
 
       ALTER TABLE
         debtor_orders
@@ -314,7 +314,7 @@ class CreateCheckConstraints < ActiveRecord::Migration[5.1]
       ALTER TABLE
         creditor_orders
       DROP CONSTRAINT
-        value_incl_lt_value_excl;
+        value_excl_lt_value_incl;
 
       ALTER TABLE
         creditor_orders
