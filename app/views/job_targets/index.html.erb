@@ -1,21 +1,48 @@
-<%= render partial: "shared/subpage_header",
-  locals: {
-    header_text: "Job Targets",
-    entity: :job_targets,
-    placeholder_text: "Search Job Targets" } %>
+<section class="header">
+  <h1>Job Targets</h1>
+</section>
 
+<section class="search-form">
+  <%= form_tag "/job_targets", method: :get do %>
+  <%= label_tag :keywords, nil, class: "sr-only" %>
+  <div class="input-group input-group-lg">
+    <%= text_field_tag :keywords, nil,
+          placeholder: "Search Job Targets",
+          class: "form-control input-lg" %>
+    <%= image_tag("loading.gif", class: "img-thumbnail loading_gif") %>
+    <%= image_tag("typing.gif", class: "img-thumbnail typing_gif") %>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <%= label_tag :target_start_date %> </br>
+      <%= text_field_tag( :target_start_date,
+            "#{params[:target_start_date]}",
+            {autocomplete: :off,
+              class: "form-control datepicker",
+                placeholder: "yyyy-mm-dd"}) %>
+    </div>
+    <div class="form-group col-md-6">
+        <%= label_tag :target_end_date %> </br>
+        <%= text_field_tag :target_end_date,
+            "#{params[:target_end_date]}",
+            {autocomplete: :off,
+              class: "form-control datepicker",
+                placeholder: "yyyy-mm-dd"} %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-10"></div>
+    <div class="form-group col-md-2">
+      <div class="actions">
+        <%= submit_tag("Refresh values", class: "btn btn-primary") %>
+      </div>
+    </div>
+  </div>
+  <% end %>
+</section>
 
 <%= render partial: 'top_pager' %>
 
-<div class="d-flex justify-content-between">
-  <div>
-  </div>
-  <div>
-    <%= button_to 'New Job Target', new_job_target_path, class: "btn", method: :get %>
-  </div>
-</div>
-<hr>
-<br>
 <section class="job-target-panels">
   <%= render partial: 'job_target', collection: @job_targets %>
 </section>

@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-  function doStuff() {
+  function calculateAvailableAmount() {
     var total = $("#job_total").val();
     var targeted_amount = $("#job_targeted_amount").val();
     var available_amount = total - targeted_amount;
@@ -8,10 +8,10 @@ $(document).ready(function() {
   }
 
   $('#job_total').change(function() {
-    doStuff();
+    calculateAvailableAmount();
   });
   $('#job_targeted_amount').change(function() {
-    doStuff();
+    calculateAvailableAmount();
   });
-  
+
 });

@@ -103,7 +103,7 @@ class LaborRecord < ApplicationRecord
       ).paginate(
         page: page
       ).includes(
-        :employee, :job
+        :employee, :job, :section
       )
     # If there are numbers, we only search JCE number
     elsif keywords =~ /\d/
@@ -128,7 +128,7 @@ class LaborRecord < ApplicationRecord
       ).paginate(
         page: page
       ).includes(
-        :employee, :job
+        :employee, :job, :section
       )
     else
       # search everything
@@ -154,7 +154,7 @@ class LaborRecord < ApplicationRecord
       ).paginate(
         page: page
       ).includes(
-        :employee, :job
+        :employee, :job, :section
       )
 
     end

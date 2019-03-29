@@ -1,0 +1,28 @@
+$('#<%= @job_target.id %>').html("<%= escape_javascript(render 'inline_edit', job_target: @job_target).html_safe %>");
+$(document).ready(function() {
+
+  var job_target_id = '<%= j "#{@job_target.id}" %>';
+
+  function calculateAvailableAmount(job_target_id) {
+    var selected_job_id = $("#job_target_job_id_<%= @job_target.id %>").val();
+    $.ajax({
+      dataType: "json",
+      url: "/job_targets/" + job_target_id + "/amounts/" + selected_job_id,
+      success: function( response ) {
+        var target_amount = $("#job_target_target_amount_<%= @job_target.id %>").val();
+        var remaining_amount = response["remaining_amount"] - target_amount;
+        var job_total = response["job_total"] - 0.0;
+        $("#job_target_remaining_amount_<%= @job_target.id %>").val(remaining_amount.toFixed(2));
+        $("#job_target_job_total_<%= @job_target.id %>").val(job_total.toFixed(2));
+      }
+    });
+  }
+
+  $("#job_target_job_id_<%= @job_target.id %>").change(function() {
+    calculateAvailableAmount(job_target_id);
+  });
+  $("#job_target_target_amount_<%= @job_target.id %>").change(function() {
+    calculateAvailableAmount(job_target_id);
+  });
+
+});

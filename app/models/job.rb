@@ -18,7 +18,7 @@ class Job < ApplicationRecord
   end
 
   def job_name
-    "#{jce_number}"
+    "#{job_number}"
   end
 
   def get_receive_date_string
@@ -57,18 +57,24 @@ class Job < ApplicationRecord
     LaborRecord.where("job_id = ?", job_id)
   end
 
+  def self.get_job_targets(job_id)
+    JobTarget.where("job_id = ?", job_id)
+  end
+
   def self.get_entities(job_id)
     creditor_orders  = get_creditor_orders(   job_id              )
     credit_notes     = get_credit_notes(      creditor_orders.ids )
     debtor_orders    = get_debtor_orders(     job_id              )
     debtor_payments  = get_debtor_payments(   debtor_orders.ids   )
     labor_records    = get_job_labor_records( job_id              )
+    job_targets      = get_job_targets(       job_id              )
     {
       creditor_orders: creditor_orders,
       credit_notes: credit_notes,
       debtor_orders: debtor_orders,
       debtor_payments: debtor_payments,
-      labor_records: labor_records
+      labor_records: labor_records,
+      job_targets: job_targets
     }
   end
 
@@ -87,6 +93,7 @@ class Job < ApplicationRecord
     confirmation << "* #{entities[:debtor_orders].count} Debtor Order records \n"
     confirmation << "    * #{entities[:debtor_payments].count} Debtor Payment records \n"
     confirmation << "* #{entities[:labor_records].count} Labor Records \n"
+    confirmation << "* #{entities[:job_targets].count} Job Target records \n"
 
     confirmation << "Are you sure?"
   end

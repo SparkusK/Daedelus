@@ -27,12 +27,12 @@
 
 <p>
   <strong>Section:</strong>
-  <%= @job_target.section %>
+  <%= @job_target.section.id %>
 </p>
 
 <p>
   <strong>Job:</strong>
-  <%= @job_target.job %>
+  <%= @job_target.job.id %>
 </p>
 
 <%= link_to 'Edit', edit_job_target_path(@job_target) %> |

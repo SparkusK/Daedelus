@@ -16,7 +16,7 @@
     </div>
     <div class="row">
       <div class="col-md-6">
-        <h6><small class="text-muted">SECTION: </small><%= job_target.job.section.name %></h6>
+        <h6><small class="text-muted">SECTION: </small><%= job_target.section.name %></h6>
       </div>
       <div class="col-md-6">
         <h6><small class="text-muted">AVAILABLE AMOUNT: </small><%= number_to_currency(job_target.get_available_amount, unit: "R") %></h6>

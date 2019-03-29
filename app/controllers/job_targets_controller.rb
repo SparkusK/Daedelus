@@ -1,11 +1,15 @@
 class JobTargetsController < ApplicationController
-  before_action :set_job_target, only: [:show, :edit, :update, :destroy]
+  before_action :set_job_target, only: [:show, :edit, :update, :destroy, :amounts]
 
   # GET /job_targets
   # GET /job_targets.json
   def index
     @job_targets = params[:keywords].present? ?
-      JobTarget.search(params[:keywords]).includes(:job, :section).paginate(page: params[:page]) :
+      JobTarget.search(
+        params[:keywords],
+        params[:target_start_date],
+        params[:target_end_date],
+        params[:page]).includes(:job, :section).paginate(page: params[:page]) :
       JobTarget.includes(:job, :section).paginate(page: params[:page])
     respond_to do |format|
       format.html {}
@@ -25,6 +29,10 @@ class JobTargetsController < ApplicationController
 
   # GET /job_targets/1/edit
   def edit
+    respond_to do |format|
+      format.html
+      format.js
+    end
   end
 
   # POST /job_targets
@@ -47,12 +55,18 @@ class JobTargetsController < ApplicationController
   # PATCH/PUT /job_targets/1.json
   def update
     respond_to do |format|
-      if @job_target.update(job_target_params)
-        format.html { redirect_to @job_target, notice: 'Job target was successfully updated.' }
-        format.json { render :show, status: :ok, location: @job_target }
+      if params[:commit] == "Save"
+        if @job_target.update(job_target_params)
+          format.html { redirect_to @job_target, notice: 'Job was successfully updated.' }
+          format.json { render :show, status: :ok, location: @job_target }
+          format.js
+        else
+          format.html { render :edit }
+          format.json { render json: @job_target.errors, status: :unprocessable_entity }
+          format.js { render 'edit' }
+        end
       else
-        format.html { render :edit }
-        format.json { render json: @job_target.errors, status: :unprocessable_entity }
+        format.js { render action: "cancel"}
       end
     end
   end
@@ -67,6 +81,21 @@ class JobTargetsController < ApplicationController
     end
   end
 
+  def cancel
+    job_target = JobTarget.find_by(id: params[:id])
+    respond_to { |format| format.js }
+  end
+
+  # GET /job_targets/1/amounts
+  def amounts
+    job_id = params[:job_id]
+    @job_target_amounts = @job_target.get_amounts(job_id)
+    respond_to do |format|
+      format.html { render json: @job_target_amounts }
+      format.json { render json: @job_target_amounts }
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_job_target
@@ -75,6 +104,17 @@ class JobTargetsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_target_params
-      params.require(:job_target).permit(:target_date, :invoice_number, :remarks, :details, :target_amount, :section_id, :job_id)
+      params.require(:job_target).permit(
+        :target_date,
+        :invoice_number,
+        :remarks,
+        :details,
+        :target_amount,
+        :section_id,
+        :job_id,
+        :target_start_date,
+        :target_end_date,
+        :page
+        )
     end
 end

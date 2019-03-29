@@ -1,0 +1,2 @@
+var newContent = $("<%= j render @job_target %>").html();
+$('#<%= @job_target.id %>').html(newContent);
