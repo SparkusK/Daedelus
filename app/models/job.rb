@@ -5,10 +5,10 @@ class Job < ApplicationRecord
   has_many :labor_records
   has_many :job_targets
 
-  validates :receive_date,
-    :contact_person, :responsible_person, :work_description, :jce_number,
-    :quotation_reference, :total,
-    presence: true
+  validates :receive_date, :contact_person, :responsible_person,
+    :work_description, :jce_number, :quotation_reference, :total, :job_number,
+    :order_number, :client_section,
+      presence: true
 
   validates :total, numericality: { greater_than: 0.0 }
 
