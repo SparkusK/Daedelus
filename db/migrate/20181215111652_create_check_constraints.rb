@@ -119,8 +119,8 @@ class CreateCheckConstraints < ActiveRecord::Migration[5.1]
       ALTER TABLE
         debtor_orders
       ADD CONSTRAINT
-        value_incl_lt_value_excl
-      CHECK( value_including_tax < value_excluding_tax );
+        value_excl_lt_value_incl
+      CHECK( value_excluding_tax < value_including_tax );
 
       ALTER TABLE
         debtor_orders
@@ -159,8 +159,8 @@ class CreateCheckConstraints < ActiveRecord::Migration[5.1]
       ALTER TABLE
         creditor_orders
       ADD CONSTRAINT
-        value_incl_lt_value_excl
-      CHECK( value_including_tax < value_excluding_tax );
+        value_excl_lt_value_incl
+      CHECK( value_excluding_tax < value_including_tax );
 
       ALTER TABLE
         creditor_orders
