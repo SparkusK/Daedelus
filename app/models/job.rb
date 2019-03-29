@@ -17,7 +17,7 @@ class Job < ApplicationRecord
   end
 
   def job_name
-    "#{job_number}"
+    job_number.nil? ? "Job number not found" : "#{job_number}"
   end
 
   def get_receive_date_string
