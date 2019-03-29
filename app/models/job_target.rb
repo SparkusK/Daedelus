@@ -2,6 +2,10 @@ class JobTarget < ApplicationRecord
   belongs_to :section
   belongs_to :job
 
+  validates :target_date, :invoice_number, :target_amount, presence: true
+
+  validates :target_amount, numericality: { greater_than: 0.0 }
+
   def get_available_amount
     total = self.job.total
     payments = JobTarget.where(job_id: self.job_id).sum(:target_amount)
