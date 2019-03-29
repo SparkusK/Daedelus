@@ -12,7 +12,6 @@ class Job < ApplicationRecord
 
   validates :total, numericality: { greater_than: 0.0 }
 
-
   def get_supervisor
     Supervisor.find_by(section_id: section.id)
   end
@@ -36,6 +35,8 @@ class Job < ApplicationRecord
   def self.get_amount_remaining(job)
     job.total - JobTarget.where(job_id: job.id).sum(target_amount)
   end
+
+  # ---- Get Removal Confirmation stuff ---------------------------------------
 
   def self.get_creditor_orders(job_id)
     CreditorOrder.where("job_id = ?", job_id)
@@ -98,6 +99,8 @@ class Job < ApplicationRecord
     confirmation << "Are you sure?"
   end
 
+# ------------------------------------------------------------------------------
+
   # Search by:
   # If there are NO keywords:
   #   Grab everything
@@ -151,11 +154,17 @@ class Job < ApplicationRecord
         OR lower(jobs.work_description) LIKE ?
         OR lower(quotation_reference) LIKE ?
         OR lower(jobs.jce_number) LIKE ?
-        OR jobs.id::varchar(20) LIKE ?)
+        OR jobs.id::varchar(20) LIKE ?
+        OR lower(jobs.job_number) LIKE ?
+        OR lower(jobs.order_number) LIKE ?
+        OR lower(jobs.client_section) LIKE ?)
       }.gsub(/\s+/, " ").strip
 
       @jobs = Job.where(
         where_term,
+        search_term,
+        search_term,
+        search_term,
         search_term,
         search_term,
         search_term,
@@ -170,31 +179,21 @@ class Job < ApplicationRecord
     @jobs = @jobs.joins(:section)
 
     # Then reduce the result set by filtering jobs by dates, filters, etc
-    if has_target_start
-      @jobs = @jobs.where("jobs.target_date >= ?", target_start_date)
-    end
-    if has_target_end
-      @jobs = @jobs.where("jobs.target_date <= ?", target_end_date)
-    end
-    if has_receive_start
-      @jobs = @jobs.where("jobs.receive_date >= ?", receive_start_date)
-    end
-    if has_receive_end
-      @jobs = @jobs.where("jobs.receive_date <= ?", receive_end_date)
-    end
-
     case targets
     when "All"
       # we don't really need to do anything here
     when "Not targeted"
       # Jobs where targeted_amount = 0
-      @jobs = @jobs.where("jobs.targeted_amount = 0")
-    when "Partially targeted"
-      # Jobs where 0 < targeted_amount < total
-      @jobs = @jobs.where("jobs.targeted_amount > 0 AND jobs.targeted_amount < jobs.total")
-    when "Fully targeted"
-      # Jobs where targeted_amount >= total
-      @jobs = @jobs.where("jobs.targeted_amount >= jobs.total")
+      @jobs = @jobs.where(id: get_not_targeted_records(@jobs))
+    when "Under Targeted"
+      # Jobs where targeted_amount < job.total
+      @jobs = @jobs.where(id: get_targeted_records('<'))
+    when "Fully Targeted"
+      # Jobs where targeted_amount == total
+      @jobs = @jobs.where(id: get_targeted_records('='))
+    when "Over Targeted"
+      # Jobs where targeted_amount > job.total
+      @jobs = @jobs.where(id: get_targeted_records('>'))
     end
 
     case completes
@@ -208,6 +207,21 @@ class Job < ApplicationRecord
       @jobs = @jobs.where("jobs.is_finished = 't'")
     end
 
+    if has_target_start
+      # Jobs for which their earliest Job Target's Date is after the input date
+      @jobs = @jobs.where(id: get_target_date_jobs(true, target_start_date))
+    end
+    if has_target_end
+      # Jobs for which their latest Job Target's Date is before the Input Date
+      @jobs = @jobs.where(id: get_target_date_jobs(false, target_end_date))
+    end
+    if has_receive_start
+      @jobs = @jobs.where("jobs.receive_date >= ?", receive_start_date)
+    end
+    if has_receive_end
+      @jobs = @jobs.where("jobs.receive_date <= ?", receive_end_date)
+    end
+
     # Finally, do the ordering and pagination and such
     order_term = "jobs.receive_date desc"
     @jobs = @jobs.order(
@@ -219,3 +233,87 @@ class Job < ApplicationRecord
     )
   end
 end
+
+def get_targeted_records(modifier)
+  raise "Only valid modifiers are allowed." if !(['<', '>', '='].include? modifier)
+  sql = "SELECT jobs.id, jobs.total, SUM(job_targets.target_amount)
+  FROM jobs LEFT OUTER JOIN job_targets
+  ON job_targets.job_id = jobs.id
+  GROUP BY jobs.id
+  HAVING SUM(job_targets.target_amount) #{modifier} jobs.total;"
+  results = ActiveRecord::Base.connection.execute(sql)
+  ids = results.map{|hash| hash["id"]}
+end
+
+def get_not_targeted_records
+  sql = "SELECT jobs.id, jobs.total, SUM(job_targets.target_amount)
+  FROM jobs LEFT OUTER JOIN job_targets
+  ON job_targets.job_id = jobs.id
+  GROUP BY jobs.id
+  HAVING SUM(job_targets.target_amount) IS NULL;"
+  results = ActiveRecord::Base.connection.execute(sql)
+  ids = results.map{|hash| hash["id"]}
+end
+
+
+def get_target_date_jobs(start, input_date)
+
+  # I don't know which types of formats, other than the regex listed below,
+  # Postgres actually supports. I know that the Javascript Calendar datepicker
+  # actually outputs to this format too. So, any weird input behaviors should
+  # be caught by both the following regex and the Date.parse() method in the
+  # begin..rescue block.
+  input_date_format_valid = !(/\A\d{4}-\d{2}-\d{2}\z/ =~ input_date).nil?
+  if input_date_format_valid
+    begin
+      # This will make sure that the input date actually parses to a valid date
+      Date.parse(input_date)
+    rescue ArgumentError
+      raise "Input date needs to be a valid date ('YYYY-MM-DD'). [PARSE_ERROR]"
+    end
+  else
+    raise "Input date needs to be a valid date ('YYYY-MM-DD'). [FORMAT_INVALID]"
+  end
+  # If we got to this point, we can assume input_date is mostly good.
+  # We need to make sure it's good, because we're taking data directly from the
+  # UI. SQL Injections and such.
+
+  if start
+    comparator = '>='
+    date_order = 'ASC'
+  else
+    comparator = '<='
+    date_order = 'DESC'
+  end
+
+  sql = "SELECT DISTINCT ON (jobs.id) job_id, job_targets.target_date
+  FROM jobs
+  INNER JOIN job_targets ON job_targets.job_id = jobs.id
+  WHERE target_date #{comparator} '#{input_date}'
+  ORDER BY jobs.id ASC, job_targets.target_date #{date_order};"
+  results = ActiveRecord::Base.connection.execute(sql)
+  ids = results.map{|hash| hash["job_id"]}
+end
+
+(/\A\d{4}-\d{2}-\d{2}\z/ =~ "2019-03-25").nil?
+
+
+# SELECT jobs.id, jobs.total, SUM(job_targets.target_amount)
+# FROM jobs LEFT OUTER JOIN job_targets
+# ON job_targets.job_id = jobs.id
+# GROUP BY jobs.id
+# HAVING jobs.total < SUM(job_targets.target_amount);
+
+# TARGET_START_DATE
+# SELECT DISTINCT ON (jobs.id) job_id, job_targets.target_date
+# FROM jobs
+# INNER JOIN job_targets ON job_targets.job_id = jobs.id
+# WHERE target_date >= '2019-03-15'
+# ORDER BY jobs.id ASC, job_targets.target_date ASC;
+
+# TARGET_END_DATE
+# SELECT DISTINCT ON (jobs.id) job_id, job_targets.target_date
+# FROM jobs
+# INNER JOIN job_targets ON job_targets.job_id = jobs.id
+# WHERE target_date <= '2019-02-15'
+# ORDER BY jobs.id ASC, job_targets.target_date DESC;
