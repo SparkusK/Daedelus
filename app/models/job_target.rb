@@ -38,6 +38,13 @@ class JobTarget < ApplicationRecord
     amounts = {remaining_amount: remaining_amount, job_total: job_total}
   end
 
+  def self.get_amounts_for_new_job_target(job_id)
+    job_total = Job.find_by(id: job_id).total
+    payments = JobTarget.where(job_id: job_id).sum(:target_amount)
+    remaining_amount = job_total - payments
+    amounts = {remaining_amount: remaining_amount, job_total: job_total}
+  end
+
   def self.search(keywords, target_start_date, target_end_date, page)
     # Let's first setup some named conditions on which we want to search
     has_target_start = !target_start_date.nil? && !target_start_date.empty?

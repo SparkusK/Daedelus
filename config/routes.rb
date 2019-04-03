@@ -30,6 +30,7 @@ Rails.application.routes.draw do
   get '/creditor_orders/:id/amounts', to: "creditor_orders#ajax_amounts"
 
   get '/job_targets/:id/amounts/:job_id', to: "job_targets#amounts"
+  get '/job_targets/amounts/:job_id', to: "job_targets#amounts_new"
 
 end
 

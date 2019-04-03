@@ -1,10 +1,10 @@
 $(document).ready(function() {
 
-  function calculateAvailableAmount(job_target_id) {
+  function calculateAvailableAmount() {
     var selected_job_id = $("#job_target_job_id").val();
     $.ajax({
       dataType: "json",
-      url: "/job_targets/" + "/amounts_new/" + selected_job_id,
+      url: "/job_targets/amounts/" + selected_job_id,
       success: function( response ) {
         var target_amount = $("#job_target_target_amount").val();
         var remaining_amount = response["remaining_amount"] - target_amount;
@@ -16,10 +16,10 @@ $(document).ready(function() {
   }
 
   $("#job_target_job_id").change(function() {
-    calculateAvailableAmount(job_target_id);
+    calculateAvailableAmount();
   });
   $("#job_target_target_amount").change(function() {
-    calculateAvailableAmount(job_target_id);
+    calculateAvailableAmount();
   });
 
 });
