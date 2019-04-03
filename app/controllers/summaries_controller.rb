@@ -3,7 +3,7 @@ class SummariesController < ApplicationController
 
   # GET /summaries
   def index
-    params[:start_date] = 1.months.ago if params[:start_date].nil?
+    params[:start_date] = 1.months.ago.to_date if params[:start_date].nil?
     params[:end_date] = Date.today if params[:end_date].nil?
     date1 = params[:start_date]
     date2 = params[:end_date]

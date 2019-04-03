@@ -5,8 +5,8 @@ class PayrollsController < ApplicationController
   # GET /payrolls
   # GET /payrolls.json
   def index
-    params[:start_date] = 2.months.ago if params[:start_date].nil?
-    params[:end_date] = 1.months.ago if params[:end_date].nil?
+    params[:start_date] = 2.months.ago.to_date if params[:start_date].nil?
+    params[:end_date] = 1.months.ago.to_date if params[:end_date].nil?
     date1 = params[:start_date]
     date2 = params[:end_date]
 

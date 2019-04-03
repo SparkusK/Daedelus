@@ -92,8 +92,8 @@ class LaborRecordsController < ApplicationController
 
     def set_dates
 
-      params[:start_date] = 1.month.ago if params[:start_date].nil?
-      params[:end_date] = 0.months.ago if params[:end_date].nil?
+      params[:start_date] = 1.month.ago.to_date if params[:start_date].nil?
+      params[:end_date] = 0.months.ago.to_date if params[:end_date].nil?
       date1 = params[:start_date]
       date2 = params[:end_date]
 

@@ -64,7 +64,7 @@ class Summary
     )
     @summary.overheads = Section.find_by(id: section.id).overheads
     @summary.orders = Job.joins(:creditor_orders).where("receive_date >= ? AND receive_date <= ? AND section_id = ?", start_date, end_date, section.id).sum(:value_excluding_tax)
-    @summary.target_jobs = Job.where("receive_date >= ? AND receive_date =< ? AND section_id = ?", start_date, end_date, section.id).sum(:targeted_amount)
+    @summary.target_jobs = JobTarget.joins(:job).where("receive_date >= ? AND receive_date <= ? AND job_targets.section_id = ?", start_date, end_date, section.id).sum(:target_amount)
     @summary
     # Get Labor for Section, Total After
     # Get Overheads for Section
@@ -86,7 +86,7 @@ class Summary
                                             start_date,
                                             end_date)
                                      .sum(:value_excluding_tax)
-    @aggregate.target_jobs = Job.where("receive_date >= ? AND receive_date <= ?", start_date, end_date).sum(:targeted_amount)
+    @aggregate.target_jobs = JobTarget.joins(:job).where("receive_date >= ? AND receive_date <= ?", start_date, end_date).sum(:target_amount)
     @aggregate
     # Get Total Labor
     # Get Total Overheads
