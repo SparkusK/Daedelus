@@ -43,6 +43,25 @@ class Employee < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
+  # def self.get_labor_record_dates(employee_id, start_date, end_date)
+  #   dates_hash = Hash.new(true)
+  #   LaborRecord.select("labor_date").where(
+  #     "employee_id = ? AND labor_date > ? AND labor_date < ?",
+  #     employee_id, start_date, end_date
+  #   ).each do |date_object|
+  #     dates_hash["#{date_object.labor_date}"] = true
+  #   end
+  #   dates_hash
+  # end
+
+  def self.get_labor_record_dates(employee_id)
+    dates_hash = Hash.new(true)
+    LaborRecord.select("labor_date").where("employee_id = ?", employee_id).each do |date_object|
+      dates_hash["#{date_object.labor_date}"] = true
+    end
+    dates_hash
+  end
+
   # Labor Records should only be able to choose Employees that are not fired
   def self.valid
     Employee.except(eoc: true)

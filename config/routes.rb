@@ -32,6 +32,8 @@ Rails.application.routes.draw do
   get '/job_targets/:id/amounts/:job_id', to: "job_targets#amounts"
   get '/job_targets/amounts/:job_id', to: "job_targets#amounts_new"
 
+  get 'employees/:id/ajax_labor_dates', to: "employees#ajax_labor_dates"
+
 end
 
 

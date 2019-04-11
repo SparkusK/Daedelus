@@ -22,11 +22,11 @@
                         {prompt: true}, {class: "custom-select", id: "labor_record_employee_id_#{@labor_record.id}"}) %>
   </div>
   <div class="form-group col-md-4">
-    <%= form.label :labor_date %> </br>
+    <%= form.label :labor_date %> <br>
     <span>
       <%= form.text_field :labor_date,
                            autocomplete: :off,
-                           class: "form-control datepicker",
+                           class: "form-control datepickercustom_#{@labor_record.id}",
                            placeholder: "yyyy-mm-dd",
                            id: "labor_record_date_#{@labor_record.id}" %>
     </span>

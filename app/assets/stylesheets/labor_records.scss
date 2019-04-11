@@ -1,3 +1,17 @@
 // Place all the styles related to the labor_records controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+.datepicker-assigned-day a.ui-state-default {
+  border-color: #bc410c;
+  background-color: #ff9980;
+}
+
+.datepicker-selected-day a.ui-state-default {
+  border-color: #a64dff;
+  background-color: #d9b3ff;
+}
+
+.datepicker-selected-day a.ui-state-default {
+  color: #454545;
+}

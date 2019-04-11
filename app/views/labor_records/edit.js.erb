@@ -1,93 +1,226 @@
 $('#<%= @labor_record.id %>').html("<%= escape_javascript(render 'inline_edit', employee: @labor_record).html_safe %>");
 
-$(document).ready(function() {
+var labor_dates_<%= @labor_record.id %>;
 
-  function EmployeeAmounts(employee_id) {
-    this.employee_id = employee_id;
+function EmployeeAmounts(employee_id) {
+  this.employee_id = employee_id;
 
-    this.getRates = function(id, date, hours) {
-      $.get("/employees/" + this.employee_id + "/rates", function( response ) {
-        // response.exclusive_rate
-        // response.inclusive_rate
-
-
-        var day_of_the_week = date.getDay();
-
-        var allowed_hours_before_overtime = 0.0;
-        var rate_after_overtime = 1.5;
-        var normal_time_hours = 0.0;
-        var overtime_hours = 0.0;
-        var sunday_time_hours = 0.0;
-
-        var day_hours = parseFloat(hours);
-
-        switch (day_of_the_week) {
-          case 0: // sunday
-            rate_after_overtime = 2.0;
-            sunday_time_hours = day_hours;
-            break;
-          case 5: // friday
-            allowed_hours_before_overtime = 5.0;
-            if (day_hours > allowed_hours_before_overtime) {
-              normal_time_hours = allowed_hours_before_overtime;
-              overtime_hours = day_hours - allowed_hours_before_overtime;
-            } else {
-              normal_time_hours = day_hours;
-            }
-            break;
-          case 6: // saturday
-            normal_time_hours = 0;
-            overtime_hours = 0;
-            break;
-          case 1: // monday
-          case 2: // tuesday
-          case 3: // wednesday
-          case 4: // thursday
-            allowed_hours_before_overtime = 8.75;
-            if (day_hours > allowed_hours_before_overtime) {
-              normal_time_hours = allowed_hours_before_overtime;
-              overtime_hours = day_hours - allowed_hours_before_overtime;
-            } else {
-              normal_time_hours = day_hours;
-            }
-            break;
-        }
-        var normal_time_amount_before_tax = normal_time_hours * response.exclusive_rate;
-        var normal_time_amount_after_tax = normal_time_hours * response.inclusive_rate;
-
-        var overtime_amount_before_tax = overtime_hours * response.exclusive_rate * rate_after_overtime;
-        var overtime_amount_after_tax = overtime_hours * response.inclusive_rate * rate_after_overtime;
-
-        var sunday_time_amount_before_tax = sunday_time_hours * response.exclusive_rate * rate_after_overtime;
-        var sunday_time_amount_after_tax = sunday_time_hours * response.inclusive_rate * rate_after_overtime;
-
-        var total_amount_before_tax = normal_time_amount_before_tax + overtime_amount_before_tax + sunday_time_amount_before_tax;
-        var total_amount_after_tax = normal_time_amount_after_tax + overtime_amount_after_tax + sunday_time_amount_after_tax;
+  this.getRates = function(id, date, hours) {
+    $.get("/employees/" + this.employee_id + "/rates", function( response ) {
+      // response.exclusive_rate
+      // response.inclusive_rate
 
 
-        $("#normal_time_hours_<%= @labor_record.id %>").val(normal_time_hours.toFixed(2));
-        $("#overtime_hours_<%= @labor_record.id %>").val(overtime_hours.toFixed(2));
-        $("#sunday_time_hours_<%= @labor_record.id %>").val(sunday_time_hours.toFixed(2));
+      var day_of_the_week = date.getDay();
 
-        $("#normal_time_amount_before_tax_<%= @labor_record.id %>").val(normal_time_amount_before_tax.toFixed(2));
-        $("#normal_time_amount_after_tax_<%= @labor_record.id %>").val(normal_time_amount_after_tax.toFixed(2));
+      var allowed_hours_before_overtime = 0.0;
+      var rate_after_overtime = 1.5;
+      var normal_time_hours = 0.0;
+      var overtime_hours = 0.0;
+      var sunday_time_hours = 0.0;
 
-        $("#overtime_amount_before_tax_<%= @labor_record.id %>").val(overtime_amount_before_tax.toFixed(2));
-        $("#overtime_amount_after_tax_<%= @labor_record.id %>").val(overtime_amount_after_tax.toFixed(2));
+      var day_hours = parseFloat(hours);
 
-        $("#sunday_time_amount_before_tax_<%= @labor_record.id %>").val(sunday_time_amount_before_tax.toFixed(2));
-        $("#sunday_time_amount_after_tax_<%= @labor_record.id %>").val(sunday_time_amount_after_tax.toFixed(2));
+      switch (day_of_the_week) {
+        case 0: // sunday
+          rate_after_overtime = 2.0;
+          sunday_time_hours = day_hours;
+          break;
+        case 5: // friday
+          allowed_hours_before_overtime = 5.0;
+          if (day_hours > allowed_hours_before_overtime) {
+            normal_time_hours = allowed_hours_before_overtime;
+            overtime_hours = day_hours - allowed_hours_before_overtime;
+          } else {
+            normal_time_hours = day_hours;
+          }
+          break;
+        case 6: // saturday
+          normal_time_hours = 0;
+          overtime_hours = 0;
+          break;
+        case 1: // monday
+        case 2: // tuesday
+        case 3: // wednesday
+        case 4: // thursday
+          allowed_hours_before_overtime = 8.75;
+          if (day_hours > allowed_hours_before_overtime) {
+            normal_time_hours = allowed_hours_before_overtime;
+            overtime_hours = day_hours - allowed_hours_before_overtime;
+          } else {
+            normal_time_hours = day_hours;
+          }
+          break;
+      }
+      var normal_time_amount_before_tax = normal_time_hours * response.exclusive_rate;
+      var normal_time_amount_after_tax = normal_time_hours * response.inclusive_rate;
 
-        $("#total_amount_before_tax_<%= @labor_record.id %>").val(total_amount_before_tax.toFixed(2));
-        $("#total_amount_after_tax_<%= @labor_record.id %>").val(total_amount_after_tax.toFixed(2));
+      var overtime_amount_before_tax = overtime_hours * response.exclusive_rate * rate_after_overtime;
+      var overtime_amount_after_tax = overtime_hours * response.inclusive_rate * rate_after_overtime;
 
-      });
+      var sunday_time_amount_before_tax = sunday_time_hours * response.exclusive_rate * rate_after_overtime;
+      var sunday_time_amount_after_tax = sunday_time_hours * response.inclusive_rate * rate_after_overtime;
+
+      var total_amount_before_tax = normal_time_amount_before_tax + overtime_amount_before_tax + sunday_time_amount_before_tax;
+      var total_amount_after_tax = normal_time_amount_after_tax + overtime_amount_after_tax + sunday_time_amount_after_tax;
+
+
+      $("#normal_time_hours_<%= @labor_record.id %>").val(normal_time_hours.toFixed(2));
+      $("#overtime_hours_<%= @labor_record.id %>").val(overtime_hours.toFixed(2));
+      $("#sunday_time_hours_<%= @labor_record.id %>").val(sunday_time_hours.toFixed(2));
+
+      $("#normal_time_amount_before_tax_<%= @labor_record.id %>").val(normal_time_amount_before_tax.toFixed(2));
+      $("#normal_time_amount_after_tax_<%= @labor_record.id %>").val(normal_time_amount_after_tax.toFixed(2));
+
+      $("#overtime_amount_before_tax_<%= @labor_record.id %>").val(overtime_amount_before_tax.toFixed(2));
+      $("#overtime_amount_after_tax_<%= @labor_record.id %>").val(overtime_amount_after_tax.toFixed(2));
+
+      $("#sunday_time_amount_before_tax_<%= @labor_record.id %>").val(sunday_time_amount_before_tax.toFixed(2));
+      $("#sunday_time_amount_after_tax_<%= @labor_record.id %>").val(sunday_time_amount_after_tax.toFixed(2));
+
+      $("#total_amount_before_tax_<%= @labor_record.id %>").val(total_amount_before_tax.toFixed(2));
+      $("#total_amount_after_tax_<%= @labor_record.id %>").val(total_amount_after_tax.toFixed(2));
+
+    });
+  }
+}
+
+function update_fields() {
+  var id = $("#labor_record_employee_id_<%= @labor_record.id %>").val();
+  var hrs = $("#labor_record_hours_<%= @labor_record.id %>").val();
+  var date_input = $("#labor_record_date_<%= @labor_record.id %>").val();
+
+  // validate the date input
+  var date_format_correct = (/^\d{4}\-\d{2}-\d{2}$/g.test(date_input) == true);
+  var date = null;
+  var date_correct = false;
+  if (date_format_correct) {
+    var date = new Date(date_input);
+    // let's hope this works nicely!
+    if (date != "Invalid Date") {
+      date_correct = true;
     }
   }
 
-  function update_fields() {
-    var id = $("#labor_record_employee_id_<%= @labor_record.id %>").val();
+  // validate the employee input
+  var employee_selected = Number.isInteger(parseInt(id));
+
+  // validate the hours input
+  var hours_format_valid = !(isNaN(parseFloat(hrs)));
+  var hours_valid = false;
+  if (hours_format_valid) {
+    var hours = parseFloat(hrs);
+    if (hours >= 0.0 && hours <= 24.0) {
+      hours_valid = true;
+    }
+  }
+
+  if (date_correct && employee_selected && hours_valid) {
+    var empAmts = new EmployeeAmounts(id, parseFloat(hrs));
+    empAmts.getRates(id, date, hrs);
+  }
+}
+
+function LaborDates(labor_dates) {
+  this.labor_dates = labor_dates;
+  this.current_date = null;
+
+  this.set_labor_dates = function(dates) {
+    this.labor_dates = dates;
+  }
+
+  this.get_labor_dates = function() {
+    return this.labor_dates;
+  }
+
+  this.set_current_date = function(date) {
+    this.current_date = date;
+  }
+
+  this.get_current_date = function() {
+    return this.current_date;
+  }
+
+  this.query_labor_dates = function(employee_id, inst) {
+    $('#labor_record_date_<%= @labor_record.id %>').datepicker('disable');
+    $('#labor_record_date_<%= @labor_record.id %>').attr('title', "Please select an Employee first.");
+    $.ajax({
+      dataType: "json",
+      url: "/employees/" + employee_id + "/ajax_labor_dates",
+      success: function( response ) {
+        $('#labor_record_date_<%= @labor_record.id %>').datepicker('enable');
+        $('#labor_record_date_<%= @labor_record.id %>').attr('title', "");
+        inst.set_labor_dates(response);
+      }
+    });
+  }
+}
+
+$(document).ready(function() {
+
+  labor_dates_<%= @labor_record.id %> = new LaborDates("");
+
+  // We want to initialize the Labor Date if Employee is already selected, in
+  // the case of the Edit page.
+  var employee_id_<%= @labor_record.id %> = $("#labor_record_employee_id_<%= @labor_record.id %>").val();
+  if (employee_id_<%= @labor_record.id %> != "") {
+    labor_dates_<%= @labor_record.id %>.set_current_date($("#labor_record_date_<%= @labor_record.id %>").val());
+    labor_dates_<%= @labor_record.id %>.query_labor_dates(employee_id_<%= @labor_record.id %>, labor_dates_<%= @labor_record.id %>);
+  }
+
+  $(".datepickercustom_<%= @labor_record.id %>").datepicker({
+    disabled: true,
+    beforeShowDay: function(date) {
+      var dateIndex = formatDate(date);
+      var dates = labor_dates_<%= @labor_record.id %>.get_labor_dates();
+      if (labor_dates_<%= @labor_record.id %>.get_current_date() == dateIndex)
+        return [true, "datepicker-selected-day", "This is the current (pre-edit) date for the Labor Record."];
+      if (dates[dateIndex] == true)
+        return [true, "datepicker-assigned-day", "This employee already has a labor record for this date."];
+      return [true, ""];
+
+    },
+    dateFormat: "yy-mm-dd"
+  });
+
+  $('#labor_record_hours_<%= @labor_record.id %>').change(function() {
+
     var hrs = $("#labor_record_hours_<%= @labor_record.id %>").val();
+    // validate the hours input
+    var hours_format_valid = !(isNaN(parseFloat(hrs)));
+    var hours_valid = false;
+    if (hours_format_valid) {
+      var hours = parseFloat(hrs);
+      if (hours >= 0.0 && hours <= 24.0) {
+        hours_valid = true;
+      }
+    }
+
+    if ( hours_valid ) {
+      update_fields();
+    } else {
+      alert("Hours needs to be between 0 and 24.");
+      $('#labor_record_hours_<%= @labor_record.id %>').val("");
+    }
+
+  });
+
+  $('#labor_record_employee_id_<%= @labor_record.id %>').change(function() {
+    var inputId = $('#labor_record_employee_id_<%= @labor_record.id %>').val();
+    if(Number.isInteger(parseInt(inputId))) {
+      update_fields();
+      labor_dates_<%= @labor_record.id %>.query_labor_dates(inputId, labor_dates_<%= @labor_record.id %>);
+    } else {
+      $('#labor_record_date_<%= @labor_record.id %>').datepicker('disable');
+      $('#labor_record_date_<%= @labor_record.id %>').val('');
+      $('#labor_record_date_<%= @labor_record.id %>').attr('title', "Please select an Employee first.");
+      labor_dates_<%= @labor_record.id %>.set_labor_dates("");
+      alert("You need to select a valid Employee.");
+      $('#labor_record_employee_id_<%= @labor_record.id %>').val("");
+    }
+  });
+
+  $('#labor_record_date_<%= @labor_record.id %>').change(function() {
     var date_input = $("#labor_record_date_<%= @labor_record.id %>").val();
 
     // validate the date input
@@ -102,88 +235,12 @@ $(document).ready(function() {
       }
     }
 
-    // validate the employee input
-    var employee_selected = Number.isInteger(parseInt(id));
-
-    // validate the hours input
-    var hours_format_valid = !(isNaN(parseFloat(hrs)));
-    var hours_valid = false;
-    if (hours_format_valid) {
-      var hours = parseFloat(hrs);
-      if (hours >= 0.0 && hours <= 24.0) {
-        hours_valid = true;
-      }
+    if(date_correct) {
+      update_fields();
+    } else {
+      alert("You need to select a valid Date.");
+      //$('#labor_record_date_<%= @labor_record.id %>').val("");
     }
-
-    if (date_correct && employee_selected && hours_valid) {
-      var empAmts = new EmployeeAmounts(id, parseFloat(hrs));
-      empAmts.getRates(id, date, hrs);
-    }
-  }
-
-  $(document).ready(function() {
-
-    $('#labor_record_hours_<%= @labor_record.id %>').change(function() {
-
-      var hrs = $("#labor_record_hours_<%= @labor_record.id %>").val();
-      // validate the hours input
-      var hours_format_valid = !(isNaN(parseFloat(hrs)));
-      var hours_valid = false;
-      if (hours_format_valid) {
-        var hours = parseFloat(hrs);
-        if (hours >= 0.0 && hours <= 24.0) {
-          hours_valid = true;
-        }
-      }
-
-      if ( hours_valid ) {
-        update_fields();
-      } else {
-        alert("Hours needs to be between 0 and 24.");
-        $('#labor_record_hours_<%= @labor_record.id %>').val("");
-      }
-
-    });
-
-    $('#labor_record_employee_id_<%= @labor_record.id %>').change(function() {
-      var inputId = $('#labor_record_employee_id_<%= @labor_record.id %>').val();
-      if(Number.isInteger(parseInt(inputId))) {
-        update_fields();
-      } else {
-        alert("You need to select a valid Employee.");
-        $('#labor_record_employee_id_<%= @labor_record.id %>').val("");
-      }
-    });
-
-    $('#labor_record_date_<%= @labor_record.id %>').change(function() {
-      var date_input = $("#labor_record_date_<%= @labor_record.id %>").val();
-
-      // validate the date input
-      var date_format_correct = (/^\d{4}\-\d{2}-\d{2}$/g.test(date_input) == true);
-      var date = null;
-      var date_correct = false;
-      if (date_format_correct) {
-        var date = new Date(date_input);
-        // let's hope this works nicely!
-        if (date != "Invalid Date") {
-          date_correct = true;
-        }
-      }
-
-      if(date_correct) {
-        update_fields();
-      } else {
-        alert("You need to select a valid Date.");
-        //$('#labor_record_date_<%= @labor_record.id %>').val("");
-      }
-
-    });
-
-    $( ".datepicker" ).datepicker({
-      dateFormat: "yy-mm-dd"
-    });
 
   });
-
-
 });

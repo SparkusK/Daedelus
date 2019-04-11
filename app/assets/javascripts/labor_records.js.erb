@@ -1,3 +1,5 @@
+var laborDates;
+
 function EmployeeAmounts(employee_id) {
   this.employee_id = employee_id;
 
@@ -59,7 +61,6 @@ function EmployeeAmounts(employee_id) {
       var total_amount_before_tax = normal_time_amount_before_tax + overtime_amount_before_tax + sunday_time_amount_before_tax;
       var total_amount_after_tax = normal_time_amount_after_tax + overtime_amount_after_tax + sunday_time_amount_after_tax;
 
-
       $("#normal_time_hours").val(normal_time_hours.toFixed(2));
       $("#overtime_hours").val(overtime_hours.toFixed(2));
       $("#sunday_time_hours").val(sunday_time_hours.toFixed(2));
@@ -116,7 +117,82 @@ function update_fields() {
   }
 }
 
+function formatDate(date) {
+  var day = date.getDate();
+  dayString = (day < 10 ? '0' + day : '' + day);
+
+  var month = date.getMonth() + 1;
+  monthString = (month < 10 ? '0' + month : '' + month);
+
+  var year = date.getFullYear();
+
+  return year + '-' + monthString + '-' + dayString;
+}
+
+function LaborDates(labor_dates) {
+  this.labor_dates = labor_dates;
+  this.current_date = null;
+
+  this.set_labor_dates = function(dates) {
+    this.labor_dates = dates;
+  }
+
+  this.get_labor_dates = function() {
+    return this.labor_dates;
+  }
+
+  this.set_current_date = function(date) {
+    this.current_date = date;
+  }
+
+  this.get_current_date = function() {
+    return this.current_date;
+  }
+
+  this.query_labor_dates = function(employee_id, inst) {
+    $('#labor_record_date').datepicker('disable');
+    $('#labor_record_date').attr('title', "Please select an Employee first.");
+    $.ajax({
+      dataType: "json",
+      url: "/employees/" + employee_id + "/ajax_labor_dates",
+      success: function( response ) {
+        $('#labor_record_date').datepicker('enable');
+        $('#labor_record_date').attr('title', "");
+        inst.set_labor_dates(response);
+      }
+    });
+  }
+}
+
 $(document).ready(function() {
+
+  laborDates = new LaborDates("");
+
+  // We want to initialize the Labor Date if Employee is already selected, in
+  // the case of the Edit page.
+  var employee_id = $("#labor_record_employee_id").val();
+  if (employee_id != "") {
+    laborDates.set_current_date($("#labor_record_date").val());
+    console.log("Current date: " + $("#labor_record_date").val());
+    console.log("LaborDates date: " + laborDates.get_current_date());
+    laborDates.query_labor_dates(employee_id, laborDates);
+  }
+
+
+  $(".datepickercustom").datepicker({
+    disabled: true,
+    beforeShowDay: function(date) {
+      var dateIndex = formatDate(date);
+      var dates = laborDates.get_labor_dates();
+      if (laborDates.get_current_date() == dateIndex)
+        return [true, "datepicker-selected-day", "This is the current (pre-edit) date for the Labor Record."];
+      if (dates[dateIndex] == true)
+        return [true, "datepicker-assigned-day", "This employee already has a labor record for this date."];
+      return [true, ""];
+
+    },
+    dateFormat: "yy-mm-dd"
+  });
 
   $('#labor_record_hours').change(function() {
 
@@ -144,7 +220,12 @@ $(document).ready(function() {
     var inputId = $('#labor_record_employee_id').val();
     if(Number.isInteger(parseInt(inputId))) {
       update_fields();
+      laborDates.query_labor_dates(inputId, laborDates);
     } else {
+      $('#labor_record_date').datepicker('disable');
+      $('#labor_record_date').val('');
+      $('#labor_record_date').attr('title', "Please select an Employee first.");
+      laborDates.set_labor_dates("");
       alert("You need to select a valid Employee.");
       $('#labor_record_employee_id').val("");
     }
