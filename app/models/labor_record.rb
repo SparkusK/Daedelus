@@ -18,6 +18,8 @@ class LaborRecord < ApplicationRecord
     :overtime_amount_after_tax, :sunday_time_amount_before_tax,
     :sunday_time_amount_after_tax, numericality: { greater_than_or_equal_to: 0.0 }
 
+  validates_uniqueness_of :employee_id, scope: %i[labor_date]
+
 
   def self.calculate_amounts(employee, date, hours)
 
@@ -54,10 +56,10 @@ class LaborRecord < ApplicationRecord
     # Check Amounts[] for abbreviation meanings
     ntb = normal_time_hours * employee.net_rate
     nta = normal_time_hours * employee.inclusive_rate
-    otb = overtime_hours * employee.net_rate
-    ota = overtime_hours * employee.inclusive_rate
-    stb = sunday_time_hours * employee.net_rate
-    sta = sunday_time_hours * employee.inclusive_rate
+    otb = overtime_hours * employee.net_rate * rate_after_overtime
+    ota = overtime_hours * employee.inclusive_rate * rate_after_overtime
+    stb = sunday_time_hours * employee.net_rate * rate_after_overtime
+    sta = sunday_time_hours * employee.inclusive_rate * rate_after_overtime
 
     amounts = Hash.new(0)
     amounts[:normal_time_amount_before_tax] = ntb

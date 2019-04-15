@@ -1,0 +1,77 @@
+<% total_before_tax = labor_record.normal_time_amount_before_tax + labor_record.overtime_amount_before_tax + labor_record.sunday_time_amount_before_tax %>
+<% total_after_tax = labor_record.normal_time_amount_after_tax + labor_record.overtime_amount_after_tax + labor_record.sunday_time_amount_after_tax %>
+<div class="card" id="<%= labor_record.id %>">
+  <div class="card-header">
+    <div class="d-flex justify-content-between">
+      <h4>
+        <%= labor_record.employee.employee_name %>
+      </h4>
+      <h5>
+        <%= labor_record.labor_date.strftime("%a, %d %b %Y") %>
+      </h5>
+    </div>
+  </div>
+  <div class="card-body">
+
+    <div class="row d-flex justify-content-between">
+      <div class="col-md-3 d-flex justify-content-end">
+        <h6><div><small class="text-muted">JOB NUMBER: </small></div></h6>
+      </div>
+      <div class="col-md-2 d-flex justify-content-start">
+        <h6><div><%= labor_record.job.job_name %></div></h6>
+      </div>
+      <div class="col-md-3 d-flex justify-content-end">
+        <h6><div><small class="text-muted">SECTION: </small></div></h6>
+      </div>
+      <div class="col-md-2 d-flex justify-content-start">
+        <h6><div><%= labor_record.get_section_name %></div></h6>
+      </div>
+    </div>
+
+    <div class="row d-flex justify-content-between">
+      <div class="col-md-3 d-flex justify-content-end">
+        <h6><div><small class="text-muted">NET RATE: </small></div></h6>
+      </div>
+      <div class="col-md-2 d-flex justify-content-start">
+        <h6><div><%= number_to_currency(labor_record.employee.net_rate, unit: "R") %></div></h6>
+      </div>
+      <div class="col-md-3 d-flex justify-content-end">
+        <h6><div><small class="text-muted">INCLUSIVE RATE: </small></div></h6>
+      </div>
+      <div class="col-md-2 d-flex justify-content-start">
+        <h6><div><%= number_to_currency(labor_record.employee.inclusive_rate, unit: "R") %></div></h6>
+      </div>
+    </div>
+
+    <table class="table table-hover table-striped table-sm">
+      <thead>
+        <td class="table-info"><h6><div><small class="text-muted">[HOURS: <%= labor_record.hours %>]</small></div></h6></td>
+        <td><h6><div><small class="text-muted">AMOUNT BEFORE TAX </small></div></h6></td>
+        <td><h6><div><small class="text-muted">AMOUNT AFTER TAX </small></div></h6></td>
+      </thead>
+      <tbody>
+        <tr>
+          <td><h6><div><small class="text-muted">NORMAL TIME </small></div></h6></td>
+          <td><%= number_to_currency(labor_record.normal_time_amount_before_tax, unit: "R") %></td>
+          <td><%= number_to_currency(labor_record.normal_time_amount_after_tax, unit: "R") %></td>
+        </tr>
+        <tr>
+          <td><h6><div><small class="text-muted">OVERTIME</small></div></h6></td>
+          <td><%= number_to_currency(labor_record.overtime_amount_before_tax, unit: "R") %></td>
+          <td><%= number_to_currency(labor_record.overtime_amount_after_tax, unit: "R") %></td>
+        </tr>
+        <tr>
+          <td><h6><div><small class="text-muted">SUNDAY TIME</small></div></h6></td>
+          <td><%= number_to_currency(labor_record.sunday_time_amount_before_tax, unit: "R") %></td>
+          <td><%= number_to_currency(labor_record.sunday_time_amount_after_tax, unit: "R") %></td>
+        </tr>
+        <tr class="table-info">
+          <td><h6><div><small class="text-muted">TOTAL</small></div></h6></td>
+          <td><%= number_to_currency(total_before_tax, unit: "R") %></td>
+          <td><%= number_to_currency(total_after_tax, unit: "R") %></td>
+        </tr>
+      </tbody>
+    </table>
+
+  </div>
+</div>

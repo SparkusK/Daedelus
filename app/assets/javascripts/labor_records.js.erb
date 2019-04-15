@@ -162,6 +162,13 @@ function LaborDates(labor_dates) {
       }
     });
   }
+
+  this.is_date_assigned = function(date) {
+    // this is necessary because else it returns "undefined" instead of "false"
+    // we really don't call it that much, though, so performance issues should be
+    // negligible
+    return (this.labor_dates[formatDate(date)] == true) ? true : false
+  }
 }
 
 $(document).ready(function() {
@@ -173,11 +180,8 @@ $(document).ready(function() {
   var employee_id = $("#labor_record_employee_id").val();
   if (employee_id != "") {
     laborDates.set_current_date($("#labor_record_date").val());
-    console.log("Current date: " + $("#labor_record_date").val());
-    console.log("LaborDates date: " + laborDates.get_current_date());
     laborDates.query_labor_dates(employee_id, laborDates);
   }
-
 
   $(".datepickercustom").datepicker({
     disabled: true,
@@ -240,18 +244,32 @@ $(document).ready(function() {
     var date_correct = false;
     if (date_format_correct) {
       var date = new Date(date_input);
-      // let's hope this works nicely!
       if (date != "Invalid Date") {
         date_correct = true;
+        if (laborDates.get_current_date() != formatDate(date)) {
+          if (laborDates.is_date_assigned(date) == true) {
+            var employee_id = $("#labor_record_employee_id").val();
+            $.ajax({
+              url: "/labor_records/" + employee_id + "/" + formatDate(date),
+              datatype: "script",
+              success: function( response ) {
+                $("#redirectModal").modal('show');
+              }
+            });
+          }
+        }
       }
     }
-
     if(date_correct) {
       update_fields();
     } else {
       alert("You need to select a valid Date.");
       $('#labor_record_date').val("");
     }
+  });
 
+  $("#redirectModal").on('hide.bs.modal', function (e) {
+    if (laborDates.get_current_date() != null)
+      $("#labor_record_date").val("");
   });
 });

@@ -34,6 +34,7 @@ Rails.application.routes.draw do
 
   get 'employees/:id/ajax_labor_dates', to: "employees#ajax_labor_dates"
 
+  get '/labor_records/:employee_id/:labor_date', to: "labor_records#modal_labor_record"
 end
 
 

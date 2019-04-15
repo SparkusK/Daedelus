@@ -1,0 +1,2 @@
+$(".modal-labor-record").html("<%= escape_javascript(render 'labor_record_without_actions', labor_record: @labor_record).html_safe %>");
+$("#modal_redirect_button").html("<%= escape_javascript(button_to 'Edit Selected Labor Record', edit_labor_record_path(@labor_record), method: :get, class: 'btn btn-primary') %>");

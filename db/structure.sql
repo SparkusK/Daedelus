@@ -837,6 +837,13 @@ CREATE INDEX index_labor_records_on_employee_id ON public.labor_records USING bt
 
 
 --
+-- Name: index_labor_records_on_employee_id_and_labor_date; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_labor_records_on_employee_id_and_labor_date ON public.labor_records USING btree (employee_id, labor_date);
+
+
+--
 -- Name: index_labor_records_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -1086,6 +1093,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190308124624'),
 ('20190314141233'),
 ('20190318153246'),
-('20190329161044');
+('20190329161044'),
+('20190415150911');
 
 

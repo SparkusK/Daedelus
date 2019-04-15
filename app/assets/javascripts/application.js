@@ -14,4 +14,5 @@
 //= require jquery
 //= require jquery-ui/widgets/datepicker
 //= require jquery.datetimepicker
+//= require bootstrap
 //= require_tree .

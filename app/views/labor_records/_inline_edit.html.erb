@@ -1,3 +1,4 @@
+<div class="labor_record_form container">
 <%= form_with(model: @labor_record) do |form| %>
 <% if @labor_record.errors.any? %>
   <div id="error_explanation">
@@ -116,11 +117,13 @@
   </div>
 
   <br>
-  <div class="row">
-    <div class="col-md-10"></div>
-    <div class="d-flex col-md-2">
+  <div class="form-row d-flex justify-content-end">
+    <div class="p-2" id="labor_record_action_<%= @labor_record.id %>">
       <%= form.submit "Save", class: "btn btn-primary", remote: true %>
+    </div>
+    <div class="p-2">
       <%= form.submit "Cancel", class: "btn btn-disabled", remote: true, method: :get %>
     </div>
   </div>
 <% end %>
+</div>

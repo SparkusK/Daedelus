@@ -52,16 +52,22 @@ class LaborRecordsController < ApplicationController
     respond_to do |format|
       if params[:commit] == "Save"
         if @labor_record.update(labor_record_params)
-          format.html { redirect_to @labor_record, notice: 'Labor record was successfully updated.' }
           format.json { render :show, status: :ok, location: @labor_record }
           format.js
         else
-          format.html { render :edit }
+
           format.json { render json: @labor_record.errors, status: :unprocessable_entity }
           format.js { render 'edit' }
         end
       else
         format.js { render action: "cancel" }
+        format.html do
+          if @labor_record.update(labor_record_params)
+            redirect_to @labor_record, notice: 'Labor record was successfully updated.'
+          else
+            format.html { render :edit }
+          end
+        end
       end
     end
   end
@@ -79,6 +85,16 @@ class LaborRecordsController < ApplicationController
   def cancel
     id = params[:id]
     @labor_record = LaborRecord.find_by(id: id)
+    respond_to do |format|
+      format.js
+    end
+  end
+
+  def modal_labor_record
+    @labor_record = LaborRecord.find_by(
+      employee_id: params[:employee_id],
+      labor_date: params[:labor_date]
+    )
     respond_to do |format|
       format.js
     end

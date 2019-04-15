@@ -122,3 +122,28 @@
     <%= form.submit "Submit Labor Record", class: "btn btn-primary btn-lg" %>
   </div>
 <% end %>
+
+<div class="modal fade" id="redirectModal" tabindex="-1" role="dialog">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Labor Record Detected</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <p>An employee cannot have more than one Labor Record assigned on the same day.</p>
+        <p> Details for that day's labor record: </p>
+        <hr>
+        <div class="modal-labor-record">
+          Retrieving labor record data...
+        </div>
+      </div>
+      <div class="modal-footer">
+        <div><button type="button" class="btn btn-secondary" data-dismiss="modal">Choose Different Date</button></div>
+        <div id="modal_redirect_button"></div>
+      </div>
+    </div>
+  </div>
+</div>

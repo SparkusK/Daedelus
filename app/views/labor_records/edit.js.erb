@@ -37,7 +37,7 @@ function EmployeeAmounts(employee_id) {
           break;
         case 6: // saturday
           normal_time_hours = 0;
-          overtime_hours = 0;
+          overtime_hours = day_hours;
           break;
         case 1: // monday
         case 2: // tuesday
@@ -154,6 +154,15 @@ function LaborDates(labor_dates) {
       }
     });
   }
+
+  this.is_date_assigned = function(date) {
+    // this is necessary because else it returns "undefined" instead of "false"
+    // we really don't call it that much, though, so performance issues should be
+    // negligible
+    return (this.labor_dates[formatDate(date)] == true) ? true : false
+  }
+
+
 }
 
 $(document).ready(function() {
@@ -229,9 +238,20 @@ $(document).ready(function() {
     var date_correct = false;
     if (date_format_correct) {
       var date = new Date(date_input);
-      // let's hope this works nicely!
       if (date != "Invalid Date") {
         date_correct = true;
+        if (labor_dates_<%= @labor_record.id %>.get_current_date() != formatDate(date)) {
+          if (labor_dates_<%= @labor_record.id %>.is_date_assigned(date) == true) {
+            var employee_id = $("#labor_record_employee_id_<%= @labor_record.id %>").val();
+            $.ajax({
+              url: "/labor_records/" + employee_id + "/" + formatDate(date),
+              datatype: "script",
+              success: function( response ) {
+                $("#redirectModal").modal('show');
+              }
+            });
+          }
+        }
       }
     }
 
@@ -242,5 +262,9 @@ $(document).ready(function() {
       //$('#labor_record_date_<%= @labor_record.id %>').val("");
     }
 
+  });
+
+  $("#redirectModal").on('hide.bs.modal', function (e) {
+    $("#labor_record_date_<%= @labor_record.id %>").val(labor_dates_<%= @labor_record.id %>.get_current_date());
   });
 });

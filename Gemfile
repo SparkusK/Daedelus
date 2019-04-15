@@ -30,6 +30,7 @@ gem 'jbuilder', '~> 2.5'
 # gem 'bcrypt', '~> 3.1.7'
 
 gem 'bootstrap-will_paginate'
+gem 'bootstrap'
 gem 'devise'
 gem 'faker'
 gem 'foreman'
@@ -38,7 +39,6 @@ gem 'jquery-rails'
 gem 'jquery-ui-rails'
 gem 'webpacker'
 gem 'will_paginate'
-
 gem 'octicons'
 gem 'octicons_helper'
 
