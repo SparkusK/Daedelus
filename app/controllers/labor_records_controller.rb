@@ -55,7 +55,6 @@ class LaborRecordsController < ApplicationController
           format.json { render :show, status: :ok, location: @labor_record }
           format.js
         else
-
           format.json { render json: @labor_record.errors, status: :unprocessable_entity }
           format.js { render 'edit' }
         end
