@@ -134,11 +134,11 @@ class LaborRecord < ApplicationRecord
       )
     else
       # search everything
-      search_term =  keywords.downcase + '%'
+      search_term = '%' + keywords.downcase + '%'
       where_term = %{
-        (lower(employees.first_name) || ' ' || lower(employees.last_name)) LIKE ?
-        OR lower(jobs.jce_number) LIKE ?
-        AND labor_records.labor_date >= ? AND labor_records.labor_date <= ?
+        ((lower(employees.first_name) || ' ' || lower(employees.last_name)) LIKE ?
+        OR lower(jobs.jce_number) LIKE ?)
+        AND labor_records.labor_date BETWEEN ? AND ?
       }.gsub(/\s+/, " ").strip
 
       order_term = "employees.first_name asc, labor_records.labor_date desc"
