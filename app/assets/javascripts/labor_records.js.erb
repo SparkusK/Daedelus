@@ -178,7 +178,13 @@ $(document).ready(function() {
   // We want to initialize the Labor Date if Employee is already selected, in
   // the case of the Edit page.
   var employee_id = $("#labor_record_employee_id").val();
-  if (employee_id != "") {
+  var is_employee_id_valid = false;
+  is_employee_id_valid = (
+    employee_id != "" &&
+    employee_id != 'undefined' &&
+    Number.isInteger(parseInt(employee_id))
+  );
+  if (is_employee_id_valid) {
     laborDates.set_current_date($("#labor_record_date").val());
     laborDates.query_labor_dates(employee_id, laborDates);
   }
