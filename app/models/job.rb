@@ -130,7 +130,7 @@ class Job < ApplicationRecord
     keywords,
     target_start_date, target_end_date,
     receive_start_date, receive_end_date,
-    page, targets, completes
+    page, targets, completes, section_filter_id
   )
 
     # Let's first setup some named conditions on which we want to search
@@ -139,6 +139,7 @@ class Job < ApplicationRecord
     has_receive_start = !receive_start_date.nil? && !receive_start_date.empty?
     has_receive_end = !receive_end_date.nil? && !receive_end_date.empty?
     omit_keywords = keywords.nil? || keywords.empty?
+    skip_section_filter = section_filter_id.nil? || section_filter_id.empty?
 
     @jobs = nil # Initialize @jobs so we don't get NilError
 
@@ -221,6 +222,10 @@ class Job < ApplicationRecord
     if has_receive_end
       @jobs = @jobs.where("jobs.receive_date <= ?", receive_end_date)
     end
+    unless skip_section_filter
+      @jobs = @jobs.where(section_id: section_filter_id)
+    end
+
 
     # Finally, do the ordering and pagination and such
     order_term = "jobs.receive_date desc"

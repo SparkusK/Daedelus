@@ -1,45 +1,57 @@
 <section class="header">
-    <h1 class="col-md-4">Labor Records</h1>
-    <div class="d-flex justify-content-between">
-    <section class="search-form col-md-8">
-      <%= form_tag "/labor_records", method: :get %>
-      <div class="row col-md-12">
-        <div class="input-group input-group-lg">
-          <%= label_tag :keywords, nil, class: "sr-only" %>
-          <%= text_field_tag :keywords, nil,
-                placeholder: "Search labor records",
-                class: "form-control input-lg" %>
-          <%= image_tag("loading.gif", class: "img-thumbnail loading_gif") %>
-          <%= image_tag("typing.gif", class: "img-thumbnail typing_gif") %>
-        </div>
+  <h1 class="col-md-4">Labor Records</h1>
+</section>
+<section class="search-form">
+  <div class="container">
+  <%= form_tag "/labor_records", method: :get %>
+  <div class="row">
+    <div class="form-group col-md-12">
+      <div class="input-group input-group-lg">
+        <%= label_tag :keywords, nil, class: "sr-only" %>
+        <%= text_field_tag :keywords, nil,
+              placeholder: "Search labor records",
+              class: "form-control input-lg" %>
+        <%= image_tag("loading.gif", class: "img-thumbnail loading_gif") %>
+        <%= image_tag("typing.gif", class: "img-thumbnail typing_gif") %>
       </div>
-      <div class="row">
-        <div class="form-group col-md-5">
-          <%= label_tag :start_date %> <br>
-          <%= text_field_tag( :start_date,
-            "#{params[:start_date]}",
-            { autocomplete: :off,
-              class: "form-control datepicker",
-              placeholder: "yyyy-mm-dd" }) %>
-        </div>
-        <div class="form-group col-md-5">
-          <%= label_tag :end_date %> <br>
-          <%= text_field_tag :end_date,
-          "#{params[:end_date]}",
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <%= label_tag :start_date %> <br>
+      <%= text_field_tag( :start_date,
+          "#{params[:start_date]}",
           { autocomplete: :off,
             class: "form-control datepicker",
-            placeholder: "yyyy-mm-dd" } %>
-        </div>
-        <div class="form-group col-md-2">
-          <br>
-          <%= submit_tag("Refresh dates", class: "btn btn-lg btn-primary") %>
-        </div>
+            placeholder: "yyyy-mm-dd" }) %>
+    </div>
+    <div class="form-group col-md-6">
+        <%= label_tag :end_date %> <br>
+        <%= text_field_tag :end_date,
+        "#{params[:end_date]}",
+        { autocomplete: :off,
+          class: "form-control datepicker",
+          placeholder: "yyyy-mm-dd" } %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <%= label_tag :section %> <br>
+      <%= collection_select(nil, :section_filter_id, Section.all, :id, :section_name, {prompt: true}, {class: "custom-select"}) %>
+    </div>
+    <div class="form-group col-md-4"></div>
+    <div class="form-group col-md-2">
+      <br>
+      <div class="actions">
+        <%= submit_tag("Refresh values", class: "btn btn-primary") %>
       </div>
-    </section>
+    </div>
+  </div>
   </div>
 </section>
 </form>
 <br>
+<hr>
 
 <div class="modal fade" id="redirectModal" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-lg" role="document">

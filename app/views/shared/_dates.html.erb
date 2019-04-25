@@ -1,26 +1,29 @@
 <%= form_tag(path, method: "get") do %>
 
   <div class="row">
-    <div class="form-group col-md-5">
-      <%= label_tag :start_date %> </br>
+    <div class="form-group col-md-6">
+      <%= label_tag :start_date %> <br>
       <%= text_field_tag( :start_date,
                           "#{params[:start_date]}",
                           {autocomplete: :off,
                           class: "form-control datepicker",
                           placeholder: "yyyy-mm-dd"}) %>
     </div>
-    <div class="form-group col-md-5">
-      <%= label_tag :end_date %> </br>
+    <div class="form-group col-md-6">
+      <%= label_tag :end_date %> <br>
       <%= text_field_tag :end_date,
                           "#{params[:end_date]}",
                           {autocomplete: :off,
                           class: "form-control datepicker",
                           placeholder: "yyyy-mm-dd"} %>
     </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-10"></div>
     <div class="form-group col-md-2">
-      </br>
-      <%= submit_tag("Refresh dates", class: "btn btn-lg btn-primary") %>
+      <br>
+      <%= submit_tag("Refresh dates", class: "btn btn-primary") %>
     </div>
   </div>
 <% end %>
-</br>
+<br>

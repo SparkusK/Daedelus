@@ -81,84 +81,64 @@ class LaborRecord < ApplicationRecord
     self.section.nil? ? "" : self.section.name
   end
 
-  # Search by employee.first_name, employee.last_name,
-  #   supervisor.first_name, supervisor.last_name, or job.jce_number
-  def self.search(keywords, start_date, end_date, page)
+  # Search by Employee.first_name, Employee.last_name, JObs.jce_number,
+  # Jobs.job_number
+  def self.search(keywords, start_date, end_date, page, section_filter_id)
+    # Let's first setup some named conditions on which we want to search
+    has_start = !start_date.nil?
+    has_end = !end_date.nil?
+    omit_keywords = keywords.nil? || keywords.empty?
+    skip_section_filter = section_filter_id.nil? || section_filter_id.empty?
 
-    # If there are no keywords, just search dates and paginate and includes:
-    if keywords.nil?
+    # Initialize @labor_records so we don't get NilError
+    @labor_records = nil
 
-      where_term = %{
-        labor_records.labor_date >= ? AND labor_records.labor_date <= ?
-      }.gsub(/\s+/, " ").strip
-
-      order_term = "employees.first_name asc, labor_records.labor_date desc"
-
-      LaborRecord.joins(
-        :employee, :job
-      ).where(
-        where_term,
-        start_date,
-        end_date
-      ).order(
-        order_term
-      ).paginate(
-        page: page
-      ).includes(
-        :employee, :job, :section
-      )
-    # If there are numbers, we only search JCE number
-    elsif keywords =~ /\d/
-
-      search_term = '%' + keywords.downcase + '%'
-
-      where_term = %{
-        lower(jobs.jce_number) LIKE ?
-        AND labor_records.labor_date >= ? AND labor_records.labor_date <= ?
-      }.gsub(/\s+/, " ").strip
-
-      order_term = "labor_records.labor_date desc"
-
-      LaborRecord.joins(:job)
-      .where(
-        where_term,
-        search_term,
-        start_date,
-        end_date
-      ).order(
-        order_term
-      ).paginate(
-        page: page
-      ).includes(
-        :employee, :job, :section
-      )
-    else
+    # Start by grabbing everything we need according to the search keywords
+    unless omit_keywords
       # search everything
       search_term = '%' + keywords.downcase + '%'
       where_term = %{
-        ((lower(employees.first_name) || ' ' || lower(employees.last_name)) LIKE ?
-        OR lower(jobs.jce_number) LIKE ?)
-        AND labor_records.labor_date BETWEEN ? AND ?
+        ( lower(employees.first_name) LIKE ?
+          OR lower(employees.last_name) LIKE ?
+          OR lower(jobs.jce_number) LIKE ?
+          OR lower(jobs.job_number) LIKE ? )
       }.gsub(/\s+/, " ").strip
 
-      order_term = "employees.first_name asc, labor_records.labor_date desc"
-
-      LaborRecord.joins(
-        :employee, :job
-      ).where(
+      @labor_records = LaborRecord.where(
         where_term,
         search_term,
         search_term,
-        start_date,
-        end_date
-      ).order(
-        order_term
-      ).paginate(
-        page: page
-      ).includes(
-        :employee, :job, :section
+        search_term,
+        search_term
       )
-
+    else
+      @labor_records = LaborRecord.all
     end
+    @labor_records = @labor_records.joins(:job, :employee)
+
+    # Then reduce the result set by filtering by dates, filters, etc
+    if has_start
+      # Labor Records for which Labor Date >= input date
+      @labor_records = @labor_records.where("labor_date >= ?", start_date)
+    end
+    if has_end
+      # Labor Records for which Labor Date <= input date
+      @labor_records = @labor_records.where("labor_date <= ?", end_date)
+    end
+    unless skip_section_filter
+      # Filter Labor Records by a specific section
+      @labor_records = @labor_records.where(section_id: section_filter_id)
+    end
+
+
+    # Finally, do the ordering and pagination and such
+    order_term = "employees.last_name asc, labor_records.labor_date desc"
+    @labor_records = @labor_records.order(
+      order_term
+    ).paginate(
+      page: page
+    ).includes(
+      :section
+    )
   end
 end

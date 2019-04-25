@@ -9,7 +9,7 @@ class JobsController < AdministrativeController
       params[:keywords],
       @target_start_date, @target_end_date,
       @receive_start_date, @receive_end_date,
-      params[:page], params[:targets], params[:completes]
+      params[:page], params[:targets], params[:completes], params[:section_filter_id]
     )
     respond_to do |format|
       format.html {}
@@ -158,7 +158,8 @@ class JobsController < AdministrativeController
         :is_finished,
         :job_number,
         :order_number,
-        :client_section
+        :client_section,
+        :section_filter_id
       )
     end
 end

@@ -5,7 +5,11 @@ class LaborRecordsController < ApplicationController
   # GET /labor_records
   # GET /labor_records.json
   def index
-    @labor_records = LaborRecord.search(params[:keywords], @start_date, @end_date, params[:page])
+    @labor_records = LaborRecord.search(
+      params[:keywords],
+      @start_date, @end_date,
+      params[:page], params[:section_filter_id]
+    )
     respond_to do |format|
       format.html {}
       format.js {}
@@ -129,7 +133,7 @@ class LaborRecordsController < ApplicationController
         :overtime_amount_before_tax, :overtime_amount_after_tax,
         :sunday_time_amount_before_tax, :sunday_time_amount_after_tax,
         :section_id, :job_id,
-        :start_date, :end_date, :page
+        :start_date, :end_date, :page, :section_filter_id
       )
     end
 

@@ -45,11 +45,13 @@ class JobTarget < ApplicationRecord
     amounts = {remaining_amount: remaining_amount, job_total: job_total}
   end
 
-  def self.search(keywords, target_start_date, target_end_date, page)
+  def self.search(keywords, target_start_date, target_end_date,
+        page, section_filter_id)
     # Let's first setup some named conditions on which we want to search
     has_target_start = !target_start_date.nil? && !target_start_date.empty?
     has_target_end = !target_end_date.nil? && !target_end_date.empty?
     omit_keywords = keywords.nil? || keywords.empty?
+    skip_section_filter = section_filter_id.nil? || section_filter_id.empty?
 
 
     @job_targets = nil # Initialize @job_targets so we don't get NilError
@@ -89,6 +91,9 @@ class JobTarget < ApplicationRecord
     end
     if has_target_end
       @job_targets = @job_targets.where("job_targets.target_date <= ?", target_end_date)
+    end
+    unless skip_section_filter
+      @job_targets = @job_targets.where(section_id: section_filter_id)
     end
 
     # Finally, do the ordering and pagination and such

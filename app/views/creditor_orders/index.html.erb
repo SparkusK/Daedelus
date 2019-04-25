@@ -11,10 +11,40 @@
     <%= image_tag("loading.gif", class: "img-thumbnail loading_gif") %>
     <%= image_tag("typing.gif", class: "img-thumbnail typing_gif") %>
   </div>
-  <% end %>
-</section>
 
-<%= render partial: 'shared/dates', locals: { path: "/creditor_orders" } %>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <%= label_tag :start_date %> <br>
+      <%= text_field_tag( :start_date,
+                          "#{params[:start_date]}",
+                          {autocomplete: :off,
+                          class: "form-control datepicker",
+                          placeholder: "yyyy-mm-dd"}) %>
+    </div>
+    <div class="form-group col-md-6">
+      <%= label_tag :end_date %> <br>
+      <%= text_field_tag :end_date,
+                          "#{params[:end_date]}",
+                          {autocomplete: :off,
+                          class: "form-control datepicker",
+                          placeholder: "yyyy-mm-dd"} %>
+    </div>
+  </div>
+  <div class="row">
+    <div class="form-group col-md-6">
+      <%= label_tag :section %> <br>
+      <%= collection_select(nil, :section_filter_id, Section.all, :id, :section_name, {prompt: true}, {class: "custom-select"}) %>
+    </div>
+    <div class="form-group col-md-4"></div>
+    <div class="form-group col-md-2">
+      <br>
+      <%= submit_tag("Refresh dates", class: "btn btn-primary") %>
+    </div>
+  </div>
+<% end %>
+</section>
+<br>
+<hr>
 
 <%= render partial: 'top_pager' %>
 

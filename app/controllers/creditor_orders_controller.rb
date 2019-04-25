@@ -5,7 +5,10 @@ class CreditorOrdersController < AdministrativeController
   # GET /creditor_orders
   # GET /creditor_orders.json
   def index
-    @creditor_orders = CreditorOrder.search(params[:keywords], @start_date, @end_date, params[:page])
+    @creditor_orders = CreditorOrder.search(
+      params[:keywords], @start_date, @end_date, params[:page],
+      params[:section_filter_id]
+    )
     respond_to do |format|
       format.html {}
       format.js {}
@@ -89,6 +92,9 @@ class CreditorOrdersController < AdministrativeController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def creditor_order_params
-      params.require(:creditor_order).permit(:supplier_id, :job_id, :delivery_note, :date_issued, :value_excluding_tax, :tax_amount, :value_including_tax, :reference_number)
+      params.require(:creditor_order).permit(:supplier_id, :job_id,
+        :delivery_note, :date_issued, :value_excluding_tax, :tax_amount,
+        :value_including_tax, :reference_number, :section_filter_id
+      )
     end
 end

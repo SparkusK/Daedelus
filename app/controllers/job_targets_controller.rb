@@ -7,13 +7,16 @@ class JobTargetsController < ApplicationController
     apply_filters =
         params[:keywords].present? ||
         params[:target_start_date].present? ||
-        params[:target_end_date].present?
+        params[:target_end_date].present? ||
+        params[:section_filter_id].present?
     @job_targets = apply_filters ?
       JobTarget.search(
         params[:keywords],
         params[:target_start_date],
         params[:target_end_date],
-        params[:page]).includes(:job, :section).paginate(page: params[:page]) :
+        params[:page],
+        params[:section_filter_id]
+      ).includes(:job, :section).paginate(page: params[:page]) :
       JobTarget.includes(:job, :section).paginate(page: params[:page])
     respond_to do |format|
       format.html {}
@@ -128,7 +131,8 @@ class JobTargetsController < ApplicationController
         :job_id,
         :target_start_date,
         :target_end_date,
-        :page
+        :page,
+        :section_filter_id
         )
     end
 end

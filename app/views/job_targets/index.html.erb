@@ -14,7 +14,7 @@
   </div>
   <div class="row">
     <div class="form-group col-md-6">
-      <%= label_tag :target_start_date %> </br>
+      <%= label_tag :target_start_date %> <br>
       <%= text_field_tag( :target_start_date,
             "#{params[:target_start_date]}",
             {autocomplete: :off,
@@ -22,7 +22,7 @@
                 placeholder: "yyyy-mm-dd"}) %>
     </div>
     <div class="form-group col-md-6">
-        <%= label_tag :target_end_date %> </br>
+        <%= label_tag :target_end_date %> <br>
         <%= text_field_tag :target_end_date,
             "#{params[:target_end_date]}",
             {autocomplete: :off,
@@ -31,8 +31,13 @@
     </div>
   </div>
   <div class="row">
-    <div class="form-group col-md-10"></div>
+    <div class="form-group col-md-6">
+        <%= label_tag :section %> <br>
+        <%= collection_select(nil, :section_filter_id, Section.all, :id, :section_name, {prompt: true}, {class: "custom-select"}) %>
+    </div>
+    <div class="form-group col-md-4"></div>
     <div class="form-group col-md-2">
+      <br>
       <div class="actions">
         <%= submit_tag("Refresh values", class: "btn btn-primary") %>
       </div>
@@ -40,6 +45,8 @@
   </div>
   <% end %>
 </section>
+
+<hr>
 
 <%= render partial: 'top_pager' %>
 
