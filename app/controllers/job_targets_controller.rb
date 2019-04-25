@@ -4,7 +4,11 @@ class JobTargetsController < ApplicationController
   # GET /job_targets
   # GET /job_targets.json
   def index
-    @job_targets = params[:keywords].present? ?
+    apply_filters =
+        params[:keywords].present? ||
+        params[:target_start_date].present? ||
+        params[:target_end_date].present?
+    @job_targets = apply_filters ?
       JobTarget.search(
         params[:keywords],
         params[:target_start_date],
