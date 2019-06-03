@@ -83,10 +83,8 @@ class LaborRecord < ApplicationRecord
 
   # Search by Employee.first_name, Employee.last_name, JObs.jce_number,
   # Jobs.job_number
-  def self.search(keywords, start_date, end_date, page, section_filter_id)
+  def self.search(keywords, dates, page, section_filter_id)
     # Let's first setup some named conditions on which we want to search
-    has_start = !start_date.nil?
-    has_end = !end_date.nil?
     omit_keywords = keywords.nil? || keywords.empty?
     skip_section_filter = section_filter_id.nil? || section_filter_id.empty?
 
@@ -117,13 +115,13 @@ class LaborRecord < ApplicationRecord
     @labor_records = @labor_records.joins(:job, :employee)
 
     # Then reduce the result set by filtering by dates, filters, etc
-    if has_start
+    if dates.has_start?
       # Labor Records for which Labor Date >= input date
-      @labor_records = @labor_records.where("labor_date >= ?", start_date)
+      @labor_records = @labor_records.where("labor_date >= ?", dates.start_date)
     end
-    if has_end
+    if dates.has_end?
       # Labor Records for which Labor Date <= input date
-      @labor_records = @labor_records.where("labor_date <= ?", end_date)
+      @labor_records = @labor_records.where("labor_date <= ?", dates.end_date)
     end
     unless skip_section_filter
       # Filter Labor Records by a specific section

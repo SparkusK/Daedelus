@@ -17,7 +17,7 @@ class DebtorPayment < ApplicationRecord
     end
   end
 
-  def self.search(keywords, start_date, end_date, page)
+  def self.search(keywords, dates, page)
 
 
 
@@ -26,8 +26,8 @@ class DebtorPayment < ApplicationRecord
       order_term = "debtor_payments.payment_date desc"
       DebtorPayment.where(
         where_term,
-        start_date,
-        end_date
+        dates.start_date,
+        dates.end_date
       ).order(
         order_term
       ).paginate(
@@ -53,8 +53,8 @@ class DebtorPayment < ApplicationRecord
         search_term,
         search_term,
         search_term,
-        start_date,
-        end_date
+        dates.start_date,
+        dates.end_date
       ).order(
         order_term
       ).paginate(

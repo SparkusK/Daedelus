@@ -3,13 +3,13 @@ class CreditNote < ApplicationRecord
   validates_each :amount_paid do |record, attr, value|
     record.errors.add(attr, "Can't pay more than is still owed") if
       value > record.creditor_order.get_still_owed_amount
-    end
+  end
 
   validates :amount_paid, numericality: { greater_than_or_equal_to: 0.0 }
 
   validates :invoice_code, :amount_paid, :payment_type, :note, presence: true
 
-  def self.search(keywords, start_date, end_date, page)
+  def self.search(keywords, dates, page)
 
     if keywords.nil?
 
@@ -21,8 +21,8 @@ class CreditNote < ApplicationRecord
         creditor_order: [:job, :supplier]
       ).where(
         where_term,
-        start_date,
-        end_date
+        dates.start_date,
+        dates.end_date
       ).order(
         order_term
       ).paginate(
@@ -53,8 +53,8 @@ class CreditNote < ApplicationRecord
         search_term,
         search_term,
         search_term,
-        start_date,
-        end_date
+        dates.start_date,
+        dates.end_date
       ).order(
         order_term
       ).paginate(

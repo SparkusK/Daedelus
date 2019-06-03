@@ -38,7 +38,7 @@ class Customer < ApplicationRecord
     confirmation << "Are you sure?"
   end
 
-  def self.search(keywords)
+  def self.search(keywords, page)
 
     search_term = '%' + keywords.downcase + '%'
 
@@ -48,14 +48,14 @@ class Customer < ApplicationRecord
         phone LIKE ?
       }.gsub(/\s+/, " ").strip
       order_term = "phone asc"
-      Customer.where(where_term, search_term).order(order_term)
+      Customer.where(where_term, search_term).order(order_term).paginate(page)
     elsif keywords.include?("@")
       # search only email
       where_term = %{
         lower(email) LIKE ?
       }.gsub(/\s+/, " ").strip
       order_term = "email asc"
-      Customer.where(where_term, search_term).order(order_term)
+      Customer.where(where_term, search_term).order(order_term).paginate(page)
     else
       # search everything
       where_term = %{
@@ -64,7 +64,8 @@ class Customer < ApplicationRecord
         OR lower(name) LIKE ?
       }.gsub(/\s+/, " ").strip
       order_term = "name asc"
-      Customer.where(where_term, search_term, search_term, search_term).order(order_term)
+      Customer.where(where_term, search_term, search_term, search_term
+      ).order(order_term).paginate(page)
     end
   end
 end

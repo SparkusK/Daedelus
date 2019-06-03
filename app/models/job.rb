@@ -126,23 +126,14 @@ class Job < ApplicationRecord
   # And then a bunch of cases depending on which target and completion statuses
   # were selected.
   #
-  def self.search(
-    keywords,
-    target_start_date, target_end_date,
-    receive_start_date, receive_end_date,
-    page, targets, completes, section_filter_id
-  )
+  def self.search( keywords, target_dates, receive_dates, page, targets,
+    completes, section_filter_id )
 
     # Let's first setup some named conditions on which we want to search
-    has_target_start = !target_start_date.nil? && !target_start_date.empty?
-    has_target_end = !target_end_date.nil? && !target_end_date.empty?
-    has_receive_start = !receive_start_date.nil? && !receive_start_date.empty?
-    has_receive_end = !receive_end_date.nil? && !receive_end_date.empty?
     omit_keywords = keywords.nil? || keywords.empty?
     skip_section_filter = section_filter_id.nil? || section_filter_id.empty?
 
     @jobs = nil # Initialize @jobs so we don't get NilError
-
 
     # Start by grabbing everything we need according to the search keywords
     unless omit_keywords
@@ -208,19 +199,19 @@ class Job < ApplicationRecord
       @jobs = @jobs.where("jobs.is_finished = 't'")
     end
 
-    if has_target_start
+    if target_dates.has_start?
       # Jobs for which their earliest Job Target's Date is after the input date
-      @jobs = @jobs.where(id: get_target_date_jobs(true, target_start_date))
+      @jobs = @jobs.where(id: get_target_date_jobs(true, target_dates.start_date))
     end
-    if has_target_end
+    if target_dates.has_end?
       # Jobs for which their latest Job Target's Date is before the Input Date
-      @jobs = @jobs.where(id: get_target_date_jobs(false, target_end_date))
+      @jobs = @jobs.where(id: get_target_date_jobs(false, target_dates.end_date))
     end
-    if has_receive_start
-      @jobs = @jobs.where("jobs.receive_date >= ?", receive_start_date)
+    if receive_dates.has_start?
+      @jobs = @jobs.where("jobs.receive_date >= ?", receive_dates.start_date)
     end
-    if has_receive_end
-      @jobs = @jobs.where("jobs.receive_date <= ?", receive_end_date)
+    if receive_dates.has_end?
+      @jobs = @jobs.where("jobs.receive_date <= ?", receive_dates.end_date)
     end
     unless skip_section_filter
       @jobs = @jobs.where(section_id: section_filter_id)

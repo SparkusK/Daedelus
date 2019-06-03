@@ -1,4 +1,5 @@
 class CreditorOrder < ApplicationRecord
+
   belongs_to :supplier
   belongs_to :job
 
@@ -6,12 +7,12 @@ class CreditorOrder < ApplicationRecord
 
   validates :date_issued, :value_excluding_tax, :tax_amount,
     :value_including_tax, :delivery_note, :reference_number, presence: true
-
   validates :value_excluding_tax, :tax_amount, :value_including_tax,
     numericality: { greater_than_or_equal_to: 0.0 }
-
-  validates :value_excluding_tax, numericality: { less_than: :value_including_tax }
-  validates :tax_amount, numericality: { less_than: :value_excluding_tax}
+  validates :value_excluding_tax,
+    numericality: { less_than: :value_including_tax }
+  validates :tax_amount,
+    numericality: { less_than: :value_excluding_tax}
 
   # Creditor Order -> Creditor Payment (creditnote)
 
@@ -51,11 +52,9 @@ class CreditorOrder < ApplicationRecord
   #   Invoice:
   #     * Invoice code
   #     ** This changed: Invoices now belong to Payments, not Orders
-  def self.search(keywords, start_date, end_date, page, section_filter_id)
+  def self.search(keywords, dates, page, section_filter_id)
 
     # Let's first setup some named conditions on which we want to search
-    has_start = !start_date.nil?
-    has_end = !end_date.nil?
     omit_keywords = keywords.nil? || keywords.empty?
     skip_section_filter = section_filter_id.nil? || section_filter_id.empty?
 
@@ -118,13 +117,13 @@ class CreditorOrder < ApplicationRecord
     @creditor_orders = @creditor_orders.joins(:supplier, :job)
 
     # Then reduce the result set by filtering by dates, filters, etc
-    if has_start
+    if dates.has_start?
       # Creditor Orders for which Labor Date >= input date
-      @creditor_orders = @creditor_orders.where("date_issued >= ?", start_date)
+      @creditor_orders = @creditor_orders.where("date_issued >= ?", dates.start_date)
     end
-    if has_end
+    if dates.has_end?
       # Creditor Orders for which Labor Date <= input date
-      @creditor_orders = @creditor_orders.where("date_issued <= ?", end_date)
+      @creditor_orders = @creditor_orders.where("date_issued <= ?", dates.end_date)
     end
     unless skip_section_filter
       # Filter Creditor Orders by a specific section

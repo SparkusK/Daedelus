@@ -50,7 +50,7 @@ class DebtorOrder < ApplicationRecord
   #     * responsible_person
   #   Invoice:
   # => *** This changed! We're moving Invoice to the Debtor Payments now.
-  def self.search(keywords, start_date, end_date, page)
+  def self.search(keywords, dates, page)
 
     if keywords.nil?
       where_term = "debtor_orders.updated_at >= ? AND debtor_orders.updated_at <= ?"
@@ -59,8 +59,8 @@ class DebtorOrder < ApplicationRecord
         :customer, :job
       ).where(
         where_term,
-        start_date,
-        end_date
+        dates.start_date,
+        dates.end_date
       ).order(
         order_term
       ).paginate(
@@ -87,8 +87,8 @@ class DebtorOrder < ApplicationRecord
         ).where(
           where_term,
           search_term,
-          start_date,
-          end_date
+          dates.start_date,
+          dates.end_date
         ).order(
           order_term
         ).paginate(
@@ -116,8 +116,8 @@ class DebtorOrder < ApplicationRecord
           search_term,
           search_term,
           search_term,
-          start_date,
-          end_date
+          dates.start_date,
+          dates.end_date
         ).order(
           order_term
         ).paginate(
@@ -150,8 +150,8 @@ class DebtorOrder < ApplicationRecord
           search_term,
           search_term,
           search_term,
-          start_date,
-          end_date
+          dates.start_date,
+          dates.end_date
         ).order(
           order_term
         ).paginate(
