@@ -45,7 +45,7 @@ class PayrollsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def payroll_params
-      params.fetch(:start_date) {2.months.ago}
-      params.fetch(:end_date) {1.months.ago}
+      params.fetch(:start_date) {1.months.ago}
+      params.fetch(:end_date) {0.months.ago}
     end
 end
