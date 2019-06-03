@@ -44,12 +44,12 @@
           if params[:commit] == "Save"
             if instance.update(whitelist_params)
               notice_string = "#{entity_string} was successfully updated."
-              format.html { redirect_to credit_note, notice: notice_string }
+              format.html { redirect_to instance, notice: notice_string }
               format.json { render :show, status: :ok, location: credit_note }
               format.js
             else
               format.html { render :edit }
-              format.json { render json: credit_note.errors, status: :unprocessable_entity }
+              format.json { render json: instance.errors, status: :unprocessable_entity }
               format.js { render 'edit' }
             end
           else
@@ -87,7 +87,6 @@
         instance = subclass_model.find_by(id: params[:id])
         respond_to { |format| format.js }
       end
-
 
       private
         def set_dates
