@@ -40,32 +40,37 @@ class Customer < ApplicationRecord
 
   def self.search(keywords, page)
 
-    search_term = '%' + keywords.downcase + '%'
+    keywords_are_present = !keywords.nil? && keywords.responds_to?(:downcase)
 
-    if keywords =~ /\d/
-      # search only phone
-      where_term = %{
-        phone LIKE ?
-      }.gsub(/\s+/, " ").strip
-      order_term = "phone asc"
-      Customer.where(where_term, search_term).order(order_term).paginate(page)
-    elsif keywords.include?("@")
-      # search only email
-      where_term = %{
-        lower(email) LIKE ?
-      }.gsub(/\s+/, " ").strip
-      order_term = "email asc"
-      Customer.where(where_term, search_term).order(order_term).paginate(page)
+    if keywords_are_present
+      search_term = '%' + keywords.downcase + '%'
+
+      if keywords =~ /\d/
+        # search only phone
+        where_term = %{
+          phone LIKE ?
+        }.gsub(/\s+/, " ").strip
+        order_term = "phone asc"
+        Customer.where(where_term, search_term).order(order_term).paginate(page)
+      elsif keywords.include?("@")
+        # search only email
+        where_term = %{
+          lower(email) LIKE ?
+        }.gsub(/\s+/, " ").strip
+        order_term = "email asc"
+        Customer.where(where_term, search_term).order(order_term).paginate(page)
+      else
+        # search everything
+        where_term = %{
+          phone LIKE ?
+          OR lower(email) LIKE ?
+          OR lower(name) LIKE ?
+        }.gsub(/\s+/, " ").strip
+        order_term = "name asc"
+        Customer.where(where_term, search_term, search_term, search_term).order(order_term).paginate(page)
+      end
     else
-      # search everything
-      where_term = %{
-        phone LIKE ?
-        OR lower(email) LIKE ?
-        OR lower(name) LIKE ?
-      }.gsub(/\s+/, " ").strip
-      order_term = "name asc"
-      Customer.where(where_term, search_term, search_term, search_term
-      ).order(order_term).paginate(page)
+      Customer.all.order("name asc").paginate(page)
     end
   end
 end

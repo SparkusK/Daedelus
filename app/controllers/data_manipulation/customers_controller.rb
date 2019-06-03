@@ -2,7 +2,7 @@ module DataManipulation
   class CustomersController < AdministrativeController
     before_action :set_customer, only: [:show, :edit, :update, :destroy]
     before_action :new_customer, only: :new
-    before_action :set_customer, only: :index
+    before_action :set_customers, only: :index
 
     private
       def set_customer

@@ -9,7 +9,7 @@ module DataManipulation
         @section = Section.find(params[:id])
       end
 
-      def set_section
+      def set_sections
         @sections = params[:keywords].present? ?
           Section.search(params[:keywords]).includes(manager: :employee).paginate(page: params[:page]) :
           Section.includes(manager: :employee).paginate(page: params[:page])

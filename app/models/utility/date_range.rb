@@ -4,15 +4,9 @@ module Utility
     def initialize(args)
       args = defaults.merge(args)
 
-      start_date = set_default(args[:default_start], args[:start_date], args[:use_defaults])
-      end_date = set_default(args[:default_end], args[:end_date], args[:use_defaults])
-      if end_date < start_date
-        @start_date = end_date
-        @end_date = start_date
-      else
-        @start_date = start_date
-        @end_date = end_date
-      end
+      @start_date = set_default(args[:default_start], args[:start_date], args[:use_defaults])
+      @end_date = set_default(args[:default_end], args[:end_date], args[:use_defaults])
+      @start_date, @end_date = @end_date, @start_date if @start_date && @end_date && @end_date < @start_date
     end
 
     def has_start?
@@ -20,13 +14,13 @@ module Utility
     end
 
     def has_end?
-      date_is_present(@end_date)
+      date_is_present?(@end_date)
     end
 
     private
 
       def date_is_present?(date)
-        !date.nil? && !date.empty?
+        !date.nil? && !date.to_s.nil? && !date.to_s.empty?
       end
 
       def set_default(value, date, use_defaults)
@@ -34,7 +28,7 @@ module Utility
       end
 
       def defaults
-        {default_start: default_start, default_end: default_end, use_defaults: true}
+        { default_start: default_start, default_end: default_end, use_defaults: true }
       end
 
       def default_start

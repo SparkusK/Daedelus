@@ -42,7 +42,7 @@ module DataManipulation
         @job_targets = apply_filters ?
           JobTarget.search(
             params[:keywords],
-            @dates
+            @dates,
             params[:page],
             params[:section_filter_id]
           ).includes(:job, :section).paginate(page: params[:page]) :
