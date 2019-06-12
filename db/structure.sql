@@ -5,6 +5,7 @@ SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
 SET check_function_bodies = false;
+SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
 
@@ -280,7 +281,7 @@ CREATE TABLE public.job_targets (
     remarks character varying,
     details character varying,
     target_amount numeric(12,2) NOT NULL,
-    section_id bigint NOT NULL,
+    section_id bigint,
     job_id bigint NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -1093,6 +1094,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190314141233'),
 ('20190318153246'),
 ('20190329161044'),
-('20190415150911');
+('20190415150911'),
+('20190612155531'),
+('20190612160114');
 
 

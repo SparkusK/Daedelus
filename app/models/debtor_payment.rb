@@ -19,8 +19,6 @@ class DebtorPayment < ApplicationRecord
 
   def self.search(keywords, dates, page)
 
-
-
     if keywords.nil?
       where_term = "payment_date >= ? AND payment_date <= ?"
       order_term = "debtor_payments.payment_date desc"
