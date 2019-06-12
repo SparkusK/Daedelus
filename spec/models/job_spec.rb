@@ -126,6 +126,30 @@ RSpec.describe Job, type: :model do
 
       end
     end
+
+    context "with only completion filters" do
+      before(:all) do
+        @completed_job = FactoryBot.create(:correct_job, is_finished: "t")
+        @incompleted_job = FactoryBot.create(:correct_job, is_finished: "f")
+      end
+
+      after(:all) { DatabaseCleaner.clean_with(:deletion) }
+
+      it "finds all records when not specified" do
+        jobs = Jobs.search(completes: "All")
+        expect(jobs.map($:id)).to contain_exactly(@completed_job, @incompleted_job)
+      end
+
+      it "finds the correct records when Not Finished is selected" do
+        jobs = Jobs.search(completes: "Not Finished")
+        expect(jobs.map($:id)).to contain_exactly(@incompleted_job)
+      end
+
+      it "finds the correct records when Finished is selected" do
+        jobs = Jobs.search(completes: "Finished")
+        expect(jobs.map($:id)).to contain_exactly(@completed_job)
+      end
+    end
   end
 
 end

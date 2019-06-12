@@ -5,7 +5,7 @@ FactoryBot.define do
     work_description { "A" }
     jce_number { "A" }
     quotation_reference { "A" }
-    is_finished { "A" }
+    is_finished { "t" }
     job_number { "A" }
     order_number { "A" }
     client_section { "A" }
@@ -20,7 +20,7 @@ FactoryBot.define do
     work_description { "B" }
     jce_number { "B" }
     quotation_reference { "B" }
-    is_finished { "B" }
+    is_finished { "t" }
     job_number { "B" }
     order_number { "B" }
     client_section { "B" }
