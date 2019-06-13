@@ -31,9 +31,7 @@ module DataManipulation
 
       def set_job_targets
         @dates = Utility::DateRange.new( start_date: params[:target_start_date],
-          end_date: params[:target_end_date],
-          use_defaults: false
-        )
+          end_date: params[:target_end_date] )
         apply_filters =
             params[:keywords].present? ||
             params[:target_start_date].present? ||

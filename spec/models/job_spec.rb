@@ -109,14 +109,33 @@ RSpec.describe Job, type: :model do
       end
     end
 
-    context "with only date filters" do
+    context "with only receive_date filters" do
       before(:all) do
-        @completed_job = FactoryBot.create(:correct_job, is_finished: "t")
-        @incompleted_job = FactoryBot.create(:correct_job, is_finished: "f")
+        date_range = Utility::DateRange.new(start_date: 1.day.ago, end_date: 1.day.after)
+        @correct_job = FactoryBot.create(:correct_job, receive_date: Date.today)
+        @incorrect_job = FactoryBot.create(:correct_job, receive_date: 3.days.ago)
       end
 
       after(:all) { DatabaseCleaner.clean_with(:deletion) }
-      
+
+      it "finds the correct records within a certain date range" do
+        jobs = Job.search(receive_dates: date_range)
+        expect(jobs.map(&:id)).to contain_exactly(@correct_job.id)
+      end
+
+      it "filters incorrect records outside of the given date range" do
+        jobs = Job.search(receive_dates: date_range)
+        expect(jobs.map(&:id)).to not_contain_exactly(@incorrect_job.id)
+      end
+    end
+
+    context "with only job_target_date filters" do
+      before(:all) do
+
+      end
+
+      after(:all) { DatabaseCleaner.clean_with(:deletion) }
+
       it "finds the correct records that start after a certain date" do
 
       end
@@ -133,6 +152,15 @@ RSpec.describe Job, type: :model do
 
       end
     end
+
+    context "with only section_id_filters" do
+      before(:all) do
+
+      end
+
+      after(:all) { DatabaseCleaner.clean_with(:deletion) }
+    end
+
 
     context "with only completion filters" do
       before(:all) do

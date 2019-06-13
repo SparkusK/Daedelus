@@ -85,7 +85,7 @@ class Job < ApplicationRecord
   # Job.search(keywords: a, target_dates: b, receive_dates: c, page: d, targets: e, completes: f,
   # section_filter_id: g)
   def self.search(args)
-    args = self.defaults.merge(args)
+    args = self.search_defaults.merge(args)
 
     # Let's first setup some named conditions on which we want to search
     omit_keywords = args[:keywords].nil? || args[:keywords].empty?
@@ -171,6 +171,7 @@ class Job < ApplicationRecord
     if args[:receive_dates].has_end?
       @jobs = @jobs.where("jobs.receive_date <= ?", args[:receive_dates].end_date)
     end
+
     unless skip_section_filter
       @jobs = @jobs.where(section_id: args[:section_filter_id])
     end
@@ -251,11 +252,11 @@ class Job < ApplicationRecord
 
   private
 
-  def self.defaults
+  def self.search_defaults
     {
       keywords: nil,
-      target_dates: Utility::DateRange.new(default_start: nil, default_end: nil, use_defaults: nil),
-      receive_dates: Utility::DateRange.new(default_start: nil, default_end: nil, use_defaults: nil),
+      target_dates: Utility::DateRange.new(start_date: nil, end_date: nil),
+      receive_dates: Utility::DateRange.new(start_date: nil, end_date: nil),
       page: 1,
       targets: "All",
       completes: "All",

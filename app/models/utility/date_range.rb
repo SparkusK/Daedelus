@@ -1,11 +1,17 @@
 module Utility
+
+  # date_range_floor = Utility::DateRange.new(start_date: 1.day.ago, end_date: nil)
+  # date_range_ceiling = Utility::DateRange.new(end_date: 1.day.after, start_date: nil)
+  # date_range = Utility::DateRange.new(start_date: 7.days.before, end_date: 7.days.after)
+  # date_range_with_defaults = Utility::DateRange.new(start_date: 7.days.before)
+  # date_range_with_defaults = Utility::DateRange.new(end_date: 7.days.before)
   class DateRange
     attr_reader :start_date, :end_date
     def initialize(args)
       args = defaults.merge(args)
 
-      @start_date = set_default(args[:default_start], args[:start_date], args[:use_defaults])
-      @end_date = set_default(args[:default_end], args[:end_date], args[:use_defaults])
+      @start_date = args[:start_date]
+      @end_date = args[:end_date]
       @start_date, @end_date = @end_date, @start_date if @start_date && @end_date && @end_date < @start_date
     end
 
@@ -20,15 +26,11 @@ module Utility
     private
 
       def date_is_present?(date)
-        !date.nil? && !date.to_s.nil? && !date.to_s.empty?
-      end
-
-      def set_default(value, date, use_defaults)
-        ( (date.nil? || date.empty?) && use_defaults) ? value : nil
+        !date.nil?
       end
 
       def defaults
-        { default_start: default_start, default_end: default_end, use_defaults: true }
+        { start_date: default_start, end_date: default_end }
       end
 
       def default_start
