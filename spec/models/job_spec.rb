@@ -111,10 +111,12 @@ RSpec.describe Job, type: :model do
 
     context "with only date filters" do
       before(:all) do
+        @completed_job = FactoryBot.create(:correct_job, is_finished: "t")
+        @incompleted_job = FactoryBot.create(:correct_job, is_finished: "f")
       end
 
       after(:all) { DatabaseCleaner.clean_with(:deletion) }
-
+      
       it "finds the correct records that start after a certain date" do
 
       end

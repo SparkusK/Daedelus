@@ -20,7 +20,7 @@ class DebtorOrder < ApplicationRecord
   end
 
   def self.removal_confirmation(debtor_order_id)
-    count =debtor_payments_count(debtor_order_id)
+    count = get_debtor_payments_count(debtor_order_id)
     confirmation = "Performing this removal will also delete: \n"
 
     confirmation << "* #{count} Debtor Payment records \n"
