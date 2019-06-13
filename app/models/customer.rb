@@ -11,15 +11,15 @@ class Customer < ApplicationRecord
     "#{name}"
   end
 
-  def self.get_debtor_payments(debtor_order_ids)
+  def self.debtor_payments(debtor_order_ids)
     DebtorPayment.where("debtor_order_id IN (?)", debtor_order_ids)
   end
 
-  def self.get_debtor_orders(customer_id)
+  def self.debtor_orders(customer_id)
     DebtorOrder.where("customer_id = ?", customer_id)
   end
 
-  def self.get_entities(customer_id)
+  def self.entities(customer_id)
     debtor_orders   = get_debtor_orders(   customer_id       )
     debtor_payments = get_debtor_payments( debtor_orders.ids )
     {
@@ -28,7 +28,7 @@ class Customer < ApplicationRecord
     }
   end
 
-  def self.get_removal_confirmation(customer_id)
+  def self.removal_confirmation(customer_id)
     entities = get_entities(customer_id)
     confirmation = "Performing this removal will also delete: \n"
 

@@ -15,11 +15,11 @@ class DebtorOrder < ApplicationRecord
 
   # Debtor Order -> Debtor Payment
 
-  def self.get_debtor_payments_count(debtor_order_id)
+  def self.debtor_payments_count(debtor_order_id)
     DebtorPayment.where("debtor_order_id = ?", debtor_order_id).count(:all)
   end
 
-  def self.get_removal_confirmation(debtor_order_id)
+  def self.removal_confirmation(debtor_order_id)
     count = get_debtor_payments_count(debtor_order_id)
     confirmation = "Performing this removal will also delete: \n"
 
@@ -32,7 +32,7 @@ class DebtorOrder < ApplicationRecord
     "#{customer.name}"
   end
 
-  def get_still_owed_amount
+  def still_owed_amount
     value = self.value_excluding_tax
     # Sum all payment amounts of debtor payments with debtor_order_id = self.id
     paid = DebtorPayment.where(debtor_order_id: self.id).sum(:payment_amount)

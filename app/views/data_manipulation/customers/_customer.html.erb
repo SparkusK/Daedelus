@@ -17,7 +17,7 @@
       <div class="col-md-10"></div>
       <div class="d-flex col-md-2">
         <%= button_to 'Edit', edit_customer_path(customer), remote: true, method: :get, class: "btn btn-primary" %>
-        <%= button_to 'Remove', customer, method: :delete, data: { confirm: Customer.get_removal_confirmation(customer.id) }, class: "btn btn-danger" %>
+        <%= button_to 'Remove', customer, method: :delete, data: { confirm: Customer.removal_confirmation(customer.id) }, class: "btn btn-danger" %>
       </div>
     </div>
   </div>

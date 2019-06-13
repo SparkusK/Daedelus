@@ -110,6 +110,13 @@ RSpec.describe Job, type: :model do
     end
 
     context "with only date filters" do
+      before(:all) do
+        @completed_job = FactoryBot.create(:correct_job, is_finished: "t")
+        @incompleted_job = FactoryBot.create(:correct_job, is_finished: "f")
+      end
+
+      after(:all) { DatabaseCleaner.clean_with(:deletion) }
+      
       it "finds the correct records that start after a certain date" do
 
       end
@@ -136,18 +143,18 @@ RSpec.describe Job, type: :model do
       after(:all) { DatabaseCleaner.clean_with(:deletion) }
 
       it "finds all records when not specified" do
-        jobs = Jobs.search(completes: "All")
-        expect(jobs.map($:id)).to contain_exactly(@completed_job, @incompleted_job)
+        jobs = Job.search(completes: "All")
+        expect(jobs.map(&:id)).to contain_exactly(@completed_job.id, @incompleted_job.id)
       end
 
       it "finds the correct records when Not Finished is selected" do
-        jobs = Jobs.search(completes: "Not Finished")
-        expect(jobs.map($:id)).to contain_exactly(@incompleted_job)
+        jobs = Job.search(completes: "Not finished")
+        expect(jobs.map(&:id)).to contain_exactly(@incompleted_job.id)
       end
 
       it "finds the correct records when Finished is selected" do
-        jobs = Jobs.search(completes: "Finished")
-        expect(jobs.map($:id)).to contain_exactly(@completed_job)
+        jobs = Job.search(completes: "Finished")
+        expect(jobs.map(&:id)).to contain_exactly(@completed_job.id)
       end
     end
   end

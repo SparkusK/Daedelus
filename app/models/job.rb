@@ -12,7 +12,7 @@ class Job < ApplicationRecord
 
   validates :total, numericality: { greater_than: 0.0 }
 
-  def get_supervisor
+  def supervisor
     Supervisor.find_by(section_id: section.id)
   end
 
@@ -20,7 +20,7 @@ class Job < ApplicationRecord
     job_number.nil? ? "Job number not found" : "#{job_number}"
   end
 
-  def get_receive_date_string
+  def receive_date_string
     self.receive_date.nil? ? "" : self.receive_date.strftime("%a, %d %b %Y")
   end
 
@@ -32,7 +32,7 @@ class Job < ApplicationRecord
     self.total - self.targeted_amount
   end
 
-  def self.get_amount_remaining(job)
+  def self.amount_remaining(job)
     job.total - JobTarget.where(job_id: job.id).sum(target_amount)
   end
 
@@ -42,7 +42,7 @@ class Job < ApplicationRecord
   #   -> Debtor Order
   #       -> Debtor Payment
   #   -> Labor Record
-  def self.get_removal_confirmation(job_id)
+  def self.removal_confirmation(job_id)
     entities = get_entities(job_id)
     confirmation = "Performing this removal will also delete: \n"
 
@@ -134,16 +134,16 @@ class Job < ApplicationRecord
       # we don't really need to do anything here
     when "Not Targeted"
       # Jobs where targeted_amount = 0
-      @jobs = @jobs.where(id: Job.get_not_targeted_records)
+      @jobs = @jobs.where(id: Job.not_targeted_records)
     when "Under Targeted"
       # Jobs where targeted_amount < job.total
-      @jobs = @jobs.where(id: Job.get_targeted_records('<'))
+      @jobs = @jobs.where(id: Job.targeted_records('<'))
     when "Fully Targeted"
       # Jobs where targeted_amount == total
-      @jobs = @jobs.where(id: Job.get_targeted_records('='))
+      @jobs = @jobs.where(id: Job.targeted_records('='))
     when "Over Targeted"
       # Jobs where targeted_amount > job.total
-      @jobs = @jobs.where(id: Job.get_targeted_records('>'))
+      @jobs = @jobs.where(id: Job.targeted_records('>'))
     end
 
     case args[:completes]
@@ -159,11 +159,11 @@ class Job < ApplicationRecord
 
     if args[:target_dates].has_start?
       # Jobs for which their earliest Job Target's Date is after the input date
-      @jobs = @jobs.where(id: Job.get_target_date_jobs(true, args[:target_dates].start_date))
+      @jobs = @jobs.where(id: Job.target_date_jobs(true, args[:target_dates].start_date))
     end
     if args[:target_dates].has_end?
       # Jobs for which their latest Job Target's Date is before the Input Date
-      @jobs = @jobs.where(id: Job.get_target_date_jobs(false, args[:target_dates].end_date))
+      @jobs = @jobs.where(id: Job.target_date_jobs(false, args[:target_dates].end_date))
     end
     if args[:receive_dates].has_start?
       @jobs = @jobs.where("jobs.receive_date >= ?", args[:receive_dates].start_date)
@@ -187,7 +187,7 @@ class Job < ApplicationRecord
     )
   end
 
-  def self.get_targeted_records(modifier)
+  def self.targeted_records(modifier)
     raise "Only valid modifiers are allowed." if !(['<', '>', '='].include? modifier)
     sql = "SELECT jobs.id, jobs.total, SUM(job_targets.target_amount)
     FROM jobs LEFT OUTER JOIN job_targets
@@ -198,7 +198,7 @@ class Job < ApplicationRecord
     ids = results.map{|hash| hash["id"]}
   end
 
-  def self.get_not_targeted_records
+  def self.not_targeted_records
     sql = "SELECT jobs.id, jobs.total, SUM(job_targets.target_amount)
     FROM jobs LEFT OUTER JOIN job_targets
     ON job_targets.job_id = jobs.id
@@ -209,7 +209,7 @@ class Job < ApplicationRecord
   end
 
 
-  def self.get_target_date_jobs(start, input_date)
+  def self.target_date_jobs(start, input_date)
 
     # I don't know which types of formats, other than the regex listed below,
     # Postgres actually supports. I know that the Javascript Calendar datepicker
@@ -265,31 +265,31 @@ class Job < ApplicationRecord
 
   # ---- Get Removal Confirmation stuff ---------------------------------------
 
-  def self.get_creditor_orders(job_id)
+  def self.creditor_orders(job_id)
     CreditorOrder.where("job_id = ?", job_id)
   end
 
-  def self.get_credit_notes(creditor_order_ids)
+  def self.credit_notes(creditor_order_ids)
     CreditNote.where("creditor_order_id IN (?)", creditor_order_ids)
   end
 
-  def self.get_debtor_orders(job_id)
+  def self.debtor_orders(job_id)
     DebtorOrder.where("job_id = ?", job_id)
   end
 
-  def self.get_debtor_payments(debtor_order_ids)
+  def self.debtor_payments(debtor_order_ids)
     DebtorPayment.where("debtor_order_id IN (?)", debtor_order_ids)
   end
 
-  def self.get_job_labor_records(job_id)
+  def self.job_labor_records(job_id)
     LaborRecord.where("job_id = ?", job_id)
   end
 
-  def self.get_job_targets(job_id)
+  def self.job_targets(job_id)
     JobTarget.where("job_id = ?", job_id)
   end
 
-  def self.get_entities(job_id)
+  def self.entities(job_id)
     creditor_orders  = get_creditor_orders(   job_id              )
     credit_notes     = get_credit_notes(      creditor_orders.ids )
     debtor_orders    = get_debtor_orders(     job_id              )

@@ -2,14 +2,14 @@ class DebtorPayment < ApplicationRecord
   belongs_to :debtor_order
   validates_each :payment_amount do |record, attr, value|
     record.errors.add(attr, "Can't pay more than is still owed") if
-      value > record.debtor_order.get_still_owed_amount
+      value > record.debtor_order.still_owed_amount
     end
   validates :payment_amount, numericality: { greater_than_or_equal_to: 0.0 }
 
   validates :payment_date, :payment_amount, :payment_type, :note, :invoice_code,
     presence: true
 
-  def get_payment_date
+  def payment_date
     if payment_date.nil?
       ""
     else

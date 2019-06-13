@@ -1,8 +1,8 @@
 <%= render partial: "shared/cards/card", locals: {
   entity: job,
   card_header_text: job.job_number,
-  card_subheader_text: job.get_receive_date_string,
-  confirm: Job.get_removal_confirmation(job.id),
+  card_subheader_text: job.receive_date_string,
+  confirm: Job.removal_confirmation(job.id),
   rows: [
     {
       header1: "JOB TOTAL:", text1: number_to_currency(job.total, unit: "R"),

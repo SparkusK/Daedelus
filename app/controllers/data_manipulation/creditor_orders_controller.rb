@@ -7,7 +7,7 @@ module DataManipulation
     # GET /debtor_orders/1/amounts.json
     def ajax_amounts
       order = CreditorOrder.find_by(id: params[:id])
-      owed = order.get_still_owed_amount
+      owed = order.still_owed_amount
       @amounts = { value: order.value_excluding_tax, owed: owed }
       respond_to { |format| format.json { render json: @amounts } }
     end

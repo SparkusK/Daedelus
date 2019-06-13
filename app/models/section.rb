@@ -21,51 +21,51 @@ class Section < ApplicationRecord
   # 	-> labor_records
 
 
-  def self.get_jobs(section_id)
+  def self.jobs(section_id)
     Job.where(section_id: section_id)
   end
 
-  def self.get_creditor_orders(job_ids)
+  def self.creditor_orders(job_ids)
     CreditorOrder.where("creditor_orders.job_id IN (?)", job_ids)
   end
 
-  def self.get_credit_notes(creditor_order_ids)
+  def self.credit_notes(creditor_order_ids)
     CreditNote.where("creditor_order_id IN (?)", creditor_order_ids)
   end
 
-  def self.get_debtor_orders(job_ids)
+  def self.debtor_orders(job_ids)
     DebtorOrder.where("job_id IN (?)", job_ids)
   end
 
-  def self.get_debtor_payments(debtor_order_ids)
+  def self.debtor_payments(debtor_order_ids)
     DebtorPayment.where("debtor_order_id IN (?)", debtor_order_ids)
   end
 
-  def self.get_job_labor_records(job_ids)
+  def self.job_labor_records(job_ids)
     LaborRecord.where("job_id IN (?)", job_ids)
   end
 
-  def self.get_employees(section_id)
+  def self.employees(section_id)
     Employee.where(section_id: section_id)
   end
 
-  def self.get_employee_managers(employee_ids)
+  def self.employee_managers(employee_ids)
     Manager.where("employee_id IN (?)", employee_ids)
   end
 
-  def self.get_employee_labor_records(employee_ids)
+  def self.employee_labor_records(employee_ids)
     LaborRecord.where("employee_id IN (?)", employee_ids)
   end
 
-  def self.get_manager(section_id)
+  def self.manager(section_id)
     Section.find_by(id: section_id).manager
   end
 
-  def self.get_section_labor_records(section_id)
+  def self.section_labor_records(section_id)
     LaborRecord.where(section_id: section_id)
   end
 
-  def self.get_entities(section_id)
+  def self.entities(section_id)
     jobs                    = get_jobs(                   section_id          )
     creditor_orders         = get_creditor_orders(        jobs.ids            )
     credit_notes            = get_credit_notes(           creditor_orders.ids )
@@ -95,7 +95,7 @@ class Section < ApplicationRecord
 
   end
 
-  def self.get_removal_confirmation(section_id)
+  def self.removal_confirmation(section_id)
     entities = get_entities(section_id)
     confirmation = "Performing this removal will also delete: \n"
 

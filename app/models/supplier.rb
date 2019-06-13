@@ -7,15 +7,15 @@ class Supplier < ApplicationRecord
   #   -> creditor_order
   #       -> creditor_payment
 
-  def self.get_credit_notes(creditor_order_ids)
+  def self.credit_notes(creditor_order_ids)
     CreditNote.where("creditor_order_id IN (?)", creditor_order_ids)
   end
 
-  def self.get_creditor_orders(supplier_id)
+  def self.creditor_orders(supplier_id)
     CreditorOrder.where("supplier_id = ?", supplier_id)
   end
 
-  def self.get_entities(supplier_id)
+  def self.entities(supplier_id)
     creditor_orders = get_creditor_orders( supplier_id         )
     credit_notes    = get_credit_notes(    creditor_orders.ids )
     {
@@ -24,7 +24,7 @@ class Supplier < ApplicationRecord
     }
   end
 
-  def self.get_removal_confirmation(supplier_id)
+  def self.removal_confirmation(supplier_id)
     entities = get_entities(supplier_id)
     confirmation = "Performing this removal will also delete: \n"
 
@@ -38,7 +38,7 @@ class Supplier < ApplicationRecord
     "#{name}"
   end
 
-  def get_removal_confirmation
+  def removal_confirmation
     confirmation = "Performing this removal will also delete: \n"
     confirmation << "* #{self.creditor_orders.count} Creditor Order records, including: \n" unless self.creditor_orders.nil?
     creditor_orders_payments_total = 0

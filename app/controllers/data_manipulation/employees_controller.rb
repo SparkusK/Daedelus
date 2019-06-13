@@ -13,7 +13,7 @@ module DataManipulation
 
     # AJAX GET /employees/7/labor_dates.json
     def ajax_labor_dates
-      @dates_hash = Employee.get_labor_record_dates(params[:id])
+      @dates_hash = Employee.labor_record_dates(params[:id])
       respond_to do |format|
         format.json { render json: @dates_hash }
         format.html { render json: @dates_hash }

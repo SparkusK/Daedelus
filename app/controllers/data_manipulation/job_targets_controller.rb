@@ -7,7 +7,7 @@ module DataManipulation
     # GET /job_targets/:id/amounts/:job_id
     def amounts
       job_id = params[:job_id]
-      @job_target_amounts = @job_target.get_amounts(job_id)
+      @job_target_amounts = @job_target.amounts(job_id)
       respond_to do |format|
         format.html { render json: @job_target_amounts }
         format.json { render json: @job_target_amounts }
@@ -17,7 +17,7 @@ module DataManipulation
     # GET /job_targets/amounts/:job_id
     def amounts_new
       job_id = params[:job_id]
-      @job_target_amounts = JobTarget.get_amounts_for_new_job_target(job_id)
+      @job_target_amounts = JobTarget.amounts_for_new_job_target(job_id)
       respond_to do |format|
         format.html { render json: @job_target_amounts }
         format.json { render json: @job_target_amounts }

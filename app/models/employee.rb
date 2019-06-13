@@ -10,15 +10,15 @@ class Employee < ApplicationRecord
   #   -> Manager (1)
   #   -> Labor Record
 
-  def self.get_labor_records(employee_id)
+  def self.labor_records(employee_id)
     LaborRecord.where("employee_id = ?", employee_id)
   end
 
-  def self.get_manager(employee_id)
+  def self.manager(employee_id)
     Manager.find_by(employee_id: employee_id)
   end
 
-  def self.get_entities(employee_id)
+  def self.entities(employee_id)
     labor_records  = get_labor_records( employee_id )
     manager        = get_manager(       employee_id )
     (manager.nil? )? manager_count = 0 : manager_count = 1
@@ -29,7 +29,7 @@ class Employee < ApplicationRecord
   end
 
 
-  def self.get_removal_confirmation(employee_id)
+  def self.removal_confirmation(employee_id)
     entities = get_entities(employee_id)
     confirmation = "Performing this removal will also delete: \n"
 
@@ -43,7 +43,7 @@ class Employee < ApplicationRecord
     "#{first_name} #{last_name}"
   end
 
-  # def self.get_labor_record_dates(employee_id, start_date, end_date)
+  # def self.labor_record_dates(employee_id, start_date, end_date)
   #   dates_hash = Hash.new(true)
   #   LaborRecord.select("labor_date").where(
   #     "employee_id = ? AND labor_date > ? AND labor_date < ?",
@@ -54,7 +54,7 @@ class Employee < ApplicationRecord
   #   dates_hash
   # end
 
-  def self.get_labor_record_dates(employee_id)
+  def self.labor_record_dates(employee_id)
     dates_hash = Hash.new(true)
     LaborRecord.select("labor_date").where("employee_id = ?", employee_id).each do |date_object|
       dates_hash["#{date_object.labor_date}"] = true

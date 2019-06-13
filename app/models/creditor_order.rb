@@ -16,11 +16,11 @@ class CreditorOrder < ApplicationRecord
 
   # Creditor Order -> Creditor Payment (creditnote)
 
-  def self.get_creditor_payments_count(creditor_order_id)
+  def self.creditor_payments_count(creditor_order_id)
     CreditNote.where("creditor_order_id = ?", creditor_order_id).count(:all)
   end
 
-  def self.get_removal_confirmation(creditor_order_id)
+  def self.removal_confirmation(creditor_order_id)
     count = get_creditor_payments_count(creditor_order_id)
     confirmation = "Performing this removal will also delete: \n"
 
@@ -29,7 +29,7 @@ class CreditorOrder < ApplicationRecord
     confirmation << "Are you sure?"
   end
 
-  def get_still_owed_amount
+  def still_owed_amount
     value = self.value_excluding_tax
     # Sum all payment amounts of debtor payments with debtor_order_id = self.id
     paid = CreditNote.where(creditor_order_id: self.id).sum(:amount_paid)

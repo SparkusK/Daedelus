@@ -2,7 +2,7 @@ class CreditNote < ApplicationRecord
   belongs_to :creditor_order
   validates_each :amount_paid do |record, attr, value|
     record.errors.add(attr, "Can't pay more than is still owed") if
-      value > record.creditor_order.get_still_owed_amount
+      value > record.creditor_order.still_owed_amount
   end
 
   validates :amount_paid, numericality: { greater_than_or_equal_to: 0.0 }

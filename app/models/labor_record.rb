@@ -77,7 +77,7 @@ class LaborRecord < ApplicationRecord
     Date::DAYNAMES[self.labor_date.wday]
   end
 
-  def get_section_name
+  def section_name
     self.section.nil? ? "" : self.section.name
   end
 

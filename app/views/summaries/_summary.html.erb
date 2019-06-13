@@ -37,20 +37,20 @@
         </tr>
         <tr>
           <td><small class="text-muted">5%</small></td>
-          <td><%= number_to_currency(summary.get_cost(1.05), unit: "R") %></td>
-          <td><%= number_to_currency(summary.get_profit(1.05), unit: "R") %></td>
+          <td><%= number_to_currency(summary.cost(1.05), unit: "R") %></td>
+          <td><%= number_to_currency(summary.profit(1.05), unit: "R") %></td>
           <td></td>
         </tr>
         <tr>
           <td><small class="text-muted">10%</small></td>
-          <td><%= number_to_currency(summary.get_cost(1.1), unit: "R") %></td>
-          <td><%= number_to_currency(summary.get_profit(1.1), unit: "R") %></td>
+          <td><%= number_to_currency(summary.cost(1.1), unit: "R") %></td>
+          <td><%= number_to_currency(summary.profit(1.1), unit: "R") %></td>
           <td></td>
         </tr>
         <tr>
           <td><small class="text-muted">15%</small></td>
-          <td><%= number_to_currency(summary.get_cost(1.15), unit: "R") %></td>
-          <td><%= number_to_currency(summary.get_profit(1.15), unit: "R") %></td>
+          <td><%= number_to_currency(summary.cost(1.15), unit: "R") %></td>
+          <td><%= number_to_currency(summary.profit(1.15), unit: "R") %></td>
           <td></td>
         </tr>
       </tbody>

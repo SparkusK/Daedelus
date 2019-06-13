@@ -6,13 +6,13 @@ class JobTarget < ApplicationRecord
 
   validates :target_amount, numericality: { greater_than: 0.0 }
 
-  def get_available_amount
+  def available_amount
     total = self.job.total
     payments = JobTarget.where(job_id: self.job_id).sum(:target_amount)
     total - payments
   end
 
-  def get_removal_confirmation(job_target_id)
+  def removal_confirmation(job_target_id)
     "Performing this action will permanently delete this record from the database. Are you sure?"
   end
 
@@ -28,7 +28,7 @@ class JobTarget < ApplicationRecord
   # and then touching our servers. Y'know, security conscious and all that.
   #
   # Apparently, a simple .not() should work. Let's see.
-  def get_amounts(job_id)
+  def amounts(job_id)
     job_total = self.job.total
     payments = JobTarget
       .where(job_id: job_id)
@@ -38,7 +38,7 @@ class JobTarget < ApplicationRecord
     amounts = {remaining_amount: remaining_amount, job_total: job_total}
   end
 
-  def self.get_amounts_for_new_job_target(job_id)
+  def self.amounts_for_new_job_target(job_id)
     job_total = Job.find_by(id: job_id).total
     payments = JobTarget.where(job_id: job_id).sum(:target_amount)
     remaining_amount = job_total - payments
