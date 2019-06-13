@@ -21,7 +21,7 @@ class CreditorOrder < ApplicationRecord
   end
 
   def self.removal_confirmation(creditor_order_id)
-    count = get_creditor_payments_count(creditor_order_id)
+    count =creditor_payments_count(creditor_order_id)
     confirmation = "Performing this removal will also delete: \n"
 
     confirmation << "* #{count} Creditor Payment records \n"

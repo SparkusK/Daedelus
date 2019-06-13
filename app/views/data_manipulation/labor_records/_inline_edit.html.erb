@@ -52,7 +52,7 @@
       <%= form.label :job_id %>
       <%= collection_select(:labor_record,
         :job_id,
-        get_all_jobs,
+       all_jobs,
         :id,
         :job_name,
         {prompt: true}, {class: "custom-select", id: "labor_record_job_id_#{@labor_record.id}"}) %>

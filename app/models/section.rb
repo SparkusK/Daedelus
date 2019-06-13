@@ -66,17 +66,17 @@ class Section < ApplicationRecord
   end
 
   def self.entities(section_id)
-    jobs                    = get_jobs(                   section_id          )
-    creditor_orders         = get_creditor_orders(        jobs.ids            )
-    credit_notes            = get_credit_notes(           creditor_orders.ids )
-    debtor_orders           = get_debtor_orders(          jobs.ids            )
-    debtor_payments         = get_debtor_payments(        debtor_orders.ids   )
-    job_labor_records       = get_job_labor_records(      jobs.ids            )
-    employees               = get_employees(              section_id          )
-    employee_managers       = get_employee_managers(      employees.ids       )
-    employee_labor_records  = get_employee_labor_records( employees.ids       )
-    manager                 = get_manager(                section_id          )
-    section_labor_records   = get_section_labor_records(  section_id          )
+    jobs                    =jobs(                   section_id          )
+    creditor_orders         =creditor_orders(        jobs.ids            )
+    credit_notes            =credit_notes(           creditor_orders.ids )
+    debtor_orders           =debtor_orders(          jobs.ids            )
+    debtor_payments         =debtor_payments(        debtor_orders.ids   )
+    job_labor_records       =job_labor_records(      jobs.ids            )
+    employees               =employees(              section_id          )
+    employee_managers       =employee_managers(      employees.ids       )
+    employee_labor_records  =employee_labor_records( employees.ids       )
+    manager                 =manager(                section_id          )
+    section_labor_records   =section_labor_records(  section_id          )
 
     manager.nil? ? manager_count = 0 : manager_count = 1
     {
@@ -96,7 +96,7 @@ class Section < ApplicationRecord
   end
 
   def self.removal_confirmation(section_id)
-    entities = get_entities(section_id)
+    entities =entities(section_id)
     confirmation = "Performing this removal will also delete: \n"
 
     confirmation << "* #{entities[:jobs].count} Job records \n"
