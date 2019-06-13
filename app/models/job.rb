@@ -212,6 +212,9 @@ class Job < ApplicationRecord
 
   def self.target_date_jobs(start, input_date)
 
+    if input_date.is_a?(Date)
+      input_date = input_date.strftime("%Y-%m-%d")
+    end
     # I don't know which types of formats, other than the regex listed below,
     # Postgres actually supports. I know that the Javascript Calendar datepicker
     # actually outputs to this format too. So, any weird input behaviors should

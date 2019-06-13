@@ -1,7 +1,7 @@
 require 'rails_helper'
 
 RSpec.describe Job, type: :model do
-  after(:all) { DatabaseCleaner.clean_with(:truncation) }
+  # after(:all) { DatabaseCleaner.clean_with(:truncation) }
 
   describe "search" do
     context "with only keywords" do
@@ -111,54 +111,58 @@ RSpec.describe Job, type: :model do
 
     context "with only receive_date filters" do
       before(:all) do
-        date_range = Utility::DateRange.new(start_date: 1.day.ago, end_date: 1.day.after)
+        @date_range = Utility::DateRange.new(start_date: 1.day.ago, end_date: 1.day.after)
         @correct_job = FactoryBot.create(:correct_job, receive_date: Date.today)
         @incorrect_job = FactoryBot.create(:correct_job, receive_date: 3.days.ago)
       end
 
       after(:all) { DatabaseCleaner.clean_with(:deletion) }
 
-      it "finds the correct records within a certain date range" do
-        jobs = Job.search(receive_dates: date_range)
+      it "finds the correct records within a certain date range", :aggregate_failures do
+        jobs = Job.search(receive_dates: @date_range)
         expect(jobs.map(&:id)).to contain_exactly(@correct_job.id)
-      end
-
-      it "filters incorrect records outside of the given date range" do
-        jobs = Job.search(receive_dates: date_range)
-        expect(jobs.map(&:id)).to not_contain_exactly(@incorrect_job.id)
+        expect(jobs.map(&:id)).not_to contain_exactly(@incorrect_job.id)
       end
     end
 
     context "with only job_target_date filters" do
       before(:all) do
-
+        @date_range = Utility::DateRange.new(start_date: Date.yesterday, end_date: Date.tomorrow)
+        @job_inside = FactoryBot.create(:correct_job)
+        @job_inside_target = FactoryBot.create(:correct_job_target,
+          job_id: @job_inside.id, target_date: Date.today)
+        @job_before = FactoryBot.create(:correct_job)
+        @job_before_target = FactoryBot.create(:correct_job_target,
+          job_id: @job_before.id, target_date: 7.days.ago)
+        @job_after = FactoryBot.create(:correct_job)
+        @job_after_target = FactoryBot.create(:correct_job_target,
+          job_id: @job_after.id, target_date: 7.days.after)
       end
 
       after(:all) { DatabaseCleaner.clean_with(:deletion) }
 
-      it "finds the correct records that start after a certain date" do
-
-      end
-
-      it "finds the correct records that start before a certain date" do
-
-      end
-
-      it "finds the correct records that end after a certain date" do
-
-      end
-
-      it "finds the correct records that end before a certain date" do
-
+      it "finds and filters Jobs correctly via their Job Targets' Dates", :aggregate_failures do
+        jobs = Job.search(target_dates: @date_range)
+        expect(jobs.map(&:id)).to contain_exactly(@job_inside.id)
+        expect(jobs.map(&:id)).not_to contain_exactly(@job_before.id, @job_after.id)
       end
     end
 
     context "with only section_id_filters" do
       before(:all) do
-
+        @correct_section = FactoryBot.create(:sample_section, name: "Abc")
+        @incorrect_section = FactoryBot.create(:sample_section, name: "Efg")
+        @correct_job = FactoryBot.create(:correct_job, section_id: @correct_section.id)
+        @incorrect_job = FactoryBot.create(:correct_job, section_id: @incorrect_section.id)
       end
 
       after(:all) { DatabaseCleaner.clean_with(:deletion) }
+
+      it "finds and filters the correct records via the section_id filter" do
+        jobs = Job.search(section_filter_id: "#{@correct_section.id}")
+        expect(jobs.map(&:id)).to contain_exactly(@correct_job.id)
+        expect(jobs.map(&:id)).not_to contain_exactly(@incorrect_job.id)
+      end
     end
 
 

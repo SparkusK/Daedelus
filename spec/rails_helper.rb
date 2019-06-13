@@ -64,4 +64,17 @@ RSpec.configure do |config|
   # We have to include this line to enable RSpec to test Controllers that
   # use Devise for Authentication.
   config.include Devise::Test::ControllerHelpers, type: :controller
+
+  # Include an after(:suite) block to clean the database with
+  # DatabaseCleaner(:truncation)
+  # See https://stackoverflow.com/questions/11419536/postgresql-truncation-speed/11423886#11423886
+  # In short, deletion is really fast for small data, truncation takes long because
+  # it also vaccuums the database, makes it pristine AF (cleans indexes and TOAST tables etc)
+  config.after(:suite) do
+    puts " ==== ---- Starting database clean ---- ===="
+    time_start = Time.now
+    DatabaseCleaner.clean_with(:truncation)
+    time_end = Time.now
+    puts " ==== ---- Database cleaned. Time taken: #{(time_end - time_start).truncate(4)}s ---- ===="
+  end
 end
