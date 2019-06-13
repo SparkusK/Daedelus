@@ -16,8 +16,8 @@ class Supplier < ApplicationRecord
   end
 
   def self.entities(supplier_id)
-    creditor_orders = get_creditor_orders( supplier_id         )
-    credit_notes    = get_credit_notes(    creditor_orders.ids )
+    creditor_orders = creditor_orders( supplier_id         )
+    credit_notes    = credit_notes(    creditor_orders.ids )
     {
       creditor_orders: creditor_orders,
       credit_notes: credit_notes
@@ -25,7 +25,7 @@ class Supplier < ApplicationRecord
   end
 
   def self.removal_confirmation(supplier_id)
-    entities = get_entities(supplier_id)
+    entities = entities(supplier_id)
     confirmation = "Performing this removal will also delete: \n"
 
     confirmation << "* #{entities[:creditor_orders].count} Creditor Order records \n"

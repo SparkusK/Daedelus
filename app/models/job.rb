@@ -43,7 +43,7 @@ class Job < ApplicationRecord
   #       -> Debtor Payment
   #   -> Labor Record
   def self.removal_confirmation(job_id)
-    entities = get_entities(job_id)
+    entities = entities(job_id)
     confirmation = "Performing this removal will also delete: \n"
 
     confirmation << "* #{entities[:creditor_orders].count} Creditor Order records \n"
@@ -290,12 +290,12 @@ class Job < ApplicationRecord
   end
 
   def self.entities(job_id)
-    creditor_orders  = get_creditor_orders(   job_id              )
-    credit_notes     = get_credit_notes(      creditor_orders.ids )
-    debtor_orders    = get_debtor_orders(     job_id              )
-    debtor_payments  = get_debtor_payments(   debtor_orders.ids   )
-    labor_records    = get_job_labor_records( job_id              )
-    job_targets      = get_job_targets(       job_id              )
+    creditor_orders  = creditor_orders(   job_id              )
+    credit_notes     = credit_notes(      creditor_orders.ids )
+    debtor_orders    = debtor_orders(     job_id              )
+    debtor_payments  = debtor_payments(   debtor_orders.ids   )
+    labor_records    = job_labor_records( job_id              )
+    job_targets      = job_targets(       job_id              )
     {
       creditor_orders: creditor_orders,
       credit_notes: credit_notes,

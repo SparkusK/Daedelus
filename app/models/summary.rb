@@ -24,16 +24,16 @@ class Summary
   end
 
   def sum_for_this_month(sum_field, table, date_field)
-    "SELECT SUM(#{sum_field}) FROM #{table} " + get_time_string_for_this_month(date_field)
+    "SELECT SUM(#{sum_field}) FROM #{table} " + time_string_for_this_month(date_field)
   end
 
 
   def creditor_orders_for_this_month
-    get_sum_for_this_month("amount_paid", "credit_notes", "created_at")
+    sum_for_this_month("amount_paid", "credit_notes", "created_at")
   end
 
   def labor_for_this_month
-    get_sum_for_this_month("total_after", "labor_records", "labor_date")
+    sum_for_this_month("total_after", "labor_records", "labor_date")
   end
 
   def cost(percentage)
@@ -41,7 +41,7 @@ class Summary
   end
 
   def profit(percentage)
-    self.target_jobs.to_f - get_cost(percentage)
+    self.target_jobs.to_f - cost(percentage)
   end
 
   def manager_name(section)

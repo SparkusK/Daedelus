@@ -19,8 +19,8 @@ class Employee < ApplicationRecord
   end
 
   def self.entities(employee_id)
-    labor_records  = get_labor_records( employee_id )
-    manager        = get_manager(       employee_id )
+    labor_records  = labor_records( employee_id )
+    manager        = manager(       employee_id )
     (manager.nil? )? manager_count = 0 : manager_count = 1
     {
       labor_records: labor_records,
@@ -30,7 +30,7 @@ class Employee < ApplicationRecord
 
 
   def self.removal_confirmation(employee_id)
-    entities = get_entities(employee_id)
+    entities = entities(employee_id)
     confirmation = "Performing this removal will also delete: \n"
 
     confirmation << "* #{entities[:labor_records].count} Labor Records \n"

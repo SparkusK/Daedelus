@@ -20,8 +20,8 @@ class Customer < ApplicationRecord
   end
 
   def self.entities(customer_id)
-    debtor_orders   = get_debtor_orders(   customer_id       )
-    debtor_payments = get_debtor_payments( debtor_orders.ids )
+    debtor_orders   = debtor_orders(   customer_id       )
+    debtor_payments = debtor_payments( debtor_orders.ids )
     {
       debtor_orders: debtor_orders,
       debtor_payments: debtor_payments
@@ -29,7 +29,7 @@ class Customer < ApplicationRecord
   end
 
   def self.removal_confirmation(customer_id)
-    entities = get_entities(customer_id)
+    entities = entities(customer_id)
     confirmation = "Performing this removal will also delete: \n"
 
     confirmation << "* #{entities[:debtor_orders].count} Debtor Order records \n"
