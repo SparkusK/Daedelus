@@ -14,11 +14,11 @@
   <div class="row">
     <div class="form-group col-md-4">
       <%= label_tag :target_status_filter %> <br>
-      <%= select_tag "targets", options_for_select(["All", "Not Targeted", "Under Targeted", "Fully Targeted", "Over Targeted"], "All"), {class: "custom-select"} %>
+      <%= select_tag "targets", options_for_select(Job.select_tag_amounts_options, "All"), {class: "custom-select"} %>
     </div>
     <div class="form-group col-md-4">
       <%= label_tag :completion_status_filter %> <br>
-      <%= select_tag "completes", options_for_select(["All", "Not finished", "Finished"], "All"), {class: "custom-select"} %>
+      <%= select_tag "completes", options_for_select(Job.select_tag_completes_options, "All"), {class: "custom-select"} %>
     </div>
     <div class="form-group col-md-4">
       <%= label_tag :section %> <br>

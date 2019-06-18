@@ -14,9 +14,9 @@ module DataManipulation
           end_date: params[:target_end_date] )
         @receive_dates = Utility::DateRange.new( start_date: params[:receive_start_date],
           end_date: params[:receive_end_date] )
-        @jobs = Job.search( params[:keywords], @target_dates, @receive_dates,
-          params[:page], params[:targets], params[:completes],
-          params[:section_filter_id] )
+        @jobs = Job.search( keywords: params[:keywords], target_dates: @target_dates,
+          receive_dates: @receive_dates, page: params[:page], targets: params[:targets],
+          completes: params[:completes], section_filter_id: params[:section_filter_id] )
       end
 
       def new_job

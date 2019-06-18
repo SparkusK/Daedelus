@@ -1,4 +1,8 @@
 class Job < ApplicationRecord
+  include Search::Job::TargetComparisonEnum
+  include Search::Job::CompletionStatusEnum
+  include Searchable
+  include RemovalConfirmationBuilder
   belongs_to :section
   has_many :creditor_orders
   has_many :debtor_orders
@@ -21,19 +25,15 @@ class Job < ApplicationRecord
   end
 
   def receive_date_string
-    self.receive_date.nil? ? "" : self.receive_date.strftime("%a, %d %b %Y")
+    receive_date.nil? ? "" : receive_date.strftime("%a, %d %b %Y")
   end
 
   def targeted_amount
-    JobTarget.where(job_id: self.id).sum(:target_amount)
+    JobTarget.where(job_id: id).sum(:target_amount)
   end
 
   def still_available_amount
-    self.total - self.targeted_amount
-  end
-
-  def self.amount_remaining(job)
-    job.total - JobTarget.where(job_id: job.id).sum(target_amount)
+    total - targeted_amount
   end
 
   # Job
@@ -56,215 +56,61 @@ class Job < ApplicationRecord
     confirmation << "Are you sure?"
   end
 
-# ------------------------------------------------------------------------------
-
-  # Search by:
-  # If there are NO keywords:
-  #   Grab everything
-  #
-  # If there are keywords:
-  #   jobs.id,
-  #   sections.name,
-  #   jobs.contact_person,
-  #   jobs.responsible_person,
-  #   jobs.work_description
-  #   jobs.quotation_reference
-  #   jobs.jce_number
-  #
-  #
-  # If there's a start date:
-  #   all the above, only those after the start date
-  # If there's an end date:
-  #   All the above, only jobs before the end date
-  #
-  # If there are both dates:
-  #   All the above, only jobs between start and end date
-  #
-  # And then a bunch of cases depending on which target and completion statuses
-  # were selected.
-  # Job.search(keywords: a, target_dates: b, receive_dates: c, page: d, targets: e, completes: f,
-  # section_filter_id: g)
-  def self.search(args)
-    args = self.search_defaults.merge(args)
-
-    # Let's first setup some named conditions on which we want to search
-    omit_keywords = args[:keywords].nil? || args[:keywords].empty?
-    skip_section_filter = args[:section_filter_id].nil? || args[:section_filter_id].empty?
-
-    @jobs = nil # Initialize @jobs so we don't get NilError
-
-    # Start by grabbing everything we need according to the search keywords
-    unless omit_keywords
-      # search everything
-      search_term = '%' + args[:keywords].downcase + '%'
-      where_term = %{
-        (lower(sections.name) LIKE ?
-        OR lower(jobs.contact_person) LIKE ?
-        OR lower(jobs.responsible_person) LIKE ?
-        OR lower(jobs.work_description) LIKE ?
-        OR lower(quotation_reference) LIKE ?
-        OR lower(jobs.jce_number) LIKE ?
-        OR jobs.id::varchar(20) LIKE ?
-        OR lower(jobs.job_number) LIKE ?
-        OR lower(jobs.order_number) LIKE ?
-        OR lower(jobs.client_section) LIKE ?)
-      }.gsub(/\s+/, " ").strip
-
-      @jobs = Job.where(
-        where_term,
-        search_term,
-        search_term,
-        search_term,
-        search_term,
-        search_term,
-        search_term,
-        search_term,
-        search_term,
-        search_term,
-        search_term
-      )
-    else
-      @jobs = Job.all
-    end
-    @jobs = @jobs.joins(:section)
-
-    # Then reduce the result set by filtering jobs by dates, filters, etc
-    case args[:targets]
-    when "All"
-      # we don't really need to do anything here
-    when "Not Targeted"
-      # Jobs where targeted_amount = 0
-      @jobs = @jobs.where(id: Job.not_targeted_records)
-    when "Under Targeted"
-      # Jobs where targeted_amount < job.total
-      @jobs = @jobs.where(id: Job.targeted_records('<'))
-    when "Fully Targeted"
-      # Jobs where targeted_amount == total
-      @jobs = @jobs.where(id: Job.targeted_records('='))
-    when "Over Targeted"
-      # Jobs where targeted_amount > job.total
-      @jobs = @jobs.where(id: Job.targeted_records('>'))
-    end
-
-    case args[:completes]
-    when "All"
-      # we also don't need to do anything here
-    when "Not finished"
-      # jobs where is_finished is false
-      @jobs = @jobs.where("jobs.is_finished = 'f'")
-    when "Finished"
-      # jobs where is_finished is true
-      @jobs = @jobs.where("jobs.is_finished = 't'")
-    end
-
-    if args[:target_dates].has_start?
-      # Jobs for which their earliest Job Target's Date is after the input date
-      @jobs = @jobs.where(id: Job.target_date_jobs(true, args[:target_dates].start_date))
-    end
-    if args[:target_dates].has_end?
-      # Jobs for which their latest Job Target's Date is before the Input Date
-      @jobs = @jobs.where(id: Job.target_date_jobs(false, args[:target_dates].end_date))
-    end
-    if args[:receive_dates].has_start?
-      @jobs = @jobs.where("jobs.receive_date >= ?", args[:receive_dates].start_date)
-    end
-    if args[:receive_dates].has_end?
-      @jobs = @jobs.where("jobs.receive_date <= ?", args[:receive_dates].end_date)
-    end
-
-    unless skip_section_filter
-      @jobs = @jobs.where(section_id: args[:section_filter_id])
-    end
-
-
-    # Finally, do the ordering and pagination and such
-    order_term = "jobs.receive_date desc"
-    @jobs = @jobs.order(
-      order_term
-    ).paginate(
-      page: args[:page]
-    ).includes(
-      :section
-    )
+  def self.select_tag_amounts_options
+    [ ["All", Search::Job::TargetComparisonEnum::ALL],
+      ["Not Targeted", Search::Job::TargetComparisonEnum::NOT_TARGETED],
+      ["Under Targeted", Search::Job::TargetComparisonEnum::UNDER_TARGETED],
+      ["Fully Targeted", Search::Job::TargetComparisonEnum::FULLY_TARGETED],
+      ["Over Targeted", Search::Job::TargetComparisonEnum::OVER_TARGETED] ]
   end
 
-  def self.targeted_records(modifier)
-    raise "Only valid modifiers are allowed." if !(['<', '>', '='].include? modifier)
-    sql = "SELECT jobs.id, jobs.total, SUM(job_targets.target_amount)
-    FROM jobs LEFT OUTER JOIN job_targets
-    ON job_targets.job_id = jobs.id
-    GROUP BY jobs.id
-    HAVING SUM(job_targets.target_amount) #{modifier} jobs.total;"
-    results = ActiveRecord::Base.connection.execute(sql)
-    ids = results.map{|hash| hash["id"]}
+  def self.select_tag_completes_options
+    [ ["All", Search::Job::CompletionStatusEnum::ALL],
+      ["Not Finished", Search::Job::CompletionStatusEnum::NOT_FINISHED],
+      ["Finished", Search::Job::CompletionStatusEnum::FINISHED] ]
   end
-
-  def self.not_targeted_records
-    sql = "SELECT jobs.id, jobs.total, SUM(job_targets.target_amount)
-    FROM jobs LEFT OUTER JOIN job_targets
-    ON job_targets.job_id = jobs.id
-    GROUP BY jobs.id
-    HAVING SUM(job_targets.target_amount) IS NULL;"
-    results = ActiveRecord::Base.connection.execute(sql)
-    ids = results.map{|hash| hash["id"]}
-  end
-
-
-  def self.target_date_jobs(start, input_date)
-
-    if input_date.is_a?(Date)
-      input_date = input_date.strftime("%Y-%m-%d")
-    end
-    # I don't know which types of formats, other than the regex listed below,
-    # Postgres actually supports. I know that the Javascript Calendar datepicker
-    # actually outputs to this format too. So, any weird input behaviors should
-    # be caught by both the following regex and the Date.parse() method in the
-    # begin..rescue block.
-    input_date_format_valid = !(/\A\d{4}-\d{2}-\d{2}\z/ =~ input_date).nil?
-    if input_date_format_valid
-      begin
-        # This will make sure that the input date actually parses to a valid date
-        Date.parse(input_date)
-      rescue ArgumentError
-        raise "Input date needs to be a valid date ('YYYY-MM-DD'). [PARSE_ERROR]"
-      end
-    else
-      raise "Input date needs to be a valid date ('YYYY-MM-DD'). [FORMAT_INVALID]"
-    end
-    # If we got to this point, we can assume input_date is mostly good.
-    # We need to make sure it's good, because we're taking data directly from the
-    # UI. SQL Injections and such.
-
-    if start
-      comparator = '>='
-      date_order = 'ASC'
-    else
-      comparator = '<='
-      date_order = 'DESC'
-    end
-
-    sql = "SELECT DISTINCT ON (jobs.id) job_id, job_targets.target_date
-    FROM jobs
-    INNER JOIN job_targets ON job_targets.job_id = jobs.id
-    WHERE target_date #{comparator} '#{input_date}'
-    ORDER BY jobs.id ASC, job_targets.target_date #{date_order};"
-    results = ActiveRecord::Base.connection.execute(sql)
-    ids = results.map{|hash| hash["job_id"]}
-  end
-
 
   private
 
-  def self.search_defaults
+# ======= SEARCH ========================================
+
+  def self.keyword_search_attributes
+    %w{ sections.name jobs.contact_person jobs.responsible_person
+    jobs.work_description jobs.quotation_reference jobs.jce_number
+    jobs.job_number jobs.order_number jobs.client_section
+    jobs.id::varchar(20) }
+  end
+
+  def self.subclassed_filters(args)
+    filters = []
+    filters << Search::Filter::SectionIdFilter.new(args[:section_filter_id])
+    filters << Search::Filter::JobTargetedDatesFilter.new(args[:target_dates])
+    filters << Search::Filter::DateRangeFilter.new("jobs.receive_date", args[:receive_dates])
+    filters << Search::Filter::JobTargetAmountsFilter.new(args[:targets])
+    filters << Search::Filter::CompletionStatusFilter.new(args[:completes])
+    filters
+  end
+
+  def self.subclassed_search_defaults
     {
-      keywords: nil,
       target_dates: Utility::DateRange.new(start_date: nil, end_date: nil),
       receive_dates: Utility::DateRange.new(start_date: nil, end_date: nil),
-      page: 1,
       targets: "All",
       completes: "All",
       section_filter_id: nil
     }
+  end
+
+  def self.subclassed_order_term
+    "jobs.receive_date desc"
+  end
+
+  def self.subclassed_join_list
+    :section
+  end
+
+  def self.subclassed_includes_list
+    :section
   end
 
   # ---- Get Removal Confirmation stuff ---------------------------------------
@@ -309,30 +155,4 @@ class Job < ApplicationRecord
       job_targets: job_targets
     }
   end
-
-
 end
-
-
-# (/\A\d{4}-\d{2}-\d{2}\z/ =~ "2019-03-25").nil?
-
-
-# SELECT jobs.id, jobs.total, SUM(job_targets.target_amount)
-# FROM jobs LEFT OUTER JOIN job_targets
-# ON job_targets.job_id = jobs.id
-# GROUP BY jobs.id
-# HAVING jobs.total < SUM(job_targets.target_amount);
-
-# TARGET_START_DATE
-# SELECT DISTINCT ON (jobs.id) job_id, job_targets.target_date
-# FROM jobs
-# INNER JOIN job_targets ON job_targets.job_id = jobs.id
-# WHERE target_date >= '2019-03-15'
-# ORDER BY jobs.id ASC, job_targets.target_date ASC;
-
-# TARGET_END_DATE
-# SELECT DISTINCT ON (jobs.id) job_id, job_targets.target_date
-# FROM jobs
-# INNER JOIN job_targets ON job_targets.job_id = jobs.id
-# WHERE target_date <= '2019-02-15'
-# ORDER BY jobs.id ASC, job_targets.target_date DESC;
