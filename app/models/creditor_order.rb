@@ -3,7 +3,7 @@ class CreditorOrder < ApplicationRecord
   belongs_to :supplier
   belongs_to :job
 
-  has_many :credit_notes
+  has_many :credit_notes, dependent: :delete_all
 
   validates :date_issued, :value_excluding_tax, :tax_amount,
     :value_including_tax, :delivery_note, :reference_number, presence: true

@@ -1,6 +1,6 @@
 class Supplier < ApplicationRecord
 
-  has_many :creditor_orders
+  has_many :creditor_orders, dependent: :delete_all
 
   validates :name, presence: true
   # Supplier

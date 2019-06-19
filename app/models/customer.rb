@@ -1,6 +1,6 @@
 class Customer < ApplicationRecord
 
-  has_many :debtor_orders
+  has_many :debtor_orders, dependent: :delete_all
 
   validates :name, presence: true
   # Customer

@@ -1,6 +1,6 @@
 class Employee < ApplicationRecord
   belongs_to :section
-  has_many :labor_records
+  has_many :labor_records, dependent: :delete_all
   has_one :manager
 
   validates :first_name, :last_name, :occupation, :company_number, presence: true

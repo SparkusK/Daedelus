@@ -22,7 +22,7 @@ module DataManipulation
       end
 
       def whitelist_params
-        params.require(:debtor_payment).permit(:debtor_order_id, :invoice_id, :payment_amount, :payment_date, :payment_type, :note)
+        params.require(:debtor_payment).permit(:debtor_order_id, :invoice_code, :payment_amount, :payment_date, :payment_type, :note)
       end
   end
 end

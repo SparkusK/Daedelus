@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe Job, type: :model do
-  # after(:all) { DatabaseCleaner.clean_with(:truncation) }
 
   describe "search" do
     context "with only keywords" do
@@ -10,37 +9,37 @@ RSpec.describe Job, type: :model do
 
       it "finds the correct job by Section name" do
         section = FactoryBot.create(:sample_section, name: "C")
-        correct_job = FactoryBot.create(:correct_job, section_id: section.id)
+        correct_job = FactoryBot.create(:job, section_id: section.id)
         jobs = Job.search(keywords: "C")
         expect(jobs.map(&:id)).to contain_exactly(correct_job.id)
       end
 
       it "finds the correct job by Contact Person" do
-        correct_job = FactoryBot.create(:correct_job, contact_person: "C")
+        correct_job = FactoryBot.create(:job, contact_person: "C")
         jobs = Job.search(keywords: "C")
         expect(jobs.map(&:id)).to contain_exactly(correct_job.id)
       end
 
       it "finds the correct job by Responsible Person" do
-        correct_job = FactoryBot.create(:correct_job, responsible_person: "C")
+        correct_job = FactoryBot.create(:job, responsible_person: "C")
         jobs = Job.search(keywords: "C")
         expect(jobs.map(&:id)).to contain_exactly(correct_job.id)
       end
 
       it "finds the correct job by Work Description" do
-        correct_job = FactoryBot.create(:correct_job, work_description: "C")
+        correct_job = FactoryBot.create(:job, work_description: "C")
         jobs = Job.search(keywords: "C")
         expect(jobs.map(&:id)).to contain_exactly(correct_job.id)
       end
 
       it "finds the correct job by Quotation Reference" do
-        correct_job = FactoryBot.create(:correct_job, quotation_reference: "C")
+        correct_job = FactoryBot.create(:job, quotation_reference: "C")
         jobs = Job.search(keywords: "C")
         expect(jobs.map(&:id)).to contain_exactly(correct_job.id)
       end
 
       it "finds the correct job by JCE Number" do
-        correct_job = FactoryBot.create(:correct_job, jce_number: "C")
+        correct_job = FactoryBot.create(:job, jce_number: "C")
         jobs = Job.search(keywords: "C")
         expect(jobs.map(&:id)).to contain_exactly(correct_job.id)
       end
@@ -52,19 +51,19 @@ RSpec.describe Job, type: :model do
       end
 
       it "finds the correct job by Job Number" do
-        correct_job = FactoryBot.create(:correct_job, job_number: "C")
+        correct_job = FactoryBot.create(:job, job_number: "C")
         jobs = Job.search(keywords: "C")
         expect(jobs.map(&:id)).to contain_exactly(correct_job.id)
       end
 
       it "finds the correct job by Order Number" do
-        correct_job = FactoryBot.create(:correct_job, order_number: "C")
+        correct_job = FactoryBot.create(:job, order_number: "C")
         jobs = Job.search(keywords: "C")
         expect(jobs.map(&:id)).to contain_exactly(correct_job.id)
       end
 
       it "finds the correct job by Client Section" do
-        correct_job = FactoryBot.create(:correct_job, client_section: "C")
+        correct_job = FactoryBot.create(:job, client_section: "C")
         jobs = Job.search(keywords: "C")
         expect(jobs.map(&:id)).to contain_exactly(correct_job.id)
       end
@@ -72,12 +71,12 @@ RSpec.describe Job, type: :model do
 
     context "with only target status filters" do
       before(:all) do
-        @not_targeted_job = FactoryBot.create(:correct_job, total: 1000)
-        @under_targeted_job = FactoryBot.create(:correct_job, total: 1000)
+        @not_targeted_job = FactoryBot.create(:job, total: 1000)
+        @under_targeted_job = FactoryBot.create(:job, total: 1000)
         FactoryBot.create(:correct_job_target, target_amount: 500, job_id: @under_targeted_job.id)
-        @fully_targeted_job = FactoryBot.create(:correct_job, total: 1000)
+        @fully_targeted_job = FactoryBot.create(:job, total: 1000)
         FactoryBot.create(:correct_job_target, target_amount: 1000, job_id: @fully_targeted_job.id)
-        @over_targeted_job = FactoryBot.create(:correct_job, total: 1000)
+        @over_targeted_job = FactoryBot.create(:job, total: 1000)
         FactoryBot.create(:correct_job_target, target_amount: 1500, job_id: @over_targeted_job.id)
       end
 
@@ -112,8 +111,8 @@ RSpec.describe Job, type: :model do
     context "with only receive_date filters" do
       before(:all) do
         @date_range = Utility::DateRange.new(start_date: 1.day.ago, end_date: 1.day.after)
-        @correct_job = FactoryBot.create(:correct_job, receive_date: Date.today)
-        @incorrect_job = FactoryBot.create(:correct_job, receive_date: 3.days.ago)
+        @correct_job = FactoryBot.create(:job, receive_date: Date.today)
+        @incorrect_job = FactoryBot.create(:job, receive_date: 3.days.ago)
       end
 
       after(:all) { DatabaseCleaner.clean_with(:deletion) }
@@ -152,8 +151,8 @@ RSpec.describe Job, type: :model do
       before(:all) do
         @correct_section = FactoryBot.create(:sample_section, name: "Abc")
         @incorrect_section = FactoryBot.create(:sample_section, name: "Efg")
-        @correct_job = FactoryBot.create(:correct_job, section_id: @correct_section.id)
-        @incorrect_job = FactoryBot.create(:correct_job, section_id: @incorrect_section.id)
+        @correct_job = FactoryBot.create(:job, section_id: @correct_section.id)
+        @incorrect_job = FactoryBot.create(:job, section_id: @incorrect_section.id)
       end
 
       after(:all) { DatabaseCleaner.clean_with(:deletion) }
@@ -168,8 +167,8 @@ RSpec.describe Job, type: :model do
 
     context "with only completion filters" do
       before(:all) do
-        @completed_job = FactoryBot.create(:correct_job, is_finished: "t")
-        @incompleted_job = FactoryBot.create(:correct_job, is_finished: "f")
+        @completed_job = FactoryBot.create(:job, is_finished: "t")
+        @incompleted_job = FactoryBot.create(:job, is_finished: "f")
       end
 
       after(:all) { DatabaseCleaner.clean_with(:deletion) }
@@ -191,4 +190,38 @@ RSpec.describe Job, type: :model do
     end
   end
 
+  describe "removal confirmation" do
+    before(:all) do
+      @job_to_delete = FactoryBot.create(:correct_job)
+      @creditor_order1 = FactoryBot.create(:creditor_order, job_id: @job_to_delete.id)
+      @creditor_order2 = FactoryBot.create(:creditor_order, job_id: @job_to_delete.id)
+      @creditor_payments = []
+      2.times { @creditor_payments << FactoryBot.create(:creditor_payment, creditor_order_id: @creditor_order1.id) }
+      2.times { @creditor_payments << FactoryBot.create(:creditor_payment, creditor_order_id: @creditor_order2.id) }
+      @debtor_order1 = FactoryBot.create(:debtor_order, job_id: @job_to_delete.id)
+      @debtor_order2 = FactoryBot.create(:debtor_order, job_id: @job_to_delete.id)
+      @debtor_orders = []
+      2.times { @debtor_orders << FactoryBot.create(:debtor_payment, debtor_order_id: @debtor_order1.id) }
+      2.times { @debtor_orders << FactoryBot.create(:debtor_payment, debtor_order_id: @debtor_order2.id) }
+      @labor_record1 = FactoryBot.create(:labor_record, job_id: @job_to_delete.id)
+      @labor_record2 = FactoryBot.create(:labor_record, job_id: @job_to_delete.id)
+      @job_target_1 = FactoryBot.create(:job_target, job_id: @job_to_delete.id)
+      @job_target_2 = FactoryBot.create(:job_target, job_id: @job_to_delete.id)
+    end
+
+    after(:all) do
+      DatabaseCleaner.clean_with(:deletion)
+    end
+
+    it "generates an accurate removal confirmation string", :aggregate_failures do
+      removal_string = Job.removal_confirmation(job_id)
+      expect(removal_string).to include("2 Creditor orders")
+      expect(removal_string).to include("4 Creditor payments")
+      expect(removal_string).to include("2 Debtor orders")
+      expect(removal_string).to include("4 Debtor payments")
+      expect(removal_string).to include("2 Labor records")
+      expect(removal_string).to include("2 Job targets")
+    end
+
+  end
 end

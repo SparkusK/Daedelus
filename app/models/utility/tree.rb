@@ -4,7 +4,7 @@ class Tree
     @root_node = Node.new(root_value, root_leaves)
   end
 
-  def insert(target_node, new_nodes)
-    target_node.leaves += new_nodes
+  def root_is_leaf?
+    !@root_node.is_branch?
   end
 end

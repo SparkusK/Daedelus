@@ -2,7 +2,7 @@ class DebtorOrder < ApplicationRecord
   belongs_to :customer
   belongs_to :job, optional: true
 
-  has_many :debtor_payments
+  has_many :debtor_payments, dependent: :delete_all
 
   validates :order_number, :value_excluding_tax, :tax_amount,
     :value_excluding_tax, presence: true

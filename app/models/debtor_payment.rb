@@ -9,7 +9,7 @@ class DebtorPayment < ApplicationRecord
   validates :payment_date, :payment_amount, :payment_type, :note, :invoice_code,
     presence: true
 
-  def payment_date
+  def format_payment_date
     if payment_date.nil?
       ""
     else

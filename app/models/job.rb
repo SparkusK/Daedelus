@@ -4,10 +4,10 @@ class Job < ApplicationRecord
   include Searchable
   include RemovalConfirmationBuilder
   belongs_to :section
-  has_many :creditor_orders
-  has_many :debtor_orders
-  has_many :labor_records
-  has_many :job_targets
+  has_many :creditor_orders, dependent: :delete_all
+  has_many :debtor_orders, dependent: :delete_all
+  has_many :labor_records, dependent: :delete_all
+  has_many :job_targets, dependent: :delete_all
 
   validates :receive_date, :contact_person, :responsible_person,
     :work_description, :jce_number, :quotation_reference, :total, :job_number,
@@ -46,12 +46,12 @@ class Job < ApplicationRecord
     entities = entities(job_id)
     confirmation = "Performing this removal will also delete: \n"
 
-    confirmation << "* #{entities[:creditor_orders].count} Creditor Order records \n"
-    confirmation << "    * #{entities[:credit_notes].count} Creditor Payment records \n"
-    confirmation << "* #{entities[:debtor_orders].count} Debtor Order records \n"
-    confirmation << "    * #{entities[:debtor_payments].count} Debtor Payment records \n"
-    confirmation << "* #{entities[:labor_records].count} Labor Records \n"
-    confirmation << "* #{entities[:job_targets].count} Job Target records \n"
+    confirmation << "* #{entities[:creditor_orders].count} Creditor orders \n"
+    confirmation << "    * #{entities[:credit_notes].count} Creditor payments \n"
+    confirmation << "* #{entities[:debtor_orders].count} Debtor orders \n"
+    confirmation << "    * #{entities[:debtor_payments].count} Debtor payments \n"
+    confirmation << "* #{entities[:labor_records].count} Labor records \n"
+    confirmation << "* #{entities[:job_targets].count} Job targets \n"
 
     confirmation << "Are you sure?"
   end

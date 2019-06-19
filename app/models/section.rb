@@ -1,8 +1,8 @@
 class Section < ApplicationRecord
-  has_many :employees
-  has_many :jobs
-  has_many :supervisors
-  has_many :labor_records
+  has_many :employees, dependent: :delete_all
+  has_many :jobs, dependent: :delete_all
+  has_many :supervisors, dependent: :delete_all
+  has_many :labor_records, dependent: :delete_all
   has_one :manager
 
   validates :name, :overheads, presence: true

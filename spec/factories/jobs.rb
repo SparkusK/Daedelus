@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :correct_job, class: Job do
+  factory :job do
     responsible_person { "A" }
     contact_person { "A" }
     work_description { "A" }
