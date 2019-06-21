@@ -36,26 +36,6 @@ class Job < ApplicationRecord
     total - targeted_amount
   end
 
-  # Job
-  #   -> Creditor Order
-  #       -> Credit Note
-  #   -> Debtor Order
-  #       -> Debtor Payment
-  #   -> Labor Record
-  # def self.removal_confirmation(job_id)
-  #   entities = entities(job_id)
-  #   confirmation = "Performing this removal will also delete: \n"
-  #
-  #   confirmation << "* #{entities[:creditor_orders].count} Creditor orders \n"
-  #   confirmation << "    * #{entities[:creditor_payments].count} Creditor payments \n"
-  #   confirmation << "* #{entities[:debtor_orders].count} Debtor orders \n"
-  #   confirmation << "    * #{entities[:debtor_payments].count} Debtor payments \n"
-  #   confirmation << "* #{entities[:labor_records].count} Labor records \n"
-  #   confirmation << "* #{entities[:job_targets].count} Job targets \n"
-  #
-  #   confirmation << "Are you sure?"
-  # end
-
   def self.select_tag_amounts_options
     [ ["All", Search::Job::TargetComparisonEnum::ALL],
       ["Not Targeted", Search::Job::TargetComparisonEnum::NOT_TARGETED],
@@ -113,46 +93,4 @@ class Job < ApplicationRecord
     :section
   end
 
-  # ---- Get Removal Confirmation stuff ---------------------------------------
-
-  def self.creditor_orders(job_id)
-    CreditorOrder.where("job_id = ?", job_id)
-  end
-
-  def self.creditor_payments(creditor_order_ids)
-    CreditorPayment.where("creditor_order_id IN (?)", creditor_order_ids)
-  end
-
-  def self.debtor_orders(job_id)
-    DebtorOrder.where("job_id = ?", job_id)
-  end
-
-  def self.debtor_payments(debtor_order_ids)
-    DebtorPayment.where("debtor_order_id IN (?)", debtor_order_ids)
-  end
-
-  def self.job_labor_records(job_id)
-    LaborRecord.where("job_id = ?", job_id)
-  end
-
-  def self.job_targets(job_id)
-    JobTarget.where("job_id = ?", job_id)
-  end
-
-  def self.entities(job_id)
-    creditor_orders  = creditor_orders(   job_id              )
-    creditor_payments     = creditor_payments(      creditor_orders.ids )
-    debtor_orders    = debtor_orders(     job_id              )
-    debtor_payments  = debtor_payments(   debtor_orders.ids   )
-    labor_records    = job_labor_records( job_id              )
-    job_targets      = job_targets(       job_id              )
-    {
-      creditor_orders: creditor_orders,
-      creditor_payments: creditor_payments,
-      debtor_orders: debtor_orders,
-      debtor_payments: debtor_payments,
-      labor_records: labor_records,
-      job_targets: job_targets
-    }
-  end
 end
