@@ -10,7 +10,7 @@ class Section < ApplicationRecord
   # sections
   # 	-> jobs
   # 		-> creditor_orders
-  # 			-> credit_notes
+  # 			-> creditor_payments
   # 		-> debtor_orders
   # 			-> debtor_payments
   # 		-> labor_records
@@ -29,8 +29,8 @@ class Section < ApplicationRecord
     CreditorOrder.where("creditor_orders.job_id IN (?)", job_ids)
   end
 
-  def self.credit_notes(creditor_order_ids)
-    CreditNote.where("creditor_order_id IN (?)", creditor_order_ids)
+  def self.creditor_payments(creditor_order_ids)
+    CreditorPayment.where("creditor_order_id IN (?)", creditor_order_ids)
   end
 
   def self.debtor_orders(job_ids)
@@ -68,7 +68,7 @@ class Section < ApplicationRecord
   def self.entities(section_id)
     jobs                    = jobs(                   section_id          )
     creditor_orders         = creditor_orders(        jobs.ids            )
-    credit_notes            = credit_notes(           creditor_orders.ids )
+    creditor_payments            = creditor_payments(           creditor_orders.ids )
     debtor_orders           = debtor_orders(          jobs.ids            )
     debtor_payments         = debtor_payments(        debtor_orders.ids   )
     job_labor_records       = job_labor_records(      jobs.ids            )
@@ -82,7 +82,7 @@ class Section < ApplicationRecord
     {
       jobs: jobs,
       creditor_orders: creditor_orders,
-      credit_notes: credit_notes,
+      creditor_payments: creditor_payments,
       debtor_orders: debtor_orders,
       debtor_payments: debtor_payments,
       job_labor_records: job_labor_records,
@@ -101,7 +101,7 @@ class Section < ApplicationRecord
 
     confirmation << "* #{entities[:jobs].count} Job records \n"
     confirmation << "    * #{entities[:creditor_orders].count} Creditor Order records \n"
-    confirmation << "        * #{entities[:credit_notes].count} Creditor Payment records \n"
+    confirmation << "        * #{entities[:creditor_payments].count} Creditor Payment records \n"
     confirmation << "    * #{entities[:debtor_orders].count} Debtor Order records \n"
     confirmation << "        * #{entities[:debtor_payments].count} Debtor Payment records \n"
     confirmation << "    * #{entities[:job_labor_records].count} Labor Records related to Jobs \n"

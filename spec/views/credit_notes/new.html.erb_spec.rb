@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe "credit_notes/new", type: :view do
+RSpec.describe "creditor_payments/new", type: :view do
   before(:each) do
-    assign(:credit_note, CreditNote.new(
+    assign(:creditor_payment, CreditorPayment.new(
       :creditor_order => nil,
       :payment_type => "MyString",
       :amount_paid => "",
@@ -11,20 +11,20 @@ RSpec.describe "credit_notes/new", type: :view do
     ))
   end
 
-  it "renders new credit_note form" do
+  it "renders new creditor_payment form" do
     render
 
-    assert_select "form[action=?][method=?]", credit_notes_path, "post" do
+    assert_select "form[action=?][method=?]", creditor_payments_path, "post" do
 
-      assert_select "input[name=?]", "credit_note[creditor_order_id]"
+      assert_select "input[name=?]", "creditor_payment[creditor_order_id]"
 
-      assert_select "input[name=?]", "credit_note[payment_type]"
+      assert_select "input[name=?]", "creditor_payment[payment_type]"
 
-      assert_select "input[name=?]", "credit_note[amount_paid]"
+      assert_select "input[name=?]", "creditor_payment[amount_paid]"
 
-      assert_select "input[name=?]", "credit_note[note]"
+      assert_select "input[name=?]", "creditor_payment[note]"
 
-      assert_select "input[name=?]", "credit_note[invoice_code]"
+      assert_select "input[name=?]", "creditor_payment[invoice_code]"
     end
   end
 end

@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe DataManipulation::CreditNotesController, type: :controller do
+RSpec.describe DataManipulation::CreditorPaymentsController, type: :controller do
 
   # This should return the minimal set of attributes required to create a valid
-  # CreditNote. As you add validations to CreditNote, be sure to
+  # CreditorPayment. As you add validations to CreditorPayment, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
     skip("Add a hash of attributes valid for your model")
@@ -15,12 +15,12 @@ RSpec.describe DataManipulation::CreditNotesController, type: :controller do
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
-  # CreditNotesController. Be sure to keep this updated too.
+  # CreditorPaymentsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
   describe "GET #index" do
     it "returns a success response" do
-      CreditNote.create! valid_attributes
+      CreditorPayment.create! valid_attributes
       get :index, params: {}, session: valid_session
       expect(response).to be_successful
     end
@@ -28,8 +28,8 @@ RSpec.describe DataManipulation::CreditNotesController, type: :controller do
 
   describe "GET #show" do
     it "returns a success response" do
-      credit_note = CreditNote.create! valid_attributes
-      get :show, params: {id: credit_note.to_param}, session: valid_session
+      creditor_payment = CreditorPayment.create! valid_attributes
+      get :show, params: {id: creditor_payment.to_param}, session: valid_session
       expect(response).to be_successful
     end
   end
@@ -43,29 +43,29 @@ RSpec.describe DataManipulation::CreditNotesController, type: :controller do
 
   describe "GET #edit" do
     it "returns a success response" do
-      credit_note = CreditNote.create! valid_attributes
-      get :edit, params: {id: credit_note.to_param}, session: valid_session
+      creditor_payment = CreditorPayment.create! valid_attributes
+      get :edit, params: {id: creditor_payment.to_param}, session: valid_session
       expect(response).to be_successful
     end
   end
 
   describe "POST #create" do
     context "with valid params" do
-      it "creates a new CreditNote" do
+      it "creates a new CreditorPayment" do
         expect {
-          post :create, params: {credit_note: valid_attributes}, session: valid_session
-        }.to change(CreditNote, :count).by(1)
+          post :create, params: {creditor_payment: valid_attributes}, session: valid_session
+        }.to change(CreditorPayment, :count).by(1)
       end
 
-      it "redirects to the created credit_note" do
-        post :create, params: {credit_note: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(CreditNote.last)
+      it "redirects to the created creditor_payment" do
+        post :create, params: {creditor_payment: valid_attributes}, session: valid_session
+        expect(response).to redirect_to(CreditorPayment.last)
       end
     end
 
     context "with invalid params" do
       it "returns a success response (i.e. to display the 'new' template)" do
-        post :create, params: {credit_note: invalid_attributes}, session: valid_session
+        post :create, params: {creditor_payment: invalid_attributes}, session: valid_session
         expect(response).to be_successful
       end
     end
@@ -77,41 +77,41 @@ RSpec.describe DataManipulation::CreditNotesController, type: :controller do
         skip("Add a hash of attributes valid for your model")
       }
 
-      it "updates the requested credit_note" do
-        credit_note = CreditNote.create! valid_attributes
-        put :update, params: {id: credit_note.to_param, credit_note: new_attributes}, session: valid_session
-        credit_note.reload
+      it "updates the requested creditor_payment" do
+        creditor_payment = CreditorPayment.create! valid_attributes
+        put :update, params: {id: creditor_payment.to_param, creditor_payment: new_attributes}, session: valid_session
+        creditor_payment.reload
         skip("Add assertions for updated state")
       end
 
-      it "redirects to the credit_note" do
-        credit_note = CreditNote.create! valid_attributes
-        put :update, params: {id: credit_note.to_param, credit_note: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(credit_note)
+      it "redirects to the creditor_payment" do
+        creditor_payment = CreditorPayment.create! valid_attributes
+        put :update, params: {id: creditor_payment.to_param, creditor_payment: valid_attributes}, session: valid_session
+        expect(response).to redirect_to(creditor_payment)
       end
     end
 
     context "with invalid params" do
       it "returns a success response (i.e. to display the 'edit' template)" do
-        credit_note = CreditNote.create! valid_attributes
-        put :update, params: {id: credit_note.to_param, credit_note: invalid_attributes}, session: valid_session
+        creditor_payment = CreditorPayment.create! valid_attributes
+        put :update, params: {id: creditor_payment.to_param, creditor_payment: invalid_attributes}, session: valid_session
         expect(response).to be_successful
       end
     end
   end
 
   describe "DELETE #destroy" do
-    it "destroys the requested credit_note" do
-      credit_note = CreditNote.create! valid_attributes
+    it "destroys the requested creditor_payment" do
+      creditor_payment = CreditorPayment.create! valid_attributes
       expect {
-        delete :destroy, params: {id: credit_note.to_param}, session: valid_session
-      }.to change(CreditNote, :count).by(-1)
+        delete :destroy, params: {id: creditor_payment.to_param}, session: valid_session
+      }.to change(CreditorPayment, :count).by(-1)
     end
 
-    it "redirects to the credit_notes list" do
-      credit_note = CreditNote.create! valid_attributes
-      delete :destroy, params: {id: credit_note.to_param}, session: valid_session
-      expect(response).to redirect_to(credit_notes_url)
+    it "redirects to the creditor_payments list" do
+      creditor_payment = CreditorPayment.create! valid_attributes
+      delete :destroy, params: {id: creditor_payment.to_param}, session: valid_session
+      expect(response).to redirect_to(creditor_payments_url)
     end
   end
 

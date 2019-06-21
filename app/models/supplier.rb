@@ -7,8 +7,8 @@ class Supplier < ApplicationRecord
   #   -> creditor_order
   #       -> creditor_payment
 
-  def self.credit_notes(creditor_order_ids)
-    CreditNote.where("creditor_order_id IN (?)", creditor_order_ids)
+  def self.creditor_payments(creditor_order_ids)
+    CreditorPayment.where("creditor_order_id IN (?)", creditor_order_ids)
   end
 
   def self.creditor_orders(supplier_id)
@@ -17,10 +17,10 @@ class Supplier < ApplicationRecord
 
   def self.entities(supplier_id)
     creditor_orders = creditor_orders( supplier_id         )
-    credit_notes    = credit_notes(    creditor_orders.ids )
+    creditor_payments    = creditor_payments(    creditor_orders.ids )
     {
       creditor_orders: creditor_orders,
-      credit_notes: credit_notes
+      creditor_payments: creditor_payments
     }
   end
 
@@ -29,7 +29,7 @@ class Supplier < ApplicationRecord
     confirmation = "Performing this removal will also delete: \n"
 
     confirmation << "* #{entities[:creditor_orders].count} Creditor Order records \n"
-    confirmation << "    * #{entities[:credit_notes].count} Creditor Payment records \n"
+    confirmation << "    * #{entities[:creditor_payments].count} Creditor Payment records \n"
 
     confirmation << "Are you sure?"
   end
@@ -43,7 +43,7 @@ class Supplier < ApplicationRecord
     confirmation << "* #{self.creditor_orders.count} Creditor Order records, including: \n" unless self.creditor_orders.nil?
     creditor_orders_payments_total = 0
     self.creditor_orders.each do |creditor_order|
-      creditor_orders_payments_total += creditor_order.credit_notes.count unless creditor_order.credit_notes.nil?
+      creditor_orders_payments_total += creditor_order.creditor_payments.count unless creditor_order.creditor_payments.nil?
     end
     confirmation << "  * #{creditor_orders_payments_total} Creditor Payments from Creditor Orders \n"
     confirmation << "Are you sure?"

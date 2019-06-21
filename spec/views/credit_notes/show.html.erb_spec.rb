@@ -1,8 +1,8 @@
 require 'rails_helper'
 
-RSpec.describe "credit_notes/show", type: :view do
+RSpec.describe "creditor_payments/show", type: :view do
   before(:each) do
-    @credit_note = assign(:credit_note, CreditNote.create!(
+    @creditor_payment = assign(:creditor_payment, CreditorPayment.create!(
       :creditor_order => nil,
       :payment_type => "Payment Type",
       :amount_paid => "",

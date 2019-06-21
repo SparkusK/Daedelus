@@ -1,10 +1,10 @@
-<%= form_with(model: @credit_note) do |form| %>
-  <% if @credit_note.errors.any? %>
+<%= form_with(model: @creditor_payment) do |form| %>
+  <% if @creditor_payment.errors.any? %>
     <div id="error_explanation">
-      <h2><%= pluralize(@credit_note.errors.count, "error") %> prohibited this credit_note from being saved:</h2>
+      <h2><%= pluralize(@creditor_payment.errors.count, "error") %> prohibited this creditor_payment from being saved:</h2>
 
       <ul>
-      <% @credit_note.errors.full_messages.each do |message| %>
+      <% @creditor_payment.errors.full_messages.each do |message| %>
         <li><%= message %></li>
       <% end %>
       </ul>
@@ -13,44 +13,44 @@
   <div class="form-row">
     <div class="form-group col-md-4">
       <%= form.label :creditor_order_id %>
-      <%= collection_select(:credit_note,
+      <%= collection_select(:creditor_payment,
                             :creditor_order_id,
                             CreditorOrder.all,
                             :id,
                             :creditor_order_name,
                             {prompt: true},
                             {class: "custom-select",
-                                id: "credit_note_creditor_order_id_#{@credit_note.id}"}) %>
+                                id: "creditor_payment_creditor_order_id_#{@creditor_payment.id}"}) %>
     </div>
     <div class="form-group col-md-4">
       <%= form.label :total %>
-      <h5 id="total_<%= @credit_note.id %>"><%= number_to_currency(0.0, unit: "R") %></h5>
+      <h5 id="total_<%= @creditor_payment.id %>"><%= number_to_currency(0.0, unit: "R") %></h5>
     </div>
     <div class="col-md-4">
       <%= form.label :still_owed_amount %>
-      <h5 id="remaining_<%= @credit_note.id %>"><%= number_to_currency(0.0, unit: "R") %></h5>
+      <h5 id="remaining_<%= @creditor_payment.id %>"><%= number_to_currency(0.0, unit: "R") %></h5>
     </div>
   </div>
 
   <div class="form-row">
     <div class="col-md-4">
       <%= form.label :invoice_code %>
-      <%= form.text_field :invoice_code, id: :credit_note_invoice_code, class: "form-control" %>
+      <%= form.text_field :invoice_code, id: :creditor_payment_invoice_code, class: "form-control" %>
     </div>
     <div class="form-group col-md-4">
       <%= form.label :amount_paid %>
-      <%= form.text_field :amount_paid, id: :credit_note_amount_paid, class: "form-control" %>
+      <%= form.text_field :amount_paid, id: :creditor_payment_amount_paid, class: "form-control" %>
     </div>
     <div class="form-group col-md-4">
       <%= form.label :payment_type %>
-      <%= form.text_field :payment_type, id: :credit_note_payment_type, class: "form-control" %>
+      <%= form.text_field :payment_type, id: :creditor_payment_payment_type, class: "form-control" %>
     </div>
   </div>
 
   <div class="form-row">
     <div class="col-md-12">
       <%= form.label :note %>
-      <%= form.text_field :note, id: :credit_note_note, class: "form-control" %>
+      <%= form.text_field :note, id: :creditor_payment_note, class: "form-control" %>
     </div>
   </div>
 

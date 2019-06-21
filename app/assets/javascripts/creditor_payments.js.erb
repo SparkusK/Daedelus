@@ -12,8 +12,8 @@ function CreditorOrderAmounts(creditor_order_id) {
 }
 
 $(document).ready(function() {
-  $('#credit_note_creditor_order_id').change(function() {
-    var inputOrderId = $('#credit_note_creditor_order_id').val();
+  $('#creditor_payment_creditor_order_id').change(function() {
+    var inputOrderId = $('#creditor_payment_creditor_order_id').val();
     var cdtOrderAmts = new CreditorOrderAmounts(inputOrderId);
     cdtOrderAmts.getAmounts();
   });

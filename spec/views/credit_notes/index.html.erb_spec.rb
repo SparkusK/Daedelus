@@ -1,16 +1,16 @@
 require 'rails_helper'
 
-RSpec.describe "credit_notes/index", type: :view do
+RSpec.describe "creditor_payments/index", type: :view do
   before(:each) do
-    assign(:credit_notes, [
-      CreditNote.create!(
+    assign(:creditor_payments, [
+      CreditorPayment.create!(
         :creditor_order => nil,
         :payment_type => "Payment Type",
         :amount_paid => "",
         :note => "Note",
         :invoice_code => "Invoice Code"
       ),
-      CreditNote.create!(
+      CreditorPayment.create!(
         :creditor_order => nil,
         :payment_type => "Payment Type",
         :amount_paid => "",
@@ -20,7 +20,7 @@ RSpec.describe "credit_notes/index", type: :view do
     ])
   end
 
-  it "renders a list of credit_notes" do
+  it "renders a list of creditor_payments" do
     render
     assert_select "tr>td", :text => nil.to_s, :count => 2
     assert_select "tr>td", :text => "Payment Type".to_s, :count => 2

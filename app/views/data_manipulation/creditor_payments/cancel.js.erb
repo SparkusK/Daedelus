@@ -1,0 +1,2 @@
+var newContent = $("<%= j render @creditor_payment %>").html();
+$('#<%= @creditor_payment.id %>').html(newContent);

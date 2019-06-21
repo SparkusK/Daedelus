@@ -2,7 +2,7 @@ module RemovalConfirmationBuilder
   extend ActiveSupport::Concern
 
   class_methods do
-    def build_removal_confirmation(id)
+    def removal_confirmation(id)
       removal_confirmation = ""
       tree = compute_dependency_tree(id)
       if tree.root_is_leaf?
@@ -18,18 +18,23 @@ module RemovalConfirmationBuilder
     private
 
     def format_node_to_s(node)
-      node.value.to_s.underscore.humanize.pluralize
+      node.value.klass.to_s.underscore.humanize.pluralize
     end
 
-    def generate_removal_lines(starting_node, removal_string="", indentation=0, spaces=2)
-      removal_string += " "*(spaces*indentation) + "*" +
-        starting_node.value.ids.count + " " + format_node_to_s(starting_node) + "\n"
-      starting_node.leaves.each { |node| generate_removal_lines(node, removal_string, indentation+1)}
+    def generate_removal_lines(starting_node, removal_string_lines=[], indentation=0, spaces=2)
+      removal_string_lines << " "*spaces*indentation +
+        "*" +
+        "#{starting_node.value.ids.length} " +
+        format_node_to_s(starting_node) +
+        "\n"
+      starting_node.leaves.each { |node| generate_removal_lines(node, removal_string_lines, indentation+1)}
+      removal_string_lines.join
     end
 
     def compute_dependency_tree(id)
-      tree = Utility::Tree.new(RemovalNode.new(self, [id]))
+      tree = Utility::Tree.new(Utility::RemovalNode.new(self, [id]))
       compute_leaves(tree.root_node)
+      tree
     end
 
     def compute_leaves(starting_node)
@@ -38,24 +43,24 @@ module RemovalConfirmationBuilder
     end
 
     def leaf_classes(parent_node)
-      assocs = parent_node.klass.reflect_on_all_associations(:has_many).map {
+      assocs = parent_node.value.klass.reflect_on_all_associations(:has_many).map {
         |assoc| {name: assoc.name, options: assoc.options} }
       on_delete_classes = assocs.select { |assoc| assoc[:options][:dependent] == :delete_all }
-      nodes = on_delete_classes.map { |assoc| to_node(to_class(assoc.name)) }
+      nodes = on_delete_classes.map { |assoc| to_node(to_class(assoc[:name])) }
       nodes = populate_node_ids(nodes, parent_node)
       nodes
     end
 
     def populate_node_ids(nodes, parent_node)
       nodes.each do |node|
-        fk_sym = class_to_fk_sym(klass)
-        node.ids = node.klass.select("id").where(fk_sym: ids)
+        fk_sym = class_to_fk_sym(parent_node.value.klass)
+        node.value.ids = node.value.klass.select("id").where("#{fk_sym}": parent_node.value.ids)
       end
       nodes
     end
 
     def to_node(klass)
-      Node.new(RemovalNode.new(klass))
+      Utility::Node.new(Utility::RemovalNode.new(klass))
     end
 
     def to_class(symbol)
@@ -63,7 +68,7 @@ module RemovalConfirmationBuilder
     end
 
     def class_to_fk_sym(klass)
-      (klass.to_s.downcase + "_id").to_sym
+      (klass.to_s.underscore + "_id").to_sym
     end
   end
 end

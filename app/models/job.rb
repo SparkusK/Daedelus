@@ -42,19 +42,19 @@ class Job < ApplicationRecord
   #   -> Debtor Order
   #       -> Debtor Payment
   #   -> Labor Record
-  def self.removal_confirmation(job_id)
-    entities = entities(job_id)
-    confirmation = "Performing this removal will also delete: \n"
-
-    confirmation << "* #{entities[:creditor_orders].count} Creditor orders \n"
-    confirmation << "    * #{entities[:credit_notes].count} Creditor payments \n"
-    confirmation << "* #{entities[:debtor_orders].count} Debtor orders \n"
-    confirmation << "    * #{entities[:debtor_payments].count} Debtor payments \n"
-    confirmation << "* #{entities[:labor_records].count} Labor records \n"
-    confirmation << "* #{entities[:job_targets].count} Job targets \n"
-
-    confirmation << "Are you sure?"
-  end
+  # def self.removal_confirmation(job_id)
+  #   entities = entities(job_id)
+  #   confirmation = "Performing this removal will also delete: \n"
+  #
+  #   confirmation << "* #{entities[:creditor_orders].count} Creditor orders \n"
+  #   confirmation << "    * #{entities[:creditor_payments].count} Creditor payments \n"
+  #   confirmation << "* #{entities[:debtor_orders].count} Debtor orders \n"
+  #   confirmation << "    * #{entities[:debtor_payments].count} Debtor payments \n"
+  #   confirmation << "* #{entities[:labor_records].count} Labor records \n"
+  #   confirmation << "* #{entities[:job_targets].count} Job targets \n"
+  #
+  #   confirmation << "Are you sure?"
+  # end
 
   def self.select_tag_amounts_options
     [ ["All", Search::Job::TargetComparisonEnum::ALL],
@@ -119,8 +119,8 @@ class Job < ApplicationRecord
     CreditorOrder.where("job_id = ?", job_id)
   end
 
-  def self.credit_notes(creditor_order_ids)
-    CreditNote.where("creditor_order_id IN (?)", creditor_order_ids)
+  def self.creditor_payments(creditor_order_ids)
+    CreditorPayment.where("creditor_order_id IN (?)", creditor_order_ids)
   end
 
   def self.debtor_orders(job_id)
@@ -141,14 +141,14 @@ class Job < ApplicationRecord
 
   def self.entities(job_id)
     creditor_orders  = creditor_orders(   job_id              )
-    credit_notes     = credit_notes(      creditor_orders.ids )
+    creditor_payments     = creditor_payments(      creditor_orders.ids )
     debtor_orders    = debtor_orders(     job_id              )
     debtor_payments  = debtor_payments(   debtor_orders.ids   )
     labor_records    = job_labor_records( job_id              )
     job_targets      = job_targets(       job_id              )
     {
       creditor_orders: creditor_orders,
-      credit_notes: credit_notes,
+      creditor_payments: creditor_payments,
       debtor_orders: debtor_orders,
       debtor_payments: debtor_payments,
       labor_records: labor_records,

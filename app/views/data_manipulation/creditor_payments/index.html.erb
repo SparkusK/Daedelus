@@ -14,14 +14,14 @@
   <% end %>
 </section>
 
-<%= render partial: 'shared/dates', locals: { path: "/credit_notes" } %>
+<%= render partial: 'shared/dates', locals: { path: "/creditor_payments" } %>
 
 <%= render partial: 'top_pager' %>
 
 
 <section class="credit-note-panels">
-  <% @credit_notes.each do |credit_note| %>
-      <%= render credit_note %>
+  <% @creditor_payments.each do |creditor_payment| %>
+      <%= render creditor_payment %>
   <% end %>
 </section>
 

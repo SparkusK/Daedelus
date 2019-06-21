@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :creditor_payment, class: CreditNote do
+  factory :creditor_payment, class: CreditorPayment do
     creditor_order_id { FactoryBot.create(:creditor_order).id }
     payment_type { "A" }
     amount_paid { 10.0 }

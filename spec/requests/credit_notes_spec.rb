@@ -1,9 +1,9 @@
 require 'rails_helper'
 
-RSpec.describe "CreditNotes", type: :request do
-  describe "GET /credit_notes" do
+RSpec.describe "CreditorPayments", type: :request do
+  describe "GET /creditor_payments" do
     it "works! (now write some real specs)" do
-      get credit_notes_path
+      get creditor_payments_path
       expect(response).to have_http_status(200)
     end
   end

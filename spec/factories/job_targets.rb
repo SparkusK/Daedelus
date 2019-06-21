@@ -1,5 +1,5 @@
 FactoryBot.define do
-  factory :correct_job_target, class: JobTarget do
+  factory :job_target do
     target_date { Date.today }
     invoice_number { "A" }
     remarks { "A" }

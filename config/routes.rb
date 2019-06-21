@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   scope module: :data_manipulation do
     resources :job_targets
     resources :managers
-    resources :credit_notes
+    resources :creditor_payments
     resources :creditor_orders
     resources :debtor_payments
     resources :debtor_orders

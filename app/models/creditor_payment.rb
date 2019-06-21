@@ -1,4 +1,4 @@
-class CreditNote < ApplicationRecord
+class CreditorPayment < ApplicationRecord
   belongs_to :creditor_order
   validates_each :amount_paid do |record, attr, value|
     record.errors.add(attr, "Can't pay more than is still owed") if
@@ -13,11 +13,11 @@ class CreditNote < ApplicationRecord
 
     if keywords.nil?
 
-      where_term = "credit_notes.updated_at >= ? AND credit_notes.updated_at <= ?"
+      where_term = "creditor_payments.updated_at >= ? AND creditor_payments.updated_at <= ?"
 
-      order_term = "credit_notes.amount_paid desc"
+      order_term = "creditor_payments.amount_paid desc"
 
-      CreditNote.joins(
+      CreditorPayment.joins(
         creditor_order: [:job, :supplier]
       ).where(
         where_term,
@@ -37,15 +37,15 @@ class CreditNote < ApplicationRecord
 
       where_term = %{
         lower(suppliers.name) LIKE ?
-        OR lower(credit_notes.payment_type) LIKE ?
-        OR lower(credit_notes.note) LIKE ?
+        OR lower(creditor_payments.payment_type) LIKE ?
+        OR lower(creditor_payments.note) LIKE ?
         OR lower(jobs.jce_number) LIKE ?
-        AND credit_notes.updated_at >= ? AND credit_notes.updated_at <= ?
+        AND creditor_payments.updated_at >= ? AND creditor_payments.updated_at <= ?
       }.gsub(/\s+/, " ").strip
 
-      order_term = "credit_notes.updated_at desc"
+      order_term = "creditor_payments.updated_at desc"
 
-      CreditNote.joins(
+      CreditorPayment.joins(
         creditor_order: [:job, :supplier]
       ).where(
         where_term,

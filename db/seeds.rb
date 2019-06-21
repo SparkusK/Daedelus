@@ -289,7 +289,7 @@ def create_creditor_payments(amount)
       random_order = orders[id]
       if rng_percentage_check(0.05 * (random_order[:amount_of_payments] + 1) )
         amnt = random_order[:value_excluding_tax] - random_order[:total_payments]
-        CreditNote.create(
+        CreditorPayment.create(
           creditor_order_id: id,
           payment_type: "cash",
           amount_paid: amnt,
@@ -300,7 +300,7 @@ def create_creditor_payments(amount)
       else
         max = random_order[:value_excluding_tax] - random_order[:total_payments]
         amnt = rand(max)
-        CreditNote.create(
+        CreditorPayment.create(
           creditor_order_id: id,
           payment_type: "cash",
           amount_paid: amnt,

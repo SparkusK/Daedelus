@@ -3,4 +3,9 @@ FactoryBot.define do
     name { "Samples" }
     overheads { rand(1000) }
   end
+
+  factory(:section) do
+    name { "A" }
+    overheads{ rand(1000) }
+  end
 end

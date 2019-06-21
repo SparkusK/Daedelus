@@ -45,7 +45,7 @@
             if instance.update(whitelist_params)
               notice_string = "#{entity_string} was successfully updated."
               format.html { redirect_to instance, notice: notice_string }
-              format.json { render :show, status: :ok, location: credit_note }
+              format.json { render :show, status: :ok, location: creditor_payment }
               format.js
             else
               format.html { render :edit }

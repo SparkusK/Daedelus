@@ -45,7 +45,7 @@ RSpec.describe Job, type: :model do
       end
 
       it "finds the correct job by Job ID" do
-        correct_job = FactoryBot.create(:correct_job)
+        correct_job = FactoryBot.create(:job)
         jobs = Job.search(keywords: "#{correct_job.id}")
         expect(jobs.map(&:id)).to contain_exactly(correct_job.id)
       end
@@ -73,11 +73,11 @@ RSpec.describe Job, type: :model do
       before(:all) do
         @not_targeted_job = FactoryBot.create(:job, total: 1000)
         @under_targeted_job = FactoryBot.create(:job, total: 1000)
-        FactoryBot.create(:correct_job_target, target_amount: 500, job_id: @under_targeted_job.id)
+        FactoryBot.create(:job_target, target_amount: 500, job_id: @under_targeted_job.id)
         @fully_targeted_job = FactoryBot.create(:job, total: 1000)
-        FactoryBot.create(:correct_job_target, target_amount: 1000, job_id: @fully_targeted_job.id)
+        FactoryBot.create(:job_target, target_amount: 1000, job_id: @fully_targeted_job.id)
         @over_targeted_job = FactoryBot.create(:job, total: 1000)
-        FactoryBot.create(:correct_job_target, target_amount: 1500, job_id: @over_targeted_job.id)
+        FactoryBot.create(:job_target, target_amount: 1500, job_id: @over_targeted_job.id)
       end
 
       after(:all) { DatabaseCleaner.clean_with(:deletion) }
@@ -127,14 +127,14 @@ RSpec.describe Job, type: :model do
     context "with only job_target_date filters" do
       before(:all) do
         @date_range = Utility::DateRange.new(start_date: Date.yesterday, end_date: Date.tomorrow)
-        @job_inside = FactoryBot.create(:correct_job)
-        @job_inside_target = FactoryBot.create(:correct_job_target,
+        @job_inside = FactoryBot.create(:job)
+        @job_inside_target = FactoryBot.create(:job_target,
           job_id: @job_inside.id, target_date: Date.today)
-        @job_before = FactoryBot.create(:correct_job)
-        @job_before_target = FactoryBot.create(:correct_job_target,
+        @job_before = FactoryBot.create(:job)
+        @job_before_target = FactoryBot.create(:job_target,
           job_id: @job_before.id, target_date: 7.days.ago)
-        @job_after = FactoryBot.create(:correct_job)
-        @job_after_target = FactoryBot.create(:correct_job_target,
+        @job_after = FactoryBot.create(:job)
+        @job_after_target = FactoryBot.create(:job_target,
           job_id: @job_after.id, target_date: 7.days.after)
       end
 
@@ -192,17 +192,29 @@ RSpec.describe Job, type: :model do
 
   describe "removal confirmation" do
     before(:all) do
-      @job_to_delete = FactoryBot.create(:correct_job)
-      @creditor_order1 = FactoryBot.create(:creditor_order, job_id: @job_to_delete.id)
-      @creditor_order2 = FactoryBot.create(:creditor_order, job_id: @job_to_delete.id)
+      @job_to_delete = FactoryBot.create(:job)
+      @creditor_order1 = FactoryBot.create(:creditor_order,
+        job_id: @job_to_delete.id,
+        value_excluding_tax: 2000.0, tax_amount: 400.0, value_including_tax: 2400.0)
+      @creditor_order2 = FactoryBot.create(:creditor_order,
+        job_id: @job_to_delete.id,
+        value_excluding_tax: 2000.0, tax_amount: 400.0, value_including_tax: 2400.0)
       @creditor_payments = []
-      2.times { @creditor_payments << FactoryBot.create(:creditor_payment, creditor_order_id: @creditor_order1.id) }
-      2.times { @creditor_payments << FactoryBot.create(:creditor_payment, creditor_order_id: @creditor_order2.id) }
-      @debtor_order1 = FactoryBot.create(:debtor_order, job_id: @job_to_delete.id)
-      @debtor_order2 = FactoryBot.create(:debtor_order, job_id: @job_to_delete.id)
+      2.times { @creditor_payments << FactoryBot.create(:creditor_payment,
+        creditor_order_id: @creditor_order1.id, amount_paid: rand(500.0)) }
+      2.times { @creditor_payments << FactoryBot.create(:creditor_payment,
+        creditor_order_id: @creditor_order2.id, amount_paid: rand(500.0)) }
+      @debtor_order1 = FactoryBot.create(:debtor_order,
+        job_id: @job_to_delete.id,
+        value_excluding_tax: 2000.0, tax_amount: 400.0, value_including_tax: 2400.0)
+      @debtor_order2 = FactoryBot.create(:debtor_order,
+        job_id: @job_to_delete.id,
+        value_excluding_tax: 2000.0, tax_amount: 400.0, value_including_tax: 2400.0)
       @debtor_orders = []
-      2.times { @debtor_orders << FactoryBot.create(:debtor_payment, debtor_order_id: @debtor_order1.id) }
-      2.times { @debtor_orders << FactoryBot.create(:debtor_payment, debtor_order_id: @debtor_order2.id) }
+      2.times { @debtor_orders << FactoryBot.create(:debtor_payment,
+        debtor_order_id: @debtor_order1.id, payment_amount: rand(500.0)) }
+      2.times { @debtor_orders << FactoryBot.create(:debtor_payment,
+        debtor_order_id: @debtor_order2.id, payment_amount: rand(500.0)) }
       @labor_record1 = FactoryBot.create(:labor_record, job_id: @job_to_delete.id)
       @labor_record2 = FactoryBot.create(:labor_record, job_id: @job_to_delete.id)
       @job_target_1 = FactoryBot.create(:job_target, job_id: @job_to_delete.id)
@@ -214,7 +226,7 @@ RSpec.describe Job, type: :model do
     end
 
     it "generates an accurate removal confirmation string", :aggregate_failures do
-      removal_string = Job.removal_confirmation(job_id)
+      removal_string = Job.removal_confirmation(@job_to_delete.id)
       expect(removal_string).to include("2 Creditor orders")
       expect(removal_string).to include("4 Creditor payments")
       expect(removal_string).to include("2 Debtor orders")

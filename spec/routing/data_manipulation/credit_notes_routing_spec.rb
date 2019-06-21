@@ -1,38 +1,38 @@
 require "rails_helper"
 
-RSpec.describe DataManipulation::CreditNotesController, type: :routing do
+RSpec.describe DataManipulation::CreditorPaymentsController, type: :routing do
   describe "routing" do
     it "routes to #index" do
-      expect(:get => "/credit_notes").to route_to("data_manipulation/credit_notes#index")
+      expect(:get => "/creditor_payments").to route_to("data_manipulation/creditor_payments#index")
     end
 
     it "routes to #new" do
-      expect(:get => "/credit_notes/new").to route_to("data_manipulation/credit_notes#new")
+      expect(:get => "/creditor_payments/new").to route_to("data_manipulation/creditor_payments#new")
     end
 
     it "routes to #show" do
-      expect(:get => "/credit_notes/1").to route_to("data_manipulation/credit_notes#show", :id => "1")
+      expect(:get => "/creditor_payments/1").to route_to("data_manipulation/creditor_payments#show", :id => "1")
     end
 
     it "routes to #edit" do
-      expect(:get => "/credit_notes/1/edit").to route_to("data_manipulation/credit_notes#edit", :id => "1")
+      expect(:get => "/creditor_payments/1/edit").to route_to("data_manipulation/creditor_payments#edit", :id => "1")
     end
 
 
     it "routes to #create" do
-      expect(:post => "/credit_notes").to route_to("data_manipulation/credit_notes#create")
+      expect(:post => "/creditor_payments").to route_to("data_manipulation/creditor_payments#create")
     end
 
     it "routes to #update via PUT" do
-      expect(:put => "/credit_notes/1").to route_to("data_manipulation/credit_notes#update", :id => "1")
+      expect(:put => "/creditor_payments/1").to route_to("data_manipulation/creditor_payments#update", :id => "1")
     end
 
     it "routes to #update via PATCH" do
-      expect(:patch => "/credit_notes/1").to route_to("data_manipulation/credit_notes#update", :id => "1")
+      expect(:patch => "/creditor_payments/1").to route_to("data_manipulation/creditor_payments#update", :id => "1")
     end
 
     it "routes to #destroy" do
-      expect(:delete => "/credit_notes/1").to route_to("data_manipulation/credit_notes#destroy", :id => "1")
+      expect(:delete => "/creditor_payments/1").to route_to("data_manipulation/creditor_payments#destroy", :id => "1")
     end
   end
 end

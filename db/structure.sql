@@ -40,42 +40,6 @@ CREATE TABLE public.ar_internal_metadata (
 
 
 --
--- Name: credit_notes; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.credit_notes (
-    id bigint NOT NULL,
-    creditor_order_id bigint,
-    payment_type character varying NOT NULL,
-    amount_paid numeric(15,2) DEFAULT 0.0 NOT NULL,
-    note character varying,
-    created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL,
-    invoice_code character varying NOT NULL,
-    CONSTRAINT amount_paid_positive CHECK ((amount_paid >= 0.0))
-);
-
-
---
--- Name: credit_notes_id_seq; Type: SEQUENCE; Schema: public; Owner: -
---
-
-CREATE SEQUENCE public.credit_notes_id_seq
-    START WITH 1
-    INCREMENT BY 1
-    NO MINVALUE
-    NO MAXVALUE
-    CACHE 1;
-
-
---
--- Name: credit_notes_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
---
-
-ALTER SEQUENCE public.credit_notes_id_seq OWNED BY public.credit_notes.id;
-
-
---
 -- Name: creditor_orders; Type: TABLE; Schema: public; Owner: -
 --
 
@@ -116,6 +80,42 @@ CREATE SEQUENCE public.creditor_orders_id_seq
 --
 
 ALTER SEQUENCE public.creditor_orders_id_seq OWNED BY public.creditor_orders.id;
+
+
+--
+-- Name: creditor_payments; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.creditor_payments (
+    id bigint NOT NULL,
+    creditor_order_id bigint,
+    payment_type character varying NOT NULL,
+    amount_paid numeric(15,2) DEFAULT 0.0 NOT NULL,
+    note character varying,
+    created_at timestamp without time zone NOT NULL,
+    updated_at timestamp without time zone NOT NULL,
+    invoice_code character varying NOT NULL,
+    CONSTRAINT amount_paid_positive CHECK ((amount_paid >= 0.0))
+);
+
+
+--
+-- Name: creditor_payments_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.creditor_payments_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: creditor_payments_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.creditor_payments_id_seq OWNED BY public.creditor_payments.id;
 
 
 --
@@ -550,17 +550,17 @@ ALTER SEQUENCE public.users_id_seq OWNED BY public.users.id;
 
 
 --
--- Name: credit_notes id; Type: DEFAULT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.credit_notes ALTER COLUMN id SET DEFAULT nextval('public.credit_notes_id_seq'::regclass);
-
-
---
 -- Name: creditor_orders id; Type: DEFAULT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.creditor_orders ALTER COLUMN id SET DEFAULT nextval('public.creditor_orders_id_seq'::regclass);
+
+
+--
+-- Name: creditor_payments id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.creditor_payments ALTER COLUMN id SET DEFAULT nextval('public.creditor_payments_id_seq'::regclass);
 
 
 --
@@ -649,19 +649,19 @@ ALTER TABLE ONLY public.ar_internal_metadata
 
 
 --
--- Name: credit_notes credit_notes_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.credit_notes
-    ADD CONSTRAINT credit_notes_pkey PRIMARY KEY (id);
-
-
---
 -- Name: creditor_orders creditor_orders_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.creditor_orders
     ADD CONSTRAINT creditor_orders_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: creditor_payments creditor_payments_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.creditor_payments
+    ADD CONSTRAINT creditor_payments_pkey PRIMARY KEY (id);
 
 
 --
@@ -761,13 +761,6 @@ ALTER TABLE ONLY public.users
 
 
 --
--- Name: index_credit_notes_on_creditor_order_id; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE INDEX index_credit_notes_on_creditor_order_id ON public.credit_notes USING btree (creditor_order_id);
-
-
---
 -- Name: index_creditor_orders_on_job_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -779,6 +772,13 @@ CREATE INDEX index_creditor_orders_on_job_id ON public.creditor_orders USING btr
 --
 
 CREATE INDEX index_creditor_orders_on_supplier_id ON public.creditor_orders USING btree (supplier_id);
+
+
+--
+-- Name: index_creditor_payments_on_creditor_order_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_creditor_payments_on_creditor_order_id ON public.creditor_payments USING btree (creditor_order_id);
 
 
 --
@@ -990,10 +990,10 @@ ALTER TABLE ONLY public.labor_records
 
 
 --
--- Name: credit_notes fk_rails_e9e779706e; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: creditor_payments fk_rails_e9e779706e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.credit_notes
+ALTER TABLE ONLY public.creditor_payments
     ADD CONSTRAINT fk_rails_e9e779706e FOREIGN KEY (creditor_order_id) REFERENCES public.creditor_orders(id) ON DELETE CASCADE;
 
 
@@ -1096,6 +1096,7 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20190329161044'),
 ('20190415150911'),
 ('20190612155531'),
-('20190612160114');
+('20190612160114'),
+('20190621152317');
 
 

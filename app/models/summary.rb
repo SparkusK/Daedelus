@@ -29,7 +29,7 @@ class Summary
 
 
   def creditor_orders_for_this_month
-    sum_for_this_month("amount_paid", "credit_notes", "created_at")
+    sum_for_this_month("amount_paid", "creditor_payments", "created_at")
   end
 
   def labor_for_this_month

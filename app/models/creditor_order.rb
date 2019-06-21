@@ -3,7 +3,7 @@ class CreditorOrder < ApplicationRecord
   belongs_to :supplier
   belongs_to :job
 
-  has_many :credit_notes, dependent: :delete_all
+  has_many :creditor_payments, dependent: :delete_all
 
   validates :date_issued, :value_excluding_tax, :tax_amount,
     :value_including_tax, :delivery_note, :reference_number, presence: true
@@ -14,10 +14,10 @@ class CreditorOrder < ApplicationRecord
   validates :tax_amount,
     numericality: { less_than: :value_excluding_tax}
 
-  # Creditor Order -> Creditor Payment (creditnote)
+  # Creditor Order -> Creditor Payment (CreditorPayment)
 
   def self.creditor_payments_count(creditor_order_id)
-    CreditNote.where("creditor_order_id = ?", creditor_order_id).count(:all)
+    CreditorPayment.where("creditor_order_id = ?", creditor_order_id).count(:all)
   end
 
   def self.removal_confirmation(creditor_order_id)
@@ -32,7 +32,7 @@ class CreditorOrder < ApplicationRecord
   def still_owed_amount
     value = self.value_excluding_tax
     # Sum all payment amounts of debtor payments with debtor_order_id = self.id
-    paid = CreditNote.where(creditor_order_id: self.id).sum(:amount_paid)
+    paid = CreditorPayment.where(creditor_order_id: self.id).sum(:amount_paid)
     value - paid
   end
 

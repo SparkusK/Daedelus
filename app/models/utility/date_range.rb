@@ -25,20 +25,20 @@ module Utility
 
     private
 
-      def date_is_present?(date)
-        !date.nil?
-      end
+    def date_is_present?(date)
+      !date.nil?
+    end
 
-      def defaults
-        { start_date: default_start, end_date: default_end }
-      end
+    def defaults
+      { start_date: default_start, end_date: default_end }
+    end
 
-      def default_start
-        1.months.ago
-      end
+    def default_start
+      1.months.ago
+    end
 
-      def default_end
-        0.months.ago
-      end
+    def default_end
+      0.months.ago
+    end
   end
 end
