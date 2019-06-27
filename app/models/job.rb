@@ -16,10 +16,6 @@ class Job < ApplicationRecord
 
   validates :total, numericality: { greater_than: 0.0 }
 
-  def supervisor
-    Supervisor.find_by(section_id: section.id)
-  end
-
   def job_name
     job_number.nil? ? "Job number not found" : "#{job_number}"
   end

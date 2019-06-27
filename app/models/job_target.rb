@@ -1,4 +1,5 @@
 class JobTarget < ApplicationRecord
+  include Searchable
   belongs_to :section
   belongs_to :job
 
@@ -45,61 +46,36 @@ class JobTarget < ApplicationRecord
     amounts = {remaining_amount: remaining_amount, job_total: job_total}
   end
 
-  def self.search(keywords, dates, page, section_filter_id)
-    # Let's first setup some named conditions on which we want to search
-    omit_keywords = keywords.nil? || keywords.empty?
-    skip_section_filter = section_filter_id.nil? || section_filter_id.empty?
+  private
 
-    @job_targets = nil # Initialize @job_targets so we don't get NilError
+# ======= SEARCH ========================================
 
-    # Start by grabbing everything we need according to the search keywords
-    unless omit_keywords
-      # search everything
-      search_term = '%' + keywords.downcase + '%'
-      where_term = %{
-        (lower(sections.name) LIKE ?
-        OR lower(jobs.jce_number) LIKE ?
-        OR lower(jobs.job_number) LIKE ?
-        OR lower(job_targets.invoice_number) LIKE ?
-        OR lower(job_targets.remarks) LIKE ?
-        OR lower(job_targets.details) LIKE ?)
-      }.gsub(/\s+/, " ").strip
+  def self.keyword_search_attributes
+    %w{ sections.name jobs.jce_number jobs.job_number job_targets.invoice_number
+       job_targets.remarks job_targets.details }
+  end
 
-      @job_targets = JobTarget.where(
-        where_term,
-        search_term,
-        search_term,
-        search_term,
-        search_term,
-        search_term,
-        search_term
-      )
-    else
-      @job_targets = JobTarget.all
-    end
+  def self.subclassed_filters(args)
+    filters = []
+    filters << Search::Filter::SectionIdFilter.new(args[:section_filter_id])
+    filters << Search::Filter::DateRangeFilter.new("job_targets.target_date", args[:target_dates])
+    filters
+  end
 
-    @job_targets = @job_targets.joins(:section, :job)
+  def self.subclassed_search_defaults
+    { target_dates: Utility::DateRange.new(start_date: nil, end_date: nil),
+      section_filter_id: nil }
+  end
 
-    # Then reduce the result set by filtering jobs by dates, filters, etc
-    if dates.has_start?
-      @job_targets = @job_targets.where("job_targets.target_date >= ?", dates.start_date)
-    end
-    if dates.has_end?
-      @job_targets = @job_targets.where("job_targets.target_date <= ?", dates.end_date)
-    end
-    unless skip_section_filter
-      @job_targets = @job_targets.where(section_id: section_filter_id)
-    end
+  def self.subclassed_order_term
+    "job_targets.target_date desc"
+  end
 
-    # Finally, do the ordering and pagination and such
-    order_term = "job_targets.target_date desc"
-    @job_targets = @job_targets.order(
-      order_term
-    ).paginate(
-      page: page
-    ).includes(
-      :section, :job
-    )
+  def self.subclassed_join_list
+    [ :section, :job ]
+  end
 
+  def self.subclassed_includes_list
+    [ :section, :job ]
   end
 end

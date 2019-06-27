@@ -25,7 +25,8 @@ module Searchable
       filters = []
       filters << Search::Filter::KeywordFilter.new(keyword_search_attributes, args[:keywords])
       filters << Search::Filter::JoinsFilter.new(subclassed_join_list)
-      filters = filters + subclassed_filters(args)
+      filters << Search::Filter::LeftOuterJoinsFilter.new(subclassed_left_outer_joins_list) unless subclassed_left_outer_joins_list.nil?
+      filters = filters + subclassed_filters(args) unless subclassed_filters(args).nil?
       filters << Search::Filter::OrderFilter.new(subclassed_order_term)
       filters << Search::Filter::PaginationFilter.new(args[:page])
       filters << Search::Filter::IncludesFilter.new(subclassed_includes_list)
@@ -47,6 +48,10 @@ module Searchable
 
     def subclassed_order_term
       default_order_term
+    end
+
+    def subclassed_left_outer_joins_list
+      nil
     end
 
     def subclassed_join_list

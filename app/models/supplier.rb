@@ -1,5 +1,5 @@
 class Supplier < ApplicationRecord
-
+  include Searchable
   has_many :creditor_orders, dependent: :delete_all
 
   validates :name, presence: true
@@ -49,34 +49,15 @@ class Supplier < ApplicationRecord
     confirmation << "Are you sure?"
   end
 
+  private
 
-  def self.search(keywords)
+  # ======= SEARCH ========================================
 
-    search_term = '%' + keywords.downcase + '%'
-
-    if keywords =~ /\d/
-      # search only phone
-      where_term = %{
-        phone LIKE ?
-      }.gsub(/\s+/, " ").strip
-      order_term = "phone asc"
-      Supplier.where(where_term, search_term).order(order_term)
-    elsif keywords.include?("@")
-      # search only email
-      where_term = %{
-        lower(email) LIKE ?
-      }.gsub(/\s+/, " ").strip
-      order_term = "email asc"
-      Supplier.where(where_term, search_term).order(order_term)
-    else
-      # search everything
-      where_term = %{
-        phone LIKE ?
-        OR lower(email) LIKE ?
-        OR lower(name) LIKE ?
-      }.gsub(/\s+/, " ").strip
-      order_term = "name asc"
-      Supplier.where(where_term, search_term, search_term, search_term).order(order_term)
+    def self.keyword_search_attributes
+      %w{ phone email name }
     end
-  end
+
+    def self.subclassed_order_term
+      "name asc"
+    end
 end

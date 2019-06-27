@@ -1,4 +1,5 @@
 class Section < ApplicationRecord
+  include Searchable
   has_many :employees, dependent: :delete_all
   has_many :jobs, dependent: :delete_all
   has_many :supervisors, dependent: :delete_all
@@ -118,17 +119,13 @@ class Section < ApplicationRecord
     "#{name}"
   end
 
-  def self.search(keywords)
+  private
 
-    search_term = '%' + keywords.downcase + '%'
-
-    where_term = %{
-      lower(name) LIKE ?
-    }.gsub(/\s+/, " ").strip
-
-    order_term = "name asc"
-
-    Section.where(where_term, search_term).order(order_term)
+  def self.keyword_search_attributes
+    %w{ name }
   end
 
+  def self.subclassed_order_term
+    "name asc"
+  end
 end

@@ -1,4 +1,5 @@
 class LaborRecord < ApplicationRecord
+  include Searchable
   belongs_to :employee
   belongs_to :section
   belongs_to :job
@@ -81,62 +82,37 @@ class LaborRecord < ApplicationRecord
     self.section.nil? ? "" : self.section.name
   end
 
-  # Search by Employee.first_name, Employee.last_name, JObs.jce_number,
-  # Jobs.job_number
-  def self.search(keywords, dates, page, section_filter_id)
-    # Let's first setup some named conditions on which we want to search
-    omit_keywords = keywords.nil? || keywords.empty?
-    skip_section_filter = section_filter_id.nil? || section_filter_id.empty?
+  private
 
-    # Initialize @labor_records so we don't get NilError
-    @labor_records = nil
+# ======= SEARCH ========================================
 
-    # Start by grabbing everything we need according to the search keywords
-    unless omit_keywords
-      # search everything
-      search_term = '%' + keywords.downcase + '%'
-      where_term = %{
-        ( lower(employees.first_name) LIKE ?
-          OR lower(employees.last_name) LIKE ?
-          OR lower(jobs.jce_number) LIKE ?
-          OR lower(jobs.job_number) LIKE ? )
-      }.gsub(/\s+/, " ").strip
+  def self.keyword_search_attributes
+    %w{ employees.first_name employees.last_name jobs.jce_number jobs.job_number }
+  end
 
-      @labor_records = LaborRecord.where(
-        where_term,
-        search_term,
-        search_term,
-        search_term,
-        search_term
-      )
-    else
-      @labor_records = LaborRecord.all
-    end
-    @labor_records = @labor_records.joins(:job, :employee)
+  def self.subclassed_filters(args)
+    filters = []
+    filters << Search::Filter::SectionIdFilter.new(args[:section_filter_id])
+    filters << Search::Filter::DateRangeFilter.new("labor_date", args[:labor_dates])
+    filters
+  end
 
-    # Then reduce the result set by filtering by dates, filters, etc
-    if dates.has_start?
-      # Labor Records for which Labor Date >= input date
-      @labor_records = @labor_records.where("labor_date >= ?", dates.start_date)
-    end
-    if dates.has_end?
-      # Labor Records for which Labor Date <= input date
-      @labor_records = @labor_records.where("labor_date <= ?", dates.end_date)
-    end
-    unless skip_section_filter
-      # Filter Labor Records by a specific section
-      @labor_records = @labor_records.where(section_id: section_filter_id)
-    end
+  def self.subclassed_search_defaults
+    {
+      labor_dates: Utility::DateRange.new(start_date: nil, end_date: nil),
+      section_filter_id: nil
+    }
+  end
 
+  def self.subclassed_order_term
+    "employees.last_name asc, labor_records.labor_date desc"
+  end
 
-    # Finally, do the ordering and pagination and such
-    order_term = "employees.last_name asc, labor_records.labor_date desc"
-    @labor_records = @labor_records.order(
-      order_term
-    ).paginate(
-      page: page
-    ).includes(
-      :section
-    )
+  def self.subclassed_join_list
+    [ :job, :employee ]
+  end
+
+  def self.subclassed_includes_list
+    :section
   end
 end

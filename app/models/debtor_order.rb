@@ -1,4 +1,5 @@
 class DebtorOrder < ApplicationRecord
+  include Searchable
   belongs_to :customer
   belongs_to :job, optional: true
 
@@ -39,127 +40,36 @@ class DebtorOrder < ApplicationRecord
     still_owed = value - paid
   end
 
-  # Search by:
-  #   Customer:
-  #     * name
-  #     * email
-  #     * phone
-  #   Job:
-  #     * JCE number
-  #     * contact person
-  #     * responsible_person
-  #   Invoice:
-  # => *** This changed! We're moving Invoice to the Debtor Payments now.
-  def self.search(keywords, dates, page)
+  private
 
-    if keywords.nil?
-      where_term = "debtor_orders.updated_at >= ? AND debtor_orders.updated_at <= ?"
-      order_term = "customers.name asc, debtor_orders.value_excluding_tax desc"
-      DebtorOrder.left_outer_joins(
-        :customer, :job
-      ).where(
-        where_term,
-        dates.start_date,
-        dates.end_date
-      ).order(
-        order_term
-      ).paginate(
-        page: page
-      ).includes(
-        :customer
-      )
-    else
-      is_email = !(( keywords =~ /@|\./ ).nil?)
-      has_numbers = !(( keywords =~ /\d/ ).nil?)
+# ======= SEARCH ========================================
 
-      search_term = '%' + keywords.downcase + '%'
+  def self.keyword_search_attributes
+    %w{ customers.phone customers.name customers.email jobs.jce_number
+    jobs.contact_person jobs.responsible_person debtor_orders.order_number }
+  end
 
-      if is_email
-        where_term = %{
-          lower(customers.email) LIKE ?
-          AND debtor_orders.updated_at >= ? AND debtor_orders.updated_at <= ?
-        }.gsub(/\s+/, " ").strip
+  def self.subclassed_filters(args)
+    Search::Filter::DateRangeFilter.new("debtor_orders.updated_at", args[:updated_dates])
+  end
 
-        order_term = "customers.email asc"
+  def self.subclassed_search_defaults
+    { updated_dates: Utility::DateRange.new(start_date: nil, end_date: nil) }
+  end
 
-        DebtorOrder.left_outer_joins(
-          :customer, :job
-        ).where(
-          where_term,
-          search_term,
-          dates.start_date,
-          dates.end_date
-        ).order(
-          order_term
-        ).paginate(
-          page: page
-        ).includes(
-          :customer
-        )
+  def self.subclassed_order_term
+    "customers.name asc, debtor_orders.value_excluding_tax desc"
+  end
 
-      elsif has_numbers
-        where_term = %{
-          lower(customers.email) LIKE ?
-          OR customers.phone LIKE ?
-          OR lower(jobs.jce_number) LIKE ?
-          OR lower(debtor_orders.order_number) LIKE ?
-          AND debtor_orders.updated_at >= ? AND debtor_orders.updated_at <= ?
-        }.gsub(/\s+/, " ").strip
+  def self.subclassed_join_list
+    :customer
+  end
 
-        order_term = "debtor_orders.value_excluding_tax desc"
+  def self.subclassed_left_outer_joins_list
+    :job
+  end
 
-        DebtorOrder.left_outer_joins(
-          :customer, :job
-        ).where(
-          where_term,
-          search_term,
-          search_term,
-          search_term,
-          search_term,
-          dates.start_date,
-          dates.end_date
-        ).order(
-          order_term
-        ).paginate(
-          page: page
-        ).includes(
-          :customer
-        )
-      else
-        where_term = %{
-          lower(customers.name) LIKE ?
-          OR lower(customers.email) LIKE ?
-          OR lower(jobs.jce_number) LIKE ?
-          OR lower(jobs.contact_person) LIKE ?
-          OR lower(jobs.responsible_person) LIKE ?
-          OR lower(debtor_orders.order_number) LIKE ?
-          AND debtor_orders.updated_at >= ? AND debtor_orders.updated_at <= ?
-        }.gsub(/\s+/, " ").strip
-
-        order_term = "customers.name asc, debtor_orders.value_excluding_tax desc"
-
-        DebtorOrder.joins(
-          :customer
-        ).left_outer_joins(
-           :job
-        ).where(
-          where_term,
-          search_term,
-          search_term,
-          search_term,
-          search_term,
-          search_term,
-          search_term,
-          dates.start_date,
-          dates.end_date
-        ).order(
-          order_term
-        ).paginate(
-          page: page
-        ).includes(
-          :customer
-        )
-      end
-    end
+  def self.subclassed_includes_list
+    :customer
   end
 end
