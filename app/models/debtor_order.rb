@@ -50,7 +50,7 @@ class DebtorOrder < ApplicationRecord
   end
 
   def self.subclassed_filters(args)
-    Search::Filter::DateRangeFilter.new("debtor_orders.updated_at", args[:updated_dates])
+    [Search::Filter::DateRangeFilter.new("debtor_orders.updated_at", args[:updated_dates])]
   end
 
   def self.subclassed_search_defaults

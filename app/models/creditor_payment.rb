@@ -19,7 +19,7 @@ class CreditorPayment < ApplicationRecord
   end
 
   def self.subclassed_filters(args)
-    Search::Filter::DateRangeFilter.new("creditor_payments.updated_at", args[:updated_dates])
+    [Search::Filter::DateRangeFilter.new("creditor_payments.updated_at", args[:updated_dates])]
   end
 
   def self.subclassed_search_defaults

@@ -28,7 +28,7 @@ class DebtorPayment < ApplicationRecord
   end
 
   def self.subclassed_filters(args)
-    Search::Filter::DateRangeFilter.new("payment_date", args[:payment_dates])
+    [Search::Filter::DateRangeFilter.new("payment_date", args[:payment_dates])]
   end
 
   def self.subclassed_search_defaults
