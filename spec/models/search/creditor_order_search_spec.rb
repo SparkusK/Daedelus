@@ -48,7 +48,7 @@ RSpec.describe CreditorOrder, type: :model do
 
       it "finds the correct Creditor Order by its Job's responsible person" do
         correct_creditor_order = FactoryBot.create(:creditor_order, job_id:
-          FactoryBot.create(:job, responsible_perosn: "C").id)
+          FactoryBot.create(:job, responsible_person: "C").id)
         creditor_orders = CreditorOrder.search(keywords: "C")
         expect(creditor_orders.map(&:id)).to contain_exactly(correct_creditor_order.id)
       end
@@ -58,6 +58,7 @@ RSpec.describe CreditorOrder, type: :model do
         creditor_orders = CreditorOrder.search(keywords: "C")
         expect(creditor_orders.map(&:id)).to contain_exactly(correct_creditor_order.id)
       end
+
       it "finds the correct Creditor Order by reference number" do
         correct_creditor_order = FactoryBot.create(:creditor_order, reference_number: "C")
         creditor_orders = CreditorOrder.search(keywords: "C")
@@ -90,7 +91,7 @@ RSpec.describe CreditorOrder, type: :model do
     context "with only section id filter" do
       after(:all) { DatabaseCleaner.clean_with(:deletion) }
 
-      it "Filters the correct job target by section_id" do
+      it "Filters the correct Creditor Order by section_id" do
         correct_section_id = FactoryBot.create(:section).id
         incorrect_section_id = FactoryBot.create(:section).id
         correct_creditor_order = FactoryBot.create(:creditor_order, section_id: correct_section_id)
