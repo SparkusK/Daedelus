@@ -29,7 +29,7 @@ Since I was the only dev, I didn't bother updating the readme file. I'm only upd
 
 * Testing:
 
-  The codebase isn't fully covered in terms of tests. In fact, there aren't very many. In all honesty, I prioritized pushing new features and making the application work for their specifications, above learning the whole TDD process - eventually, though, I did get around to it, and I started a refactoring phase that I did via a TDD methodology. Essentially, I wrote the test first to make sure that everything works as intended, and then I changed the code to be better and re-ran the tests to make sure things were still working as intended after the changes.
+  The codebase isn't fully covered in terms of tests. In fact, there aren't very many. In all honesty, I prioritized pushing new features and making the application work for their specifications, above learning the whole TDD process - eventually, though, I did get around to it, and I started a refactoring phase that I did via a TDD methodology. 
 
 * Still a WIP:
 

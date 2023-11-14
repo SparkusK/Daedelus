@@ -130,15 +130,15 @@ function formatDate(date) {
 }
 
 function LaborDates(labor_dates) {
-  this.labor_dates = labor_dates;
+  this._labor_dates = labor_dates;
   this.current_date = null;
 
   this.set_labor_dates = function(dates) {
-    this.labor_dates = dates;
+    this._labor_dates = dates;
   }
 
   this.labor_dates = function() {
-    return this.labor_dates;
+    return this._labor_dates;
   }
 
   this.set_current_date = function(date) {

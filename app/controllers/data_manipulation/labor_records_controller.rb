@@ -43,8 +43,8 @@ module DataManipulation
       end
 
       def set_labor_records
-        @labor_records = LaborRecord.search( params[:keywords], @dates,
-          params[:page], params[:section_filter_id] )
+        @labor_records = LaborRecord.search( { keywords: params[:keywords], dates: @dates,
+          page: params[:page], section_filter_id: params[:section_filter_id] } )
       end
 
       def new_labor_record

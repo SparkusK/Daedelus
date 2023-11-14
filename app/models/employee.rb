@@ -17,8 +17,8 @@ class Employee < ApplicationRecord
   end
 
   def self.entities(employee_id)
-    labor_records  = labor_records( employee_id )
-    manager        = manager(       employee_id )
+    labor_records  = LaborRecord.where(employee_id: employee_id)
+    manager        = Manager.where(employee_id: employee_id)
     manager_count  = (manager.nil? ) ? 0 : 1
     {
       labor_records: labor_records,

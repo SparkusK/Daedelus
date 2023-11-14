@@ -27,7 +27,7 @@ module DataManipulation
 
       def set_employees
         @employees = params[:keywords].present? ?
-          Employee.search(params[:keywords]).includes(:section).paginate(page: params[:page]) :
+          Employee.search(keywords: params[:keywords]).includes(:section).paginate(page: params[:page]) :
           Employee.includes(:section).paginate(page: params[:page])
       end
 

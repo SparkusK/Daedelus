@@ -181,8 +181,8 @@ $(document).ready(function() {
     disabled: true,
     beforeShowDay: function(date) {
       var dateIndex = formatDate(date);
-      var dates = labor_dates_<%= @labor_record.id %>.labor_dates();
-      if (labor_dates_<%= @labor_record.id %>.current_date() == dateIndex)
+      var dates = labor_dates_<%= @labor_record.id %>.labor_dates;
+      if (labor_dates_<%= @labor_record.id %>.current_date == dateIndex)
         return [true, "datepicker-selected-day", "This is the current (pre-edit) date for the Labor Record."];
       if (dates[dateIndex] == true)
         return [true, "datepicker-assigned-day", "This employee already has a labor record for this date."];
@@ -240,7 +240,7 @@ $(document).ready(function() {
       var date = new Date(date_input);
       if (date != "Invalid Date") {
         date_correct = true;
-        if (labor_dates_<%= @labor_record.id %>.current_date() != formatDate(date)) {
+        if (labor_dates_<%= @labor_record.id %>.current_date != formatDate(date)) {
           if (labor_dates_<%= @labor_record.id %>.is_date_assigned(date) == true) {
             var employee_id = $("#labor_record_employee_id_<%= @labor_record.id %>").val();
             $.ajax({
@@ -265,6 +265,6 @@ $(document).ready(function() {
   });
 
   $("#redirectModal").on('hide.bs.modal', function (e) {
-    $("#labor_record_date_<%= @labor_record.id %>").val(labor_dates_<%= @labor_record.id %>.current_date());
+    $("#labor_record_date_<%= @labor_record.id %>").val(labor_dates_<%= @labor_record.id %>.current_date);
   });
 });
